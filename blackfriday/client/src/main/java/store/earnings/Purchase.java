@@ -1,5 +1,7 @@
 package store.earnings;
 
+import commonMessages.ExceptionMessages;
+
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 
@@ -57,12 +59,12 @@ public class Purchase implements Serializable {
     }
 
     private void setProductName(String productName) {
-        validateString(productName);
+        requireNonBlank(productName, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.productName = productName;
     }
 
     private void setUserName(String userName) {
-        validateString(userName);
+        requireNonBlank(userName, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.userName = userName;
     }
 

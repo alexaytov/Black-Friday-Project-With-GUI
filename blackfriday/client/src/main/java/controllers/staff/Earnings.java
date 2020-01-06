@@ -131,7 +131,7 @@ public class Earnings {
         try {
             // get and validate year
             int year = Integer.parseInt(yYearField.getText());
-            Validator.validateYear(year);
+            Validator.requireNonNegative(year, ExceptionMessages.YEAR_MUST_BE_POSITIVE);
 
             // send command and year to server
             Main.store.getOos().writeObject("earnings year");

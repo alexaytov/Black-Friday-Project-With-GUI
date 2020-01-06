@@ -11,7 +11,7 @@ import util.Operations;
 
 import java.io.IOException;
 
-import static validator.Validator.validateAge;
+import static validator.Validator.requireNonNegative;
 
 public class AgeChange {
 
@@ -24,7 +24,7 @@ public class AgeChange {
     void ageSubmit(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
             int newAge = Integer.parseInt(ageField.getText());
-            validateAge(newAge);
+            requireNonNegative(newAge, ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);
             boolean isAgeChanged = Operations.changeUserField("change age",
                     ageField.getText(),
                     ConstantMessages.AGE_CHANGE_SUCCESSFUL,

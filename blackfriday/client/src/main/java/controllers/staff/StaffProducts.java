@@ -417,7 +417,7 @@ public class StaffProducts implements Initializable {
         nameTextField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 try {
-                    validateString(nameTextField.getText());
+                    requireNonBlank(nameTextField.getText(), ExceptionMessages.NAME_NULL_OR_EMPTY);
                     nameTextField.setUnFocusColor(textFieldDefaultUnfocusedColor);
                 } catch (IllegalArgumentException ex) {
                     nameTextField.setUnFocusColor(Color.RED);
@@ -490,7 +490,7 @@ public class StaffProducts implements Initializable {
 
     private void textFieldColorChangeValidation(Color textFieldDefaultUnfocusedColor, JFXTextField textField) {
         try {
-            validateString(textField.getText());
+            requireNonBlank(textField.getText(), ExceptionMessages.NAME_NULL_OR_EMPTY);
             textField.setUnFocusColor(textFieldDefaultUnfocusedColor);
         } catch (IllegalArgumentException ex) {
             createProductButton.setDisable(true);
@@ -511,9 +511,9 @@ public class StaffProducts implements Initializable {
             double discountPercent = Double.parseDouble(this.discountPercentField.getText());
             int quantity = Integer.parseInt(this.quantityTextField.getText());
 
-            validateString(name);
-            validateString(size);
-            validateString(description);
+            requireNonBlank(name, ExceptionMessages.NAME_NULL_OR_EMPTY);
+            requireNonBlank(size, ExceptionMessages.SIZE_NULL_OR_EMPTY);
+            requireNonBlank(description, ExceptionMessages.DESCRIPTION_NULL_OR_EMPTY);
             validateQuantity(quantity);
             validateDiscountPercent(discountPercent, price, minimumPrice);
 

@@ -52,8 +52,8 @@ public class LogIn implements Initializable {
         String password = passwordField.getText();
 
         try {
-            Validator.validateString(username);
-            Validator.validateString(password);
+            Validator.requireNonBlank(username, ExceptionMessages.NAME_NULL_OR_EMPTY);
+            Validator.requireNonBlank(password, ExceptionMessages.NAME_NULL_OR_EMPTY);
             User user;
             //try to login as client;
             try {

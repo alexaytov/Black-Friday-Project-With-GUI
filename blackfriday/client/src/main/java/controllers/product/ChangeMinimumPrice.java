@@ -20,7 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static validator.Validator.validateMinimumPrice;
+import static validator.Validator.requireNonNegative;
 import static validator.Validator.validatePrice;
 
 public class ChangeMinimumPrice implements Initializable {
@@ -33,7 +33,7 @@ public class ChangeMinimumPrice implements Initializable {
     private Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(10), event -> {
         try {
             this.minimumPrice = Integer.parseInt(this.minimumPriceField.getText());
-            validateMinimumPrice(minimumPrice);
+            requireNonNegative(minimumPrice, ExceptionMessages.MINIMUM_PRICE_MUST_BE_POSITIVE);
             this.submitButton.setDisable(false);
         } catch (IllegalArgumentException ex) {
             this.submitButton.setDisable(true);

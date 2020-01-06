@@ -1,5 +1,6 @@
 package user;
 
+import commonMessages.ExceptionMessages;
 import user.interfaces.User;
 import validator.Validator;
 
@@ -34,7 +35,7 @@ public abstract class BaseUser implements User, Serializable, Cloneable {
     }
 
     private void setDateOfCreation(ZonedDateTime dateOfCreation) {
-        Validator.validateDate(dateOfCreation);
+        Validator.requireNonNull(dateOfCreation);
         this.dateOfCreation = dateOfCreation;
     }
 
@@ -45,13 +46,13 @@ public abstract class BaseUser implements User, Serializable, Cloneable {
 
     @Override
     public void setPassword(String password) {
-        Validator.validatePassword(password);
+        Validator.requireNonBlank(password, ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
         this.password = password;
     }
 
     @Override
     public void setUsername(String username) {
-        Validator.validateString(username);
+        Validator.requireNonBlank(username, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.username = username;
     }
 
@@ -68,19 +69,19 @@ public abstract class BaseUser implements User, Serializable, Cloneable {
 
     @Override
     public void setFirstName(String firstName) {
-        Validator.validateString(firstName);
+        Validator.requireNonBlank(firstName, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.firstName = firstName;
     }
 
     @Override
     public void setLastName(String lastName) {
-        Validator.validateString(lastName);
+        Validator.requireNonBlank(lastName, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.lastName = lastName;
     }
 
     @Override
     public void setAge(int age) {
-        Validator.validateAge(age);
+        Validator.requireNonNegative(age, ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);
         this.age = age;
     }
 

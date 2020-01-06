@@ -5,6 +5,7 @@ import exceptions.NotEnoughQuantityException;
 import product.interfaces.Buyable;
 import product.interfaces.Promotional;
 import user.interfaces.User;
+import validator.Validator;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -58,7 +59,7 @@ public class Product implements Buyable, Promotional, Serializable, Cloneable {
     }
 
     public void setMinimumPrice(double minimumPrice) {
-        validateMinimumPrice(minimumPrice);
+        Validator.requireNonNegative(minimumPrice, ExceptionMessages.MINIMUM_PRICE_MUST_BE_POSITIVE);
         this.minimumPrice = minimumPrice;
     }
 
@@ -67,7 +68,7 @@ public class Product implements Buyable, Promotional, Serializable, Cloneable {
     }
 
     public void setName(String name) {
-        validateName(name);
+        Validator.requireNonBlank(name, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.name = name;
     }
 
@@ -94,7 +95,7 @@ public class Product implements Buyable, Promotional, Serializable, Cloneable {
     }
 
     public void setDescription(String description) {
-        validateDescription(description);
+        Validator.requireNonBlank(description, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.description = description;
     }
 

@@ -13,7 +13,7 @@ import util.Operations;
 
 import java.io.IOException;
 
-import static validator.Validator.validateString;
+import static validator.Validator.requireNonBlank;
 
 public class FirstNameChange {
 
@@ -29,7 +29,7 @@ public class FirstNameChange {
     void firstNameSubmit(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
             String newFirstName = firstNameField.getText();
-            validateString(newFirstName);
+            requireNonBlank(newFirstName, ExceptionMessages.NAME_NULL_OR_EMPTY);
             boolean change_first_name = Operations.changeUserField("change first name",
                     firstNameField.getText(),
                     ConstantMessages.FIRST_NAME_CHANGE_SUCCESSFUL,

@@ -1,5 +1,6 @@
 package database;
 
+import commonMessages.ExceptionMessages;
 import database.IO.JSONReader;
 import database.IO.JSONWriter;
 import exceptions.NotFoundException;
@@ -27,7 +28,7 @@ public class PurchaseDatabase {
 
 
     private void setData(Map<String, List<Purchase>> data) {
-        validateMap(data);
+        requireNonNull(data);
         this.data = data;
     }
 
@@ -89,7 +90,7 @@ public class PurchaseDatabase {
      * @return all purchasers happened in that (@code year)
      */
     public List<Purchase> getPurchases(int year) {
-        validateYear(year);
+        requireNonNegative(year, ExceptionMessages.YEAR_MUST_BE_POSITIVE);
         List<Purchase> validPurchases = new ArrayList<>();
         for (List<Purchase> purchaseList : this.data.values()) {
             for (Purchase purchase : purchaseList) {

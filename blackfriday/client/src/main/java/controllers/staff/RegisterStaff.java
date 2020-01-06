@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
+import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,8 +18,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static validator.Validator.validateAge;
-import static validator.Validator.validateString;
+import static validator.Validator.requireNonNegative;
+import static validator.Validator.requireNonBlank;
 
 public class RegisterStaff implements Initializable {
 
@@ -83,7 +84,7 @@ public class RegisterStaff implements Initializable {
         this.firstNameField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 try {
-                    validateString(this.firstNameField.getText());
+                    requireNonBlank(this.firstNameField.getText(), ExceptionMessages.NAME_NULL_OR_EMPTY);
                     this.firstNameField.setUnFocusColor(textFieldDefaultUnfocusedColor);
                 } catch (IllegalArgumentException ex) {
                     this.firstNameField.setUnFocusColor(invalidInputFieldColor);
@@ -94,7 +95,7 @@ public class RegisterStaff implements Initializable {
         this.lastNameField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 try {
-                    validateString(this.lastNameField.getText());
+                    requireNonBlank(this.lastNameField.getText(), ExceptionMessages.NAME_NULL_OR_EMPTY);
                     this.lastNameField.setUnFocusColor(textFieldDefaultUnfocusedColor);
                 } catch (IllegalArgumentException ex) {
                     this.lastNameField.setUnFocusColor(invalidInputFieldColor);
@@ -105,7 +106,7 @@ public class RegisterStaff implements Initializable {
         this.usernameField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 try {
-                    validateString(this.usernameField.getText());
+                    requireNonBlank(this.usernameField.getText(), ExceptionMessages.NAME_NULL_OR_EMPTY);
                     this.usernameField.setUnFocusColor(textFieldDefaultUnfocusedColor);
                 } catch (IllegalArgumentException ex) {
                     this.usernameField.setUnFocusColor(invalidInputFieldColor);
@@ -116,7 +117,7 @@ public class RegisterStaff implements Initializable {
         this.ageField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 try {
-                    validateAge(Integer.parseInt(this.ageField.getText()));
+                    requireNonNegative(Integer.parseInt(this.ageField.getText()), ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);
                     this.ageField.setUnFocusColor(textFieldDefaultUnfocusedColor);
                 } catch (IllegalArgumentException ex) {
                     this.ageField.setUnFocusColor(invalidInputFieldColor);
@@ -127,7 +128,7 @@ public class RegisterStaff implements Initializable {
         this.passwordField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 try {
-                    validateString(this.passwordField.getText());
+                    requireNonBlank(this.passwordField.getText(), ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
                     this.passwordField.setUnFocusColor(textFieldDefaultUnfocusedColor);
                 } catch (IllegalArgumentException ex) {
                     this.passwordField.setUnFocusColor(invalidInputFieldColor);
@@ -139,15 +140,15 @@ public class RegisterStaff implements Initializable {
     private boolean checkAllFields() {
         try {
             String firstName = firstNameField.getText();
-            validateString(firstName);
+            requireNonBlank(firstName, ExceptionMessages.NAME_NULL_OR_EMPTY);
             String lastName = lastNameField.getText();
-            validateString(lastName);
+            requireNonBlank(lastName, ExceptionMessages.NAME_NULL_OR_EMPTY);
             int age = Integer.parseInt(ageField.getText());
-            validateAge(age);
+            requireNonNegative(age, ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);
             String username = usernameField.getText();
-            validateString(username);
+            requireNonBlank(username, ExceptionMessages.NAME_NULL_OR_EMPTY);
             String password = passwordField.getText();
-            validateString(password);
+            requireNonBlank(password, ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
             this.firstName = firstName;
             this.lastName = lastName;
             this.age = age;

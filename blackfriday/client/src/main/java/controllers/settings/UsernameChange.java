@@ -11,7 +11,7 @@ import util.Operations;
 
 import java.io.IOException;
 
-import static validator.Validator.validateString;
+import static validator.Validator.requireNonBlank;
 
 public class UsernameChange {
 
@@ -24,7 +24,7 @@ public class UsernameChange {
     void usernameSubmit(ActionEvent event) throws IOException, ClassNotFoundException {
         String newUsername = usernameField.getText();
         try {
-            validateString(newUsername);
+            requireNonBlank(newUsername, ExceptionMessages.NAME_NULL_OR_EMPTY);
             boolean isUsernameChanged = Operations.changeUserField("change username",
                     usernameField.getText(),
                     ConstantMessages.USERNAME_CHANGE_SUCCESSFUL,

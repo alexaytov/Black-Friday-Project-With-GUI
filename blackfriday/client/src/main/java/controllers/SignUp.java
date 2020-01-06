@@ -16,8 +16,8 @@ import user.interfaces.User;
 
 import java.io.IOException;
 
-import static validator.Validator.validateAge;
-import static validator.Validator.validateString;
+import static validator.Validator.requireNonNegative;
+import static validator.Validator.requireNonBlank;
 
 public class SignUp {
 
@@ -60,11 +60,11 @@ public class SignUp {
             String lastName = lastNameField.getText();
             String username = usernameField.getText();
             String password = passwordField.getText();
-            validateString(firstName);
-            validateString(lastName);
-            validateString(username);
-            validateString(password);
-            validateAge(age);
+            requireNonBlank(firstName, ExceptionMessages.NAME_NULL_OR_EMPTY);
+            requireNonBlank(lastName, ExceptionMessages.NAME_NULL_OR_EMPTY);
+            requireNonBlank(username, ExceptionMessages.NAME_NULL_OR_EMPTY);
+            requireNonBlank(password, ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
+            requireNonNegative(age, ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);
 
             Client client = new Client(username, password, firstName, lastName, age);
 

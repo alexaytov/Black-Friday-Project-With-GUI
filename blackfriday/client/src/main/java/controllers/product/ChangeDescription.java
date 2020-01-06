@@ -3,6 +3,7 @@ package controllers.product;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
+import commonMessages.ExceptionMessages;
 import controllers.staff.StaffChosenProduct;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -19,7 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static validator.Validator.validateString;
+import static validator.Validator.requireNonBlank;
 
 public class ChangeDescription implements Initializable {
 
@@ -27,7 +28,7 @@ public class ChangeDescription implements Initializable {
 
     private Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(10), event -> {
         try {
-            validateString(this.descriptionField.getText());
+            requireNonBlank(this.descriptionField.getText(), ExceptionMessages.DESCRIPTION_NULL_OR_EMPTY);
             this.submitButton.setDisable(false);
         } catch (IllegalArgumentException ex) {
             this.submitButton.setDisable(true);

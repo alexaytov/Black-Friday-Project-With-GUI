@@ -12,7 +12,7 @@ import util.Operations;
 
 import java.io.IOException;
 
-import static validator.Validator.validateString;
+import static validator.Validator.requireNonBlank;
 
 
 public class LastNameChange {
@@ -30,7 +30,7 @@ public class LastNameChange {
     void lastNameSubmit(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
             String newLastName = lastNameField.getText();
-            validateString(newLastName);
+            requireNonBlank(newLastName, ExceptionMessages.NAME_NULL_OR_EMPTY);
             boolean isLastNameChanged = Operations.changeUserField("change last name",
                     lastNameField.getText(),
                     ConstantMessages.LAST_NAME_CHANGE_SUCCESSFUL,

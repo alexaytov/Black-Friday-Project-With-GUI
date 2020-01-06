@@ -1,5 +1,6 @@
 package database.IO;
 
+import commonMessages.ExceptionMessages;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import product.Product;
@@ -12,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static validator.Validator.validateName;
+import static validator.Validator.requireNonBlank;
 
 public class JSONWriter {
 
@@ -24,7 +25,7 @@ public class JSONWriter {
      * @param filePath file path of the product database file
      */
     public static synchronized void writeProducts(Map<String, Product> products, String filePath) {
-        validateName(filePath);
+        requireNonBlank(filePath, ExceptionMessages.FILE_PATH_NULL_OR_EMPTY);
 
         JSONObject jsonObject = new JSONObject();
         JSONArray productsArray = new JSONArray();
@@ -67,7 +68,7 @@ public class JSONWriter {
      * @param <T>      Object which extends User interface
      */
     public static synchronized <T extends User> void writeUsers(Map<String, T> users, String filePath) {
-        validateName(filePath);
+        requireNonBlank(filePath, ExceptionMessages.FILE_PATH_NULL_OR_EMPTY);
 
         JSONObject jsonObject = new JSONObject();
 
@@ -96,7 +97,7 @@ public class JSONWriter {
      * @param filePath  the file path to the file with the purchases database
      */
     public static synchronized void writePurchase(Map<String, List<Purchase>> purchases, String filePath) {
-        validateName(filePath);
+        requireNonBlank(filePath, ExceptionMessages.FILE_PATH_NULL_OR_EMPTY);
 
         JSONObject jsonObject = new JSONObject();
         // key -> id value -> purchase

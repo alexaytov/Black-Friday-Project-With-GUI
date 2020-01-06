@@ -4,7 +4,7 @@ import database.interfaces.Database;
 
 import java.util.Map;
 
-import static validator.Validator.validateMap;
+import static validator.Validator.requireNonNull;
 
 public abstract class BaseUserDatabase<T> implements Database<T> {
 
@@ -15,7 +15,7 @@ public abstract class BaseUserDatabase<T> implements Database<T> {
     }
 
     private void setData(Map<String, T> data) {
-        validateMap(data);
+        requireNonNull(data);
         this.data = data;
     }
 

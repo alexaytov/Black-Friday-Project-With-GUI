@@ -11,7 +11,7 @@ import util.Operations;
 
 import java.io.IOException;
 
-import static validator.Validator.validateString;
+import static validator.Validator.requireNonBlank;
 
 public class PasswordChange {
 
@@ -24,7 +24,7 @@ public class PasswordChange {
     void passwordSubmit(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
             String newPassword = passwordField.getText();
-            validateString(newPassword);
+            requireNonBlank(newPassword, ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
             boolean isPasswordChanged = Operations.changeUserField("change password",
                     passwordField.getText(),
                     ConstantMessages.PASSWORD_CHANGE_SUCCESSFUL,

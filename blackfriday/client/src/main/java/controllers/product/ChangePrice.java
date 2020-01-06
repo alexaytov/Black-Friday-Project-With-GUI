@@ -15,6 +15,7 @@ import javafx.util.Duration;
 import openjfx.Main;
 import product.Product;
 import util.Operations;
+import validator.Validator;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,7 +31,7 @@ public class ChangePrice implements Initializable {
     private Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(10), event -> {
         try {
             this.price = Double.parseDouble(this.priceField.getText());
-            validatePrice(this.price);
+            Validator.requireNonNegative(this.price, ExceptionMessages.MINIMUM_PRICE_MUST_BE_POSITIVE);
             this.submitButton.setDisable(false);
         } catch (IllegalArgumentException ex) {
             this.submitButton.setDisable(true);

@@ -7,45 +7,39 @@ import java.util.Map;
 
 public class Validator {
 
-    public static void validateString(String firstName) {
-        if (firstName == null || firstName.trim().length() == 0) {
-            throw new IllegalArgumentException(ExceptionMessages.STRING_NULL_OR_EMPTY);
+    public static void requireNonBlank(String text, String errorMessage) {
+        if (text == null || text.trim().length() == 0) {
+            throw new IllegalArgumentException(errorMessage);
         }
     }
 
-    public static void validateAge(int age) {
-        if (age <= 0) {
-            throw new IllegalArgumentException(ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);
+    public static void requireNonNegative(int number, String errorMessage) {
+        if (number <= 0) {
+            throw new IllegalArgumentException(errorMessage);
         }
     }
 
-    public static void validatePassword(String password) {
-        if (password == null || password.trim().length() == 0) {
-            throw new IllegalArgumentException(ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
+    public static void requireNonNegative(double number, String errorMessage){
+        if (number <= 0) {
+            throw new IllegalArgumentException(errorMessage);
         }
     }
 
-    public static void validateDate(ZonedDateTime date) {
+    public static void requireNonNull(Map map) {
+        if (map == null) {
+            throw new NullPointerException("Map can't be null");
+        }
+    }
+
+    public static void requireNonNull(ZonedDateTime date) {
         if (date == null) {
             throw new IllegalArgumentException(ExceptionMessages.DATE_NULL);
-        }
-    }
-
-    public static void validateMinimumPrice(double minimumPrice) {
-        if (minimumPrice <= 0) {
-            throw new IllegalArgumentException(ExceptionMessages.MINIMUM_PRICE_MUST_BE_POSITIVE);
         }
     }
 
     public static void validateQuantity(int quantity) {
         if (quantity < 0) {
             throw new IllegalArgumentException(ExceptionMessages.QUANTITY_ZERO_OR_NEGATIVE);
-        }
-    }
-
-    public static void validateDescription(String description) {
-        if (description == null || description.trim().isEmpty()) {
-            throw new IllegalArgumentException(ExceptionMessages.DESCRIPTION_NULL_OR_EMPTY);
         }
     }
 
@@ -61,35 +55,17 @@ public class Validator {
         }
     }
 
-    public static void validateDiscountPercent(double promotionalPricePercent, double price, double minimumPrice) {
-        if (promotionalPricePercent < 0 || price <= 0 || minimumPrice <= 0) {
+    public static void validateDiscountPercent(double discountPercent, double price, double minimumPrice) {
+        if (discountPercent < 0 || price <= 0 || minimumPrice <= 0) {
             throw new IllegalArgumentException();
         }
 
-        double promotionalPrice = price * (1 - promotionalPricePercent / 100);
+        double promotionalPrice = price * (1 - discountPercent / 100);
         if (promotionalPrice < 0) {
-            throw new IllegalArgumentException(ExceptionMessages.PROMOTIONAL_PRICE_ZERO_NEGATIVE);
+            throw new IllegalArgumentException(ExceptionMessages.DISCOUNTED_PRICE_ZERO_NEGATIVE);
         }
         if (promotionalPrice < minimumPrice) {
-            throw new IllegalArgumentException(ExceptionMessages.PROMOTIONAL_PRICE_BELOW_MINIMUM_PRICE);
-        }
-    }
-
-    public static void validateYear(int year) {
-        if (year <= 0) {
-            throw new IllegalArgumentException(ExceptionMessages.INVALID_NUMBER);
-        }
-    }
-
-    public static void validatePrice(double price) {
-        if (price <= 0) {
-            throw new IllegalArgumentException(ExceptionMessages.PRICE_ZERO_NEGATIVE);
-        }
-    }
-
-    public static void validateName(String firstName) {
-        if (firstName == null || firstName.trim().length() == 0) {
-            throw new IllegalArgumentException(ExceptionMessages.NAME_NULL_OR_EMPTY);
+            throw new IllegalArgumentException(ExceptionMessages.DISCOUNTED_PRICE_BELOW_MINIMUM_PRICE);
         }
     }
 
@@ -97,22 +73,16 @@ public class Validator {
     public static void validatePromotionalPricePercent(double promotionalPricePercent, double price, double minimumPrice) {
         double promotionalPrice = price * (1 - promotionalPricePercent / 100);
         if (promotionalPrice <= 0) {
-            throw new IllegalArgumentException(ExceptionMessages.PROMOTIONAL_PRICE_ZERO_NEGATIVE);
+            throw new IllegalArgumentException(ExceptionMessages.DISCOUNTED_PRICE_ZERO_NEGATIVE);
         }
         if (promotionalPrice < minimumPrice) {
-            throw new IllegalArgumentException(ExceptionMessages.PROMOTIONAL_PRICE_BELOW_MINIMUM_PRICE);
+            throw new IllegalArgumentException(ExceptionMessages.DISCOUNTED_PRICE_BELOW_MINIMUM_PRICE);
         }
     }
 
     public static void validateMonth(int month) {
         if (month <= 0 || month > 12) {
             throw new IllegalArgumentException(String.format(ExceptionMessages.MONTH_MUST_BE_BETWEEN_0_1, month));
-        }
-    }
-
-    public static void validateMap(Map map) {
-        if (map == null) {
-            throw new NullPointerException("Map can't be null");
         }
     }
 }
