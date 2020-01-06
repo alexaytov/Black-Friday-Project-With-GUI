@@ -34,12 +34,14 @@ public class Main extends Application {
         primaryStage.setResizable(false);
         try {
             InetAddress ip = InetAddress.getLocalHost();
-            int port = 4444;
+            final int port = Integer.parseInt(System.getenv("PORT"));
             Main.store = new Store(ip, port);
 
         } catch (IOException e) {
             showWarningDialog("There was a problem connecting to the server please try again!");
             Platform.exit();
+        }catch (NumberFormatException ex){
+            ex.printStackTrace();
         }
     }
 
