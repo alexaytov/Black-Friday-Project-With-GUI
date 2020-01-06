@@ -5,7 +5,6 @@ import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import openjfx.Main;
 import user.interfaces.User;
 import util.Operations;
 
@@ -28,7 +27,7 @@ public class PasswordChange {
             boolean isPasswordChanged = Operations.changeUserField("change password",
                     passwordField.getText(),
                     ConstantMessages.PASSWORD_CHANGE_SUCCESSFUL,
-                    ConstantMessages.PASSWORD_CHANGE_UNSUCCESSFUL, Main.store.getOis(), Main.store.getOos());
+                    ConstantMessages.PASSWORD_CHANGE_UNSUCCESSFUL);
             if (isPasswordChanged) {
                 this.user.setPassword(newPassword);
             }

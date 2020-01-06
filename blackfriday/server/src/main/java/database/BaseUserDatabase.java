@@ -1,5 +1,6 @@
 package database;
 
+import commonMessages.ExceptionMessages;
 import database.interfaces.Database;
 
 import java.util.Map;
@@ -15,7 +16,7 @@ public abstract class BaseUserDatabase<T> implements Database<T> {
     }
 
     private void setData(Map<String, T> data) {
-        requireNonNull(data);
+        requireNonNull(data, ExceptionMessages.DATABASE_MAP_NULL);
         this.data = data;
     }
 

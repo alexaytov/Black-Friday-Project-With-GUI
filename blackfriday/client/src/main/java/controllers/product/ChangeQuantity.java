@@ -26,11 +26,10 @@ public class ChangeQuantity implements Initializable {
     private int quantity;
 
     private Product product;
-
-    public void initProduct(Product product) {
-        this.product = product;
-    }
-
+    @FXML
+    private JFXTextField quantityField;
+    @FXML
+    private JFXButton submitButton;
     private Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(10), event -> {
         try {
             this.quantity = Integer.parseInt(this.quantityField.getText());
@@ -41,18 +40,16 @@ public class ChangeQuantity implements Initializable {
         }
     }));
 
-    @FXML
-    private JFXTextField quantityField;
-
-    @FXML
-    private JFXButton submitButton;
+    public void initProduct(Product product) {
+        this.product = product;
+    }
 
     @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
-        Main.store.getOos().writeObject("change product quantity");
-        Main.store.getOos().writeObject(this.quantity);
+        Main.tcpServer.write("change product quantity");
+        Main.tcpServer.write(this.quantity);
 
-        if ((boolean) Main.store.getOis().readObject()) {
+        if (Main.tcpServer.read()) {
             ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_QUANTITY_CHANGED_SUCCESSFUL);
             this.product.setQuantity(this.quantity);
         } else {

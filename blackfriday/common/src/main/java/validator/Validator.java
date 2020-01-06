@@ -2,9 +2,6 @@ package validator;
 
 import commonMessages.ExceptionMessages;
 
-import java.time.ZonedDateTime;
-import java.util.Map;
-
 public class Validator {
 
     public static void requireNonBlank(String text, String errorMessage) {
@@ -19,21 +16,15 @@ public class Validator {
         }
     }
 
-    public static void requireNonNegative(double number, String errorMessage){
+    public static void requireNonNegative(double number, String errorMessage) {
         if (number <= 0) {
             throw new IllegalArgumentException(errorMessage);
         }
     }
 
-    public static void requireNonNull(Map map) {
-        if (map == null) {
-            throw new NullPointerException("Map can't be null");
-        }
-    }
-
-    public static void requireNonNull(ZonedDateTime date) {
-        if (date == null) {
-            throw new IllegalArgumentException(ExceptionMessages.DATE_NULL);
+    public static void requireNonNull(Object object, String errorMessage) {
+        if (object == null) {
+            throw new NullPointerException(errorMessage);
         }
     }
 
@@ -85,4 +76,5 @@ public class Validator {
             throw new IllegalArgumentException(String.format(ExceptionMessages.MONTH_MUST_BE_BETWEEN_0_1, month));
         }
     }
+
 }

@@ -16,23 +16,21 @@ import java.io.IOException;
 public class ChangeSize {
 
     private Product product;
+    @FXML
+    private JFXTextField sizeField;
+    @FXML
+    private JFXButton submitButton;
 
     public void initProduct(Product product) {
         this.product = product;
     }
 
     @FXML
-    private JFXTextField sizeField;
-
-    @FXML
-    private JFXButton submitButton;
-
-    @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
-        Main.store.getOos().writeObject("change product size");
-        Main.store.getOos().writeObject(this.sizeField.getText());
+        Main.tcpServer.write("change product size");
+        Main.tcpServer.write(this.sizeField.getText());
 
-        if ((boolean) Main.store.getOis().readObject()) {
+        if (Main.tcpServer.read()) {
             ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_SIZE_CHANGED_SUCCESSFUL);
             this.product.setSize(this.sizeField.getText());
         } else {

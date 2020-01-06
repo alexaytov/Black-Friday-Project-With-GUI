@@ -55,7 +55,7 @@ public class ClientLoggedIn implements Initializable {
     private JFXRadioButton sortByPriceAscendingButton;
 
     @FXML
-    private JFXRadioButton sortByPriceDescnedingButton;
+    private JFXRadioButton sortByPriceDescendingButton;
 
     @FXML
     private HBox productsFilterChoice;
@@ -74,7 +74,7 @@ public class ClientLoggedIn implements Initializable {
 
     @FXML
     void goBack(ActionEvent event) throws IOException {
-        Main.store.getOos().writeObject("logout");
+        Main.tcpServer.write("logout");
         this.vBoxWithProducts.getScene().getWindow().hide();
         Operations.loadWindow(this.getClass(), "/view/login.fxml", "Log In", 600, 350);
     }
@@ -98,8 +98,8 @@ public class ClientLoggedIn implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            Main.store.getOos().writeObject("has promotions");
-            boolean storeHasPromotions = (boolean) Main.store.getOis().readObject();
+            Main.tcpServer.write("has promotions");
+            boolean storeHasPromotions = (boolean) Main.tcpServer.read();
             if (storeHasPromotions) {
                 productsFilterChoice.setVisible(true);
             } else {
@@ -147,8 +147,8 @@ public class ClientLoggedIn implements Initializable {
 
     @FXML
     void loadAllProducts(ActionEvent event) throws IOException, ClassNotFoundException {
-        Main.store.getOos().writeObject("get client products");
-        List<Product> products = (List<Product>) Main.store.getOis().readObject();
+        Main.tcpServer.write("get client products");
+        List<Product> products = (List<Product>) Main.tcpServer.read();
         fillVBoxWithProducts(products, this.vBoxWithProducts);
         if (products.size() == 0) {
             noResultsMessage();
@@ -158,8 +158,8 @@ public class ClientLoggedIn implements Initializable {
 
     @FXML
     void loadDiscountedProducts(ActionEvent event) throws IOException, ClassNotFoundException {
-        Main.store.getOos().writeObject("get client discounted products");
-        List<Product> products = (List<Product>) Main.store.getOis().readObject();
+        Main.tcpServer.write("get client discounted products");
+        List<Product> products = (List<Product>) Main.tcpServer.read();
         fillVBoxWithProducts(products, this.vBoxWithProducts);
 
         if (products.size() == 0) {
@@ -172,15 +172,15 @@ public class ClientLoggedIn implements Initializable {
     void searchProduct(ActionEvent event) throws IOException, ClassNotFoundException {
         String searchedProductName = this.productSearch.getText();
         if (allProductsButton.isSelected()) {
-            Main.store.getOos().writeObject("search client all products");
-            Main.store.getOos().writeObject(searchedProductName);
-            List<Product> products = (List<Product>) Main.store.getOis().readObject();
+            Main.tcpServer.write("search client all products");
+            Main.tcpServer.write(searchedProductName);
+            List<Product> products = (List<Product>) Main.tcpServer.read();
 
             fillVBoxWithProducts(products, this.vBoxWithProducts);
         } else {
-            Main.store.getOos().writeObject("search client discounted products");
-            Main.store.getOos().writeObject(searchedProductName);
-            List<Product> products = (List<Product>) Main.store.getOis().readObject();
+            Main.tcpServer.write("search client discounted products");
+            Main.tcpServer.write(searchedProductName);
+            List<Product> products = (List<Product>) Main.tcpServer.read();
 
             fillVBoxWithProducts(products, this.vBoxWithProducts);
         }
@@ -195,7 +195,7 @@ public class ClientLoggedIn implements Initializable {
             products.sort(Comparator.comparing(a -> a.getName().toLowerCase()));
         } else if (this.sortByPriceAscendingButton.isSelected()) {
             products.sort(Comparator.comparing(Product::getPrice));
-        } else if (this.sortByPriceDescnedingButton.isSelected()) {
+        } else if (this.sortByPriceDescendingButton.isSelected()) {
             products.sort((a, b) -> Double.compare(b.getPrice(), a.getPrice()));
         }
     }

@@ -7,7 +7,6 @@ import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import openjfx.Main;
 import user.interfaces.User;
 import util.Operations;
 
@@ -33,9 +32,7 @@ public class FirstNameChange {
             boolean change_first_name = Operations.changeUserField("change first name",
                     firstNameField.getText(),
                     ConstantMessages.FIRST_NAME_CHANGE_SUCCESSFUL,
-                    ConstantMessages.FIRST_NAME_CHANGE_UNSUCCESSFUL,
-                    Main.store.getOis(),
-                    Main.store.getOos());
+                    ConstantMessages.FIRST_NAME_CHANGE_UNSUCCESSFUL);
             if (change_first_name) {
                 user.setFirstName(newFirstName);
             }

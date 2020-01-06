@@ -1,5 +1,7 @@
 package server;
 
+import connection.Connection;
+import connection.TCPConnection;
 import store.Store;
 
 import java.io.IOException;
@@ -30,8 +32,8 @@ public class Server {
             while (true) {
                 Socket socket;
                 socket = serverSocket.accept();
-
-                ClientThread clientThread = new ClientThread(socket, STORE);
+                Connection clientConnection = new TCPConnection(socket);
+                ClientThread clientThread = new ClientThread(clientConnection, STORE);
                 Thread thread = new Thread(clientThread);
                 threadPool.execute(thread);
                 System.out.println("Thread with id " + thread.getId() + " started!!!");

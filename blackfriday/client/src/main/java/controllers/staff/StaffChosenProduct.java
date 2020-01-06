@@ -42,9 +42,9 @@ public class StaffChosenProduct {
     private JFXTextField pictureField;
 
     public void initProduct(String productName) throws IOException, ClassNotFoundException {
-        Main.store.getOos().writeObject("get product by name");
-        Main.store.getOos().writeObject(productName);
-        Product product = (Product) Main.store.getOis().readObject();
+        Main.tcpServer.write("get product by name");
+        Main.tcpServer.write(productName);
+        Product product = Main.tcpServer.read();
         fillProductFieldsWithInformation(product);
 
 
@@ -53,8 +53,8 @@ public class StaffChosenProduct {
     }
 
     public void initProduct(Product product) throws IOException {
-        Main.store.getOos().writeObject("set product");
-        Main.store.getOos().writeObject(product);
+        Main.tcpServer.write("set product");
+        Main.tcpServer.write(product);
         this.product = product;
         this.discountedPrice.setText(String.valueOf(product.getDiscountedPrice()));
         fillProductFieldsWithInformation(product);
@@ -75,9 +75,9 @@ public class StaffChosenProduct {
 
     @FXML
     void deleteChosenProduct(ActionEvent event) throws IOException, ClassNotFoundException {
-        Main.store.getOos().writeObject("delete product");
-        Main.store.getOos().writeObject(this.product.getName());
-        if ((boolean) Main.store.getOis().readObject()) {
+        Main.tcpServer.write("delete product");
+        Main.tcpServer.write(this.product.getName());
+        if (Main.tcpServer.read()) {
             ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_DELETED_SUCCESSFULLY);
         } else {
             ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_DELETED_UNSUCCESSFULLY);
@@ -129,9 +129,9 @@ public class StaffChosenProduct {
         File file = fileChooser.showOpenDialog(this.nameField.getScene().getWindow());
         if (file != null) {
             // user picked a file
-            Main.store.getOos().writeObject("change product image");
-            Main.store.getOos().writeObject(Files.readAllBytes(file.toPath()));
-            if ((boolean) Main.store.getOis().readObject()) {
+            Main.tcpServer.write("change product image");
+            Main.tcpServer.write(Files.readAllBytes(file.toPath()));
+            if (Main.tcpServer.read()) {
                 ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_IMAGE_CHANGE_SUCCESSFUL);
                 this.image.setImage(new Image(new FileInputStream(file)));
             } else {

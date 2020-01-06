@@ -4,7 +4,6 @@ module openjfx {
     requires com.jfoenix;
     requires common;
 
-
     opens controllers;
     opens controllers.product;
     opens controllers.staff;

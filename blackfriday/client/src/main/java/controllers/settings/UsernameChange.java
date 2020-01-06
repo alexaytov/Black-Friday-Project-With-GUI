@@ -5,7 +5,6 @@ import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import openjfx.Main;
 import user.interfaces.User;
 import util.Operations;
 
@@ -28,9 +27,7 @@ public class UsernameChange {
             boolean isUsernameChanged = Operations.changeUserField("change username",
                     usernameField.getText(),
                     ConstantMessages.USERNAME_CHANGE_SUCCESSFUL,
-                    ConstantMessages.USERNAME_CHANGE_UNSUCCESSFUL,
-                    Main.store.getOis(),
-                    Main.store.getOos());
+                    ConstantMessages.USERNAME_CHANGE_UNSUCCESSFUL);
             if (isUsernameChanged) {
                 this.user.setUsername(newUsername);
             }

@@ -35,7 +35,7 @@ public abstract class BaseUser implements User, Serializable, Cloneable {
     }
 
     private void setDateOfCreation(ZonedDateTime dateOfCreation) {
-        Validator.requireNonNull(dateOfCreation);
+        Validator.requireNonNull(dateOfCreation, ExceptionMessages.DATE_NULL);
         this.dateOfCreation = dateOfCreation;
     }
 

@@ -52,10 +52,10 @@ public class ChangeDiscountPercent implements Initializable {
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
             validateDiscountPercent(this.discountPercent, product.getPrice(), product.getMinimumPrice());
-            Main.store.getOos().writeObject("change product discount percent");
-            Main.store.getOos().writeObject(this.discountPercent);
+            Main.tcpServer.write("change product discount percent");
+            Main.tcpServer.write(this.discountPercent);
 
-            if ((boolean) Main.store.getOis().readObject()) {
+            if (Main.tcpServer.read()) {
                 ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_DISCOUNT_PERCENT_CHANGED_SUCCESSFUL);
                 this.product.setDiscountPercent(this.discountPercent);
 

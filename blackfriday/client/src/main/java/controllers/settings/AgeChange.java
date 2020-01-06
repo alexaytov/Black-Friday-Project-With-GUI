@@ -5,7 +5,6 @@ import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import openjfx.Main;
 import user.interfaces.User;
 import util.Operations;
 
@@ -28,10 +27,7 @@ public class AgeChange {
             boolean isAgeChanged = Operations.changeUserField("change age",
                     ageField.getText(),
                     ConstantMessages.AGE_CHANGE_SUCCESSFUL,
-                    ConstantMessages.AGE_CHANGE_UNSUCCESSFUL,
-                    Main.store.getOis(),
-                    Main.store.getOos()
-            );
+                    ConstantMessages.AGE_CHANGE_UNSUCCESSFUL);
             if (isAgeChanged) {
                 this.user.setAge(newAge);
             }

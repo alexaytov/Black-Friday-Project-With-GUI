@@ -29,7 +29,10 @@ public class ChangeMinimumPrice implements Initializable {
     private Product product;
 
     private double minimumPrice;
-
+    @FXML
+    private JFXTextField minimumPriceField;
+    @FXML
+    private JFXButton submitButton;
     private Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(10), event -> {
         try {
             this.minimumPrice = Integer.parseInt(this.minimumPriceField.getText());
@@ -45,19 +48,13 @@ public class ChangeMinimumPrice implements Initializable {
     }
 
     @FXML
-    private JFXTextField minimumPriceField;
-
-    @FXML
-    private JFXButton submitButton;
-
-    @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
         try {
             validatePrice(product.getPrice(), this.minimumPrice);
-            Main.store.getOos().writeObject("change product minimum price");
-            Main.store.getOos().writeObject(this.minimumPrice);
+            Main.tcpServer.write("change product minimum price");
+            Main.tcpServer.write(this.minimumPrice);
 
-            if ((boolean) Main.store.getOis().readObject()) {
+            if (Main.tcpServer.read()) {
                 ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_MINIMUM_PRICE_CHANGED_SUCCESSFUL);
                 this.product.setMinimumPrice(this.minimumPrice);
             } else {

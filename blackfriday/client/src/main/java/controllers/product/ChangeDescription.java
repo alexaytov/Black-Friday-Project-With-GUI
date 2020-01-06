@@ -25,7 +25,10 @@ import static validator.Validator.requireNonBlank;
 public class ChangeDescription implements Initializable {
 
     private Product product;
-
+    @FXML
+    private JFXTextField descriptionField;
+    @FXML
+    private JFXButton submitButton;
     private Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(10), event -> {
         try {
             requireNonBlank(this.descriptionField.getText(), ExceptionMessages.DESCRIPTION_NULL_OR_EMPTY);
@@ -36,18 +39,12 @@ public class ChangeDescription implements Initializable {
     }));
 
     @FXML
-    private JFXTextField descriptionField;
-
-    @FXML
-    private JFXButton submitButton;
-
-    @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
         System.out.println(" addddd");
-        Main.store.getOos().writeObject("change product description");
-        Main.store.getOos().writeObject(this.descriptionField.getText());
+        Main.tcpServer.write("change product description");
+        Main.tcpServer.write(this.descriptionField.getText());
 
-        if ((boolean) Main.store.getOis().readObject()) {
+        if (Main.tcpServer.read()) {
             ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_DESCRIPTION_CHANGED_SUCCESSFUL);
             product.setDescription(this.descriptionField.getText());
         } else {

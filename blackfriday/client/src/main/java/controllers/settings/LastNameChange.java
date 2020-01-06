@@ -6,7 +6,6 @@ import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import openjfx.Main;
 import user.interfaces.User;
 import util.Operations;
 
@@ -34,9 +33,7 @@ public class LastNameChange {
             boolean isLastNameChanged = Operations.changeUserField("change last name",
                     lastNameField.getText(),
                     ConstantMessages.LAST_NAME_CHANGE_SUCCESSFUL,
-                    ConstantMessages.LAST_NAME_CHANGE_UNSUCCESSFUL,
-                    Main.store.getOis(),
-                    Main.store.getOos());
+                    ConstantMessages.LAST_NAME_CHANGE_UNSUCCESSFUL);
             if (isLastNameChanged) {
                 this.user.setLastName(newLastName);
             }

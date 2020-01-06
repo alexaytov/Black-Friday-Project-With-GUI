@@ -150,8 +150,8 @@ public class StaffProducts implements Initializable {
     @FXML
     void productsSelected() throws IOException, ClassNotFoundException {
         this.allProductsButton.selectedProperty().setValue(true);
-        Main.store.getOos().writeObject("get staff products");
-        List<Product> nameImageContentOfProductList = (List<Product>) Main.store.getOis().readObject();
+        Main.tcpServer.write("get staff products");
+        List<Product> nameImageContentOfProductList = Main.tcpServer.read();
         fillVBoxWithProducts(nameImageContentOfProductList, this.vBoxWithProducts);
     }
 
@@ -159,9 +159,9 @@ public class StaffProducts implements Initializable {
     void searchQuantityControl() throws IOException, ClassNotFoundException {
 
         this.vBoxWithProductsQualityControl.getChildren().clear();
-        Main.store.getOos().writeObject("search quantity control");
-        Main.store.getOos().writeObject(this.maximumQuantity);
-        List<Product> products = (List<Product>) Main.store.getOis().readObject();
+        Main.tcpServer.write("search quantity control");
+        Main.tcpServer.write(this.maximumQuantity);
+        List<Product> products = Main.tcpServer.read();
         this.products = products;
         if (products.size() == 0) {
             noResultsMessage();
@@ -266,8 +266,8 @@ public class StaffProducts implements Initializable {
     @FXML
     void loadAllProducts(ActionEvent event) throws IOException, ClassNotFoundException {
         this.vBoxWithProducts.getChildren().clear();
-        Main.store.getOos().writeObject("get staff products");
-        List<Product> nameImageContentOfProductList = (List<Product>) Main.store.getOis().readObject();
+        Main.tcpServer.write("get staff products");
+        List<Product> nameImageContentOfProductList = Main.tcpServer.read();
         fillVBoxWithProducts(nameImageContentOfProductList, this.vBoxWithProducts);
         if (nameImageContentOfProductList.size() == 0) {
             noResultsMessage();
@@ -278,8 +278,8 @@ public class StaffProducts implements Initializable {
     @FXML
     void loadDiscountedProducts(ActionEvent event) throws IOException, ClassNotFoundException {
         this.vBoxWithProducts.getChildren().clear();
-        Main.store.getOos().writeObject("get staff discounted products");
-        List<Product> nameImageContentOfProductList = (List<Product>) Main.store.getOis().readObject();
+        Main.tcpServer.write("get staff discounted products");
+        List<Product> nameImageContentOfProductList = Main.tcpServer.read();
         fillVBoxWithProducts(nameImageContentOfProductList, this.vBoxWithProducts);
         if (nameImageContentOfProductList.size() == 0) {
             noResultsMessage();
@@ -290,14 +290,14 @@ public class StaffProducts implements Initializable {
     void searchProduct(ActionEvent event) throws IOException, ClassNotFoundException {
         this.vBoxWithProducts.getChildren().clear();
         if (allProductsButton.isSelected()) {
-            Main.store.getOos().writeObject("search staff all products");
-            Main.store.getOos().writeObject(this.productSearch.getText());
-            List<Product> products = (List<Product>) Main.store.getOis().readObject();
+            Main.tcpServer.write("search staff all products");
+            Main.tcpServer.write(this.productSearch.getText());
+            List<Product> products = Main.tcpServer.read();
             fillVBoxWithProducts(products, this.vBoxWithProducts);
         } else {
-            Main.store.getOos().writeObject("search staff discounted products");
-            Main.store.getOos().writeObject(this.productSearch.getText());
-            List<Product> products = (List<Product>) Main.store.getOis().readObject();
+            Main.tcpServer.write("search staff discounted products");
+            Main.tcpServer.write(this.productSearch.getText());
+            List<Product> products = Main.tcpServer.read();
             fillVBoxWithProducts(products, this.vBoxWithProducts);
         }
         if (vBoxWithProducts.getChildren().size() == 0) {
@@ -348,10 +348,10 @@ public class StaffProducts implements Initializable {
         double discountPercent = getProductInformationFromTextFields.getDiscountPercent();
         Product product = new Product(name, description, quantity, price, minimumPrice, discountPercent, Files.readAllBytes(this.createProductPictureFile.toPath()), size);
 
-        Main.store.getOos().writeObject("create product");
-        Main.store.getOos().writeObject(product);
+        Main.tcpServer.write("create product");
+        Main.tcpServer.write(product);
 
-        if ((boolean) Main.store.getOis().readObject()) {
+        if (Main.tcpServer.read()) {
             ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_CREATED);
             resetAllCreateProductField();
         } else {

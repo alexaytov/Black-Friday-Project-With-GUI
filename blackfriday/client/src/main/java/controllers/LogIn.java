@@ -101,7 +101,6 @@ public class LogIn implements Initializable {
 
     }
 
-
     @FXML
     void signUp(ActionEvent event) throws IOException {
         Operations.changeWindows(logInButton, "Sign Up", "/view/signUp.fxml", this.getClass(), 600, 550);
@@ -111,12 +110,12 @@ public class LogIn implements Initializable {
 
     private User login(String type, String username, String password) throws WrongPasswordException, NotFoundException, IOException, ClassNotFoundException {
         StringBuilder sb = new StringBuilder();
-        Main.store.getOos().writeObject("login");
+        Main.tcpServer.write("login");
         sb.append(type.toLowerCase()).append(" ").append(username).append(" ").append(password);
-        Main.store.getOos().writeObject(sb.toString());
-        User user = (User) Main.store.getOis().readObject();
+        Main.tcpServer.write(sb.toString());
+        User user = Main.tcpServer.read();
         if (user == null) {
-            String exceptionType = Main.store.getOis().readObject().toString();
+            String exceptionType = Main.tcpServer.read().toString();
             if (exceptionType.equals("WrongPasswordException")) {
                 throw new WrongPasswordException(ExceptionMessages.WRONG_PASSWORD);
             } else if (exceptionType.equals("NotFoundException")) {

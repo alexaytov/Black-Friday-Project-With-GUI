@@ -6,10 +6,9 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import openjfx.Main;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 public class Operations {
 
@@ -39,13 +38,11 @@ public class Operations {
     public static FXMLLoader loadWindow(Class clazz, String fxmlPath, String stageTitle, int width, int height) throws IOException {
         FXMLLoader loader = new FXMLLoader(clazz.getResource(fxmlPath));
         Parent root = loader.load();
-
         Scene scene = new Scene(root, width, height);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle(stageTitle);
         stage.show();
-
         return loader;
 
     }
@@ -53,12 +50,10 @@ public class Operations {
     public static <T> boolean changeUserField(String commandToServer,
                                               T newVariable,
                                               String messageIfSuccessful,
-                                              String messageIfUnsuccessful,
-                                              ObjectInputStream ois,
-                                              ObjectOutputStream oos) throws IOException, ClassNotFoundException {
-        oos.writeObject(commandToServer);
-        oos.writeObject(newVariable);
-        boolean changeSuccessful = (Boolean) ois.readObject();
+                                              String messageIfUnsuccessful) throws IOException, ClassNotFoundException {
+        Main.tcpServer.write(commandToServer);
+        Main.tcpServer.write(newVariable);
+        boolean changeSuccessful = Main.tcpServer.read();
         if (changeSuccessful) {
             ConstantMessages.confirmationPopUp(messageIfSuccessful);
             return true;

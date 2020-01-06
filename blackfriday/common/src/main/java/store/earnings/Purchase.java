@@ -1,7 +1,6 @@
 package store.earnings;
 
 import commonMessages.ExceptionMessages;
-import validator.Validator;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -60,12 +59,12 @@ public class Purchase implements Serializable {
     }
 
     private void setProductName(String productName) {
-        Validator.requireNonBlank(productName, ExceptionMessages.NAME_NULL_OR_EMPTY);
+        requireNonBlank(productName, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.productName = productName;
     }
 
     private void setUserName(String userName) {
-        Validator.requireNonBlank(userName, ExceptionMessages.NAME_NULL_OR_EMPTY);
+        requireNonBlank(userName, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.userName = userName;
     }
 
@@ -96,11 +95,17 @@ public class Purchase implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("Product name: ").append(this.getProductName())
                 .append(System.lineSeparator())
-                .append("Bought quantity: ").append(this.getQuantity())
+                .append("Bought quantity: ")
+                .append(this.getQuantity())
                 .append(System.lineSeparator())
-                .append("Price: ").append(this.getPrice())
+                .append("Price: ")
+                .append(this.getPrice())
                 .append(System.lineSeparator())
-                .append("Total cost: ").append(this.getCost());
+                .append("Total cost: ")
+                .append(this.getCost())
+                .append(System.lineSeparator())
+                .append("Date: ")
+                .append(this.getDate().toLocalDate().toString());
         return sb.toString();
     }
 }

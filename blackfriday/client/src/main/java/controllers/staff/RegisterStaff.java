@@ -18,8 +18,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import static validator.Validator.requireNonNegative;
 import static validator.Validator.requireNonBlank;
+import static validator.Validator.requireNonNegative;
 
 public class RegisterStaff implements Initializable {
 
@@ -59,10 +59,10 @@ public class RegisterStaff implements Initializable {
     @FXML
     void registerStaff(ActionEvent event) throws IOException, ClassNotFoundException {
         if (checkAllFields()) {
-            Main.store.getOos().writeObject("register staff");
+            Main.tcpServer.write("register staff");
             Staff staff = new Staff(this.username, this.password, this.firstName, this.lastName, this.age);
-            Main.store.getOos().writeObject(staff);
-            if ((boolean) Main.store.getOis().readObject()) {
+            Main.tcpServer.write(staff);
+            if (Main.tcpServer.read()) {
                 ConstantMessages.confirmationPopUp(ConstantMessages.STAFF_REGISTERED);
             } else {
                 ConstantMessages.confirmationPopUp(ConstantMessages.STAFF_ALREADY_EXISTS);

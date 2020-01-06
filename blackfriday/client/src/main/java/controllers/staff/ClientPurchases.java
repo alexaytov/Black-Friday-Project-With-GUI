@@ -70,8 +70,8 @@ public class ClientPurchases implements Initializable {
 
     @FXML
     void showAllPurchases() throws IOException, ClassNotFoundException {
-        Main.store.getOos().writeObject("get all clients information");
-        purchases = (Map<String, List<Purchase>>) Main.store.getOis().readObject();
+        Main.tcpServer.write("get all clients information");
+        purchases = Main.tcpServer.read();
 
         fillTreeView(purchases);
     }

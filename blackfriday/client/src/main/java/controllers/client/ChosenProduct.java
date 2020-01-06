@@ -55,11 +55,11 @@ public class ChosenProduct implements Initializable {
     @FXML
     void buyProduct(ActionEvent event) throws IOException, ClassNotFoundException {
         int wantedQuantity = this.wantedQuantity.getValue();
-        Main.store.getOos().writeObject("buy product");
-        Main.store.getOos().writeObject(this.product.getName());
-        Main.store.getOos().writeObject(wantedQuantity);
+        Main.tcpServer.write("buy product");
+        Main.tcpServer.write(this.product.getName());
+        Main.tcpServer.write(wantedQuantity);
 
-        if ((boolean) Main.store.getOis().readObject()) {
+        if (Main.tcpServer.read()) {
             ConstantMessages.confirmationPopUp(String.format("You just purchased %d of %s.", wantedQuantity, this.product.getName()));
             this.product.setQuantity(this.product.getQuantity() - wantedQuantity);
             this.quantityField.setText(String.valueOf(this.product.getQuantity()));

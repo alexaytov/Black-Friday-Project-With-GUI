@@ -1,15 +1,17 @@
 package openjfx;
 
+import connection.Connection;
+import connection.TCPConnection;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import store.Store;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.Socket;
 
 import static commonMessages.ExceptionMessages.showWarningDialog;
 
@@ -18,7 +20,7 @@ import static commonMessages.ExceptionMessages.showWarningDialog;
  */
 public class Main extends Application {
 
-    public static Store store;
+    public static Connection tcpServer;
 
 
     public static void main(String[] args) {
@@ -32,17 +34,18 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 600, 350));
         primaryStage.show();
         primaryStage.setResizable(false);
-        try {
-            InetAddress ip = InetAddress.getLocalHost();
-            final int port = Integer.parseInt(System.getenv("PORT"));
-            Main.store = new Store(ip, port);
 
-        } catch (IOException e) {
+        InetAddress ip = InetAddress.getLocalHost();
+        final int port = Integer.parseInt(System.getenv("PORT"));
+        try {
+            Socket socket = new Socket(ip, port);
+            tcpServer = new TCPConnection(socket);
+        } catch (IOException ex) {
             showWarningDialog("There was a problem connecting to the server please try again!");
             Platform.exit();
-        }catch (NumberFormatException ex){
-            ex.printStackTrace();
         }
+
+
     }
 
 }

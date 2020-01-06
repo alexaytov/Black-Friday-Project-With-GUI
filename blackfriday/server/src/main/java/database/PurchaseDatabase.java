@@ -28,7 +28,7 @@ public class PurchaseDatabase {
 
 
     private void setData(Map<String, List<Purchase>> data) {
-        requireNonNull(data);
+        requireNonNull(data, ExceptionMessages.DATABASE_MAP_NULL);
         this.data = data;
     }
 

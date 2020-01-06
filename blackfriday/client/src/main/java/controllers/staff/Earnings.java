@@ -75,12 +75,12 @@ public class Earnings {
         } else {
             // entered data is valid
             // sending data to server
-            Main.store.getOos().writeObject("earnings period");
-            Main.store.getOos().writeObject(startDate);
-            Main.store.getOos().writeObject(endDate);
+            Main.tcpServer.write("earnings period");
+            Main.tcpServer.write(startDate);
+            Main.tcpServer.write(endDate);
 
             // get and show earnings to GUI
-            double earnings = (double) Main.store.getOis().readObject();
+            double earnings = Main.tcpServer.read();
             this.customPeriodEarningsField.setText(String.valueOf(earnings));
 
         }
@@ -93,11 +93,11 @@ public class Earnings {
             LocalDate date = this.datePicker.getValue();
 
             // send command and year to server
-            Main.store.getOos().writeObject("earnings date");
-            Main.store.getOos().writeObject(date.toString());
+            Main.tcpServer.write("earnings date");
+            Main.tcpServer.write(date.toString());
 
             // get earnings from server
-            double earnings = (double) Main.store.getOis().readObject();
+            double earnings = Main.tcpServer.read();
             dateEarningsField.setText(String.valueOf(earnings));
         } catch (DateTimeException | IOException | ClassNotFoundException ex) {
             ex.printStackTrace();
@@ -112,12 +112,12 @@ public class Earnings {
             int month = Integer.parseInt(this.mMonthField.getText());
 
             // send data to server
-            Main.store.getOos().writeObject("earnings month");
-            Main.store.getOos().writeObject(month);
-            Main.store.getOos().writeObject(year);
+            Main.tcpServer.write("earnings month");
+            Main.tcpServer.write(month);
+            Main.tcpServer.write(year);
 
             // show data to GUI
-            double earnings = (double) Main.store.getOis().readObject();
+            double earnings = Main.tcpServer.read();
             this.monthEarningsField.setText(String.valueOf(earnings));
 
 
@@ -134,11 +134,11 @@ public class Earnings {
             Validator.requireNonNegative(year, ExceptionMessages.YEAR_MUST_BE_POSITIVE);
 
             // send command and year to server
-            Main.store.getOos().writeObject("earnings year");
-            Main.store.getOos().writeObject(year);
+            Main.tcpServer.write("earnings year");
+            Main.tcpServer.write(year);
 
             // get earnings from server
-            double earnings = (double) Main.store.getOis().readObject();
+            double earnings = Main.tcpServer.read();
             yearEarningsField.setText(String.valueOf(earnings));
 
         } catch (NumberFormatException ex) {

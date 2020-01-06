@@ -105,8 +105,8 @@ public class StaffSettings implements Initializable {
 
     @FXML
     void deleteAccount(ActionEvent event) throws IOException, ClassNotFoundException {
-        Main.store.getOos().writeObject("delete staff");
-        if ((boolean) Main.store.getOis().readObject()) {
+        Main.tcpServer.write("delete staff");
+        if ((boolean) Main.tcpServer.read()) {
             ConstantMessages.confirmationPopUp("User successfully deleted!");
             this.backButton.getScene().getWindow().hide();
             Operations.loadWindow(this.getClass(), "/view/login.fxml", "Log In", 600, 600);

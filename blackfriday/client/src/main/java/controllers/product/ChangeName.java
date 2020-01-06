@@ -31,10 +31,10 @@ public class ChangeName implements Initializable {
 
     @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
-        Main.store.getOos().writeObject("change product name");
-        Main.store.getOos().writeObject(this.nameField.getText());
+        Main.tcpServer.write("change product name");
+        Main.tcpServer.write(this.nameField.getText());
 
-        if ((boolean) Main.store.getOis().readObject()) {
+        if (Main.tcpServer.read()) {
             ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_NAME_CHANGED_SUCCESSFUL);
         } else {
             ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_NAME_CHANGED_UNSUCCESSFUL);

@@ -32,6 +32,8 @@ public class ExceptionMessages {
     public static String PRODUCT_ALREADY_EXISTS = "Product with the name %s alread exists!!!";
     public static String MONTH_MUST_BE_BETWEEN_0_1 = "Month %d must be between 1 and 12!!!";
     public static String YEAR_MUST_BE_POSITIVE = "Year %d must be a positive number!!!";
+    public static String CONNECTION_NULL = "Connection can't be null!!!";
+    public static String DATABASE_MAP_NULL = "Database map can't be null";
 
 
     public static void showWarningDialog(String warningMessage) {

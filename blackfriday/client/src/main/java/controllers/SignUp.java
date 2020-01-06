@@ -16,8 +16,8 @@ import user.interfaces.User;
 
 import java.io.IOException;
 
-import static validator.Validator.requireNonNegative;
 import static validator.Validator.requireNonBlank;
+import static validator.Validator.requireNonNegative;
 
 public class SignUp {
 
@@ -91,13 +91,13 @@ public class SignUp {
 
     private boolean registerUser(User toBeRegisteredUser) {
         try {
-            Main.store.getOos().writeObject("register client");
-            Main.store.getOos().writeObject(toBeRegisteredUser);
+            Main.tcpServer.write("register client");
+            Main.tcpServer.write(toBeRegisteredUser);
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            return Main.store.getOis().readObject().equals("true");
+            return Main.tcpServer.read().equals("true");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

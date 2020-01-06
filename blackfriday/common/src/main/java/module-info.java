@@ -7,4 +7,6 @@ module common {
     exports user;
     exports exceptions;
     exports validator;
+    exports connection;
+    exports store.earnings;
 }

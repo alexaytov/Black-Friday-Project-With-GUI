@@ -47,9 +47,9 @@ public class StaffLoggedIn implements Initializable {
     @FXML
     void blackFridaySwitch(ActionEvent event) throws IOException {
         if (blackFriday.isSelected()) {
-            Main.store.getOos().writeObject("start blackFriday");
+            Main.tcpServer.write("start blackFriday");
         } else {
-            Main.store.getOos().writeObject("stop blackFriday");
+            Main.tcpServer.write("stop blackFriday");
         }
     }
 
@@ -61,12 +61,12 @@ public class StaffLoggedIn implements Initializable {
 
     @FXML
     void earnings(ActionEvent event) throws IOException {
-        Operations.changeWindows(this.earningsButton, "earnings", "/view/staff/earnings.fxml", this.getClass(), 600, 400);
+        Operations.changeWindows(this.earningsButton, "store/earnings", "/view/staff/earnings.fxml", this.getClass(), 600, 400);
     }
 
     @FXML
     void logout(ActionEvent event) throws IOException {
-        Main.store.getOos().writeObject("logout");
+        Main.tcpServer.write("logout");
         Operations.changeWindows(this.logoutButton, "staffLoggedIn", "/view/login.fxml", this.getClass(), 600, 350);
     }
 
@@ -93,8 +93,8 @@ public class StaffLoggedIn implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         try {
-            Main.store.getOos().writeObject("has promotions");
-            if ((boolean) Main.store.getOis().readObject()) {
+            Main.tcpServer.write("has promotions");
+            if (Main.tcpServer.read()) {
                 blackFriday.selectedProperty().setValue(true);
             } else {
                 blackFriday.selectedProperty().setValue(false);
