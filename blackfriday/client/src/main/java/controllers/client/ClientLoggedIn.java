@@ -76,13 +76,13 @@ public class ClientLoggedIn implements Initializable {
     void goBack(ActionEvent event) throws IOException {
         Main.store.getOos().writeObject("logout");
         this.vBoxWithProducts.getScene().getWindow().hide();
-        Operations.loadWindow(this.getClass(), "/openjfx/login.fxml", "Log In", 600, 350);
+        Operations.loadWindow(this.getClass(), "/view/login.fxml", "Log In", 600, 350);
     }
 
     @FXML
     void settings(ActionEvent event) throws IOException {
         this.vBoxWithProducts.getScene().getWindow().hide();
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/openjfx/staff/staffSettings.fxml", "Settings", 600, 600);
+        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffSettings.fxml", "Settings", 600, 600);
         StaffSettings staffSettings = loader.getController();
         staffSettings.initUser(this.user);
     }
@@ -224,7 +224,7 @@ public class ClientLoggedIn implements Initializable {
         vbox.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             this.welcomeMessage.getScene().getWindow().hide();
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/openjfx/client/clientChosenProduct.fxml"));
+            loader.setLocation(getClass().getResource("/view/client/clientChosenProduct.fxml"));
             Stage stage = new Stage();
             Parent root = null;
             try {
@@ -246,10 +246,10 @@ public class ClientLoggedIn implements Initializable {
 
         HBox hbox = new HBox();
         hbox.setSpacing(10);
-        double productPrice = product.getPrice();
-        productPrice = ((int) (productPrice * 100)) / 100.0;
+        double productPurchasePrice = product.getPurchasePrice();
+        productPurchasePrice = ((int) (productPurchasePrice * 100)) / 100.0;
 
-        Label name = new Label(product.getName() + " " + productPrice + " лв.");
+        Label name = new Label(product.getName() + " " + productPurchasePrice + " лв.");
 
         hbox.getChildren().add(name);
         name.setFont(new Font(14));

@@ -44,7 +44,7 @@ public class SignUp {
         signUpButton.getScene().getWindow().hide();
 
         Stage logIn = new Stage();
-        Parent root = FXMLLoader.load(getClass().getResource("/openjfx/login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/view/login.fxml"));
         logIn.setTitle("Log in");
         logIn.setScene(new Scene(root, 600, 350));
         logIn.show();
@@ -72,7 +72,7 @@ public class SignUp {
                 // client registered successfully
                 signUpButton.getScene().getWindow().hide();
                 Stage logIn = new Stage();
-                Parent root = FXMLLoader.load(getClass().getResource("/openjfx/login.fxml"));
+                Parent root = FXMLLoader.load(getClass().getResource("/view/login.fxml"));
                 logIn.setTitle("Log in");
                 logIn.setScene(new Scene(root, 600, 400));
                 logIn.show();

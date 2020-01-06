@@ -64,7 +64,7 @@ public class ChangePrice implements Initializable {
             ExceptionMessages.showWarningDialog(ex.getMessage());
         }
 
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/openjfx/staff/staffChosenProduct.fxml", "Product", 600, 600);
+        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffChosenProduct.fxml", "Product", 600, 600);
         StaffChosenProduct controller = loader.getController();
         controller.initProduct(product);
         this.checkIfAllDataIsValid.stop();

@@ -71,7 +71,7 @@ public class ChosenProduct implements Initializable {
     @FXML
     void goBack(ActionEvent event) throws IOException {
         this.nameField.getScene().getWindow().hide();
-        Operations.loadWindow(this.getClass(), "/openjfx/client/clientLoggedIn.fxml", "Client", 650, 800);
+        Operations.loadWindow(this.getClass(), "/view/client/clientLoggedIn.fxml", "Client", 650, 800);
 
     }
 

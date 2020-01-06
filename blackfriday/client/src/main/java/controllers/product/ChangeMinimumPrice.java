@@ -67,7 +67,7 @@ public class ChangeMinimumPrice implements Initializable {
             ExceptionMessages.showWarningDialog(ExceptionMessages.PRICE_BELOW_MINIMUM_PRICE);
         }
 
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/openjfx/staff/staffChosenProduct.fxml", "Product", 600, 600);
+        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffChosenProduct.fxml", "Product", 600, 600);
         StaffChosenProduct controller = loader.getController();
         controller.initProduct(product);
         this.checkIfAllDataIsValid.stop();

@@ -208,7 +208,7 @@ public class StaffProducts implements Initializable {
         vbox.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             this.vBoxWithProducts.getScene().getWindow().hide();
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/openjfx/staff/staffChosenProduct.fxml"));
+            loader.setLocation(getClass().getResource("/view/staff/staffChosenProduct.fxml"));
             Stage stage = new Stage();
             Parent root = null;
             try {
@@ -320,7 +320,7 @@ public class StaffProducts implements Initializable {
 
     @FXML
     void goToMainMenu(ActionEvent event) throws IOException {
-        Operations.changeWindows(nameTextField, "Settings", "/openjfx/staff/staffLoggedIn.fxml", this.getClass(), 600, 600);
+        Operations.changeWindows(nameTextField, "Settings", "/view/staff/staffLoggedIn.fxml", this.getClass(), 600, 600);
 
     }
 

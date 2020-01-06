@@ -56,35 +56,35 @@ public class StaffLoggedIn implements Initializable {
     @FXML
     void clients(ActionEvent event) throws IOException {
         this.welcomeLabel.getScene().getWindow().hide();
-        Operations.loadWindow(this.getClass(), "/openjfx/staff/clients.fxml", "ClientPurchases", 600, 800);
+        Operations.loadWindow(this.getClass(), "/view/staff/clients.fxml", "ClientPurchases", 600, 800);
     }
 
     @FXML
     void earnings(ActionEvent event) throws IOException {
-        Operations.changeWindows(this.earningsButton, "earnings", "/openjfx/staff/earnings.fxml", this.getClass(), 600, 400);
+        Operations.changeWindows(this.earningsButton, "earnings", "/view/staff/earnings.fxml", this.getClass(), 600, 400);
     }
 
     @FXML
     void logout(ActionEvent event) throws IOException {
         Main.store.getOos().writeObject("logout");
-        Operations.changeWindows(this.logoutButton, "staffLoggedIn", "/openjfx/login.fxml", this.getClass(), 600, 350);
+        Operations.changeWindows(this.logoutButton, "staffLoggedIn", "/view/login.fxml", this.getClass(), 600, 350);
     }
 
     @FXML
     void products(ActionEvent event) throws IOException {
-        Operations.changeWindows(this.logoutButton, "Products", "/openjfx/staff/staffProducts.fxml", this.getClass(), 600, 730);
+        Operations.changeWindows(this.logoutButton, "Products", "/view/staff/staffProducts.fxml", this.getClass(), 600, 730);
     }
 
     @FXML
     void registerStaff(ActionEvent event) throws IOException {
-        Operations.loadWindow(this.getClass(), "/openjfx/staff/registerStaff.fxml", "Register Staff", 600, 630);
+        Operations.loadWindow(this.getClass(), "/view/staff/registerStaff.fxml", "Register Staff", 600, 630);
         this.welcomeLabel.getScene().getWindow().hide();
     }
 
     @FXML
     void settings(ActionEvent event) throws IOException {
         this.welcomeLabel.getScene().getWindow().hide();
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/openjfx/staff/staffSettings.fxml", "Settings", 600, 400);
+        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffSettings.fxml", "Settings", 600, 400);
         StaffSettings controller = loader.getController();
         controller.initUser(this.user);
     }

@@ -51,7 +51,7 @@ public class StaffSettings implements Initializable {
 
     @FXML
     void ChangeAge(ActionEvent event) throws IOException {
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/openjfx/settings/ageChange.fxml", "Age Change", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/settings/ageChange.fxml", "Age Change", 600, 200);
         AgeChange controller = loader.getController();
         controller.initUser(this.user);
 
@@ -59,21 +59,21 @@ public class StaffSettings implements Initializable {
 
     @FXML
     void changeFirstName(ActionEvent event) throws IOException {
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/openjfx/settings/firstNameChange.fxml", "First Name Change", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/settings/firstNameChange.fxml", "First Name Change", 600, 200);
         FirstNameChange controller = loader.getController();
         controller.initUser(this.user);
     }
 
     @FXML
     void changeLastName(ActionEvent event) throws IOException {
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/openjfx/settings/lastNameChange.fxml", "Last Name Change", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/settings/lastNameChange.fxml", "Last Name Change", 600, 200);
         LastNameChange controller = loader.getController();
         controller.initUser(this.user);
     }
 
     @FXML
     void changePassword(ActionEvent event) throws IOException {
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/openjfx/settings/passwordChange.fxml", "Password Change", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/settings/passwordChange.fxml", "Password Change", 600, 200);
         PasswordChange controller = loader.getController();
         controller.initUser(this.user);
 
@@ -81,7 +81,7 @@ public class StaffSettings implements Initializable {
 
     @FXML
     void changeUsername(ActionEvent event) throws IOException {
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/openjfx/settings/usernameChange.fxml", "Username Change", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/settings/usernameChange.fxml", "Username Change", 600, 200);
         UsernameChange controller = loader.getController();
         controller.initUser(this.user);
 
@@ -93,11 +93,11 @@ public class StaffSettings implements Initializable {
         FXMLLoader loader = null;
 
         if (this.user instanceof Client) {
-            loader = Operations.loadWindow(this.getClass(), "/openjfx/client/clientLoggedIn.fxml", "Logged In", 600, 730);
+            loader = Operations.loadWindow(this.getClass(), "/view/client/clientLoggedIn.fxml", "Logged In", 600, 730);
             ClientLoggedIn controller = loader.getController();
             controller.initUser(this.user);
         } else if (this.user instanceof Staff) {
-            loader = Operations.loadWindow(this.getClass(), "/openjfx/staff/staffLoggedIn.fxml", "Logged In", 600, 600);
+            loader = Operations.loadWindow(this.getClass(), "/view/staff/staffLoggedIn.fxml", "Logged In", 600, 600);
             StaffLoggedIn controller = loader.getController();
             controller.initUser(this.user);
         }
@@ -109,7 +109,7 @@ public class StaffSettings implements Initializable {
         if ((boolean) Main.store.getOis().readObject()) {
             ConstantMessages.confirmationPopUp("User successfully deleted!");
             this.backButton.getScene().getWindow().hide();
-            Operations.loadWindow(this.getClass(), "/openjfx/login.fxml", "Log In", 600, 600);
+            Operations.loadWindow(this.getClass(), "/view/login.fxml", "Log In", 600, 600);
         } else {
             ConstantMessages.confirmationPopUp("There was a problem deleting user!");
         }

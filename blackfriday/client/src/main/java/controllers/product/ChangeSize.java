@@ -39,7 +39,7 @@ public class ChangeSize {
             ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_SIZE_CHANGED_SUCCESSFUL);
         }
 
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/openjfx/staff/staffChosenProduct.fxml", "Product", 600, 600);
+        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffChosenProduct.fxml", "Product", 600, 600);
         StaffChosenProduct controller = loader.getController();
         controller.initProduct(this.product);
         this.sizeField.getScene().getWindow().hide();

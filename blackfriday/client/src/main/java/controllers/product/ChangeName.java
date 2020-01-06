@@ -42,7 +42,7 @@ public class ChangeName implements Initializable {
         this.submitButton.getScene().getWindow().hide();
 
         // load product window
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/openjfx/staff/staffChosenProduct.fxml", this.nameField.getText(), 600, 600);
+        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffChosenProduct.fxml", this.nameField.getText(), 600, 600);
         StaffChosenProduct controller = loader.getController();
         controller.initProduct(this.nameField.getText());
         this.nameField.getScene().getWindow().hide();

@@ -31,7 +31,7 @@ public class ClientPurchases implements Initializable {
     @FXML
     void goStaffProducts(ActionEvent event) throws IOException {
         this.clientPurchases.getScene().getWindow().hide();
-        Operations.loadWindow(this.getClass(), "/openjfx/staff/staffLoggedIn.fxml", "Welcome", 600, 600);
+        Operations.loadWindow(this.getClass(), "/view/staff/staffLoggedIn.fxml", "Welcome", 600, 600);
     }
 
     @FXML

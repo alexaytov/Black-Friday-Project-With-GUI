@@ -151,7 +151,7 @@ public class Earnings {
 
     @FXML
     void goBack(ActionEvent event) throws IOException {
-        Operations.changeWindows(this.datePicker, "staffLoggedIn", "/openjfx/staff/staffLoggedIn.fxml", this.getClass(), 600, 600);
+        Operations.changeWindows(this.datePicker, "staffLoggedIn", "/view/staff/staffLoggedIn.fxml", this.getClass(), 600, 600);
     }
 
 }

@@ -61,7 +61,7 @@ public class LogIn implements Initializable {
 
                 // logged in as client
                 this.usernameField.getScene().getWindow().hide();
-                FXMLLoader loader = Operations.loadWindow(this.getClass(), "/openjfx/client/clientLoggedIn.fxml", "Welcome", 650, 800);
+                FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/client/clientLoggedIn.fxml", "Welcome", 650, 800);
                 ClientLoggedIn controller = loader.getController();
                 controller.initUser(user);
 
@@ -74,7 +74,7 @@ public class LogIn implements Initializable {
                     // logged in as staff
 //                    util.Operations.changeWindows(logInButton, "StaffLoggedIn", "FXML/staffLoggedIn.fxml", this.getClass(), 600, 600);
                     this.usernameField.getScene().getWindow().hide();
-                    FXMLLoader loader = Operations.loadWindow(this.getClass(), "/openjfx/staff/staffLoggedIn.fxml", "Staff", 600, 600);
+                    FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffLoggedIn.fxml", "Staff", 600, 600);
                     StaffLoggedIn controller = loader.getController();
                     controller.initUser(user);
 
@@ -104,14 +104,13 @@ public class LogIn implements Initializable {
 
     @FXML
     void signUp(ActionEvent event) throws IOException {
-        Operations.changeWindows(logInButton, "Sign Up", "/openjfx/signUp.fxml", this.getClass(), 600, 550);
+        Operations.changeWindows(logInButton, "Sign Up", "/view/signUp.fxml", this.getClass(), 600, 550);
 
     }
 
 
     private User login(String type, String username, String password) throws WrongPasswordException, NotFoundException, IOException, ClassNotFoundException {
         StringBuilder sb = new StringBuilder();
-        System.out.println(Main.store);
         Main.store.getOos().writeObject("login");
         sb.append(type.toLowerCase()).append(" ").append(username).append(" ").append(password);
         Main.store.getOos().writeObject(sb.toString());

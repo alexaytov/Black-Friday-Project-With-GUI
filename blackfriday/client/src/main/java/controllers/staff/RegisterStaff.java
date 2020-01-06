@@ -74,7 +74,7 @@ public class RegisterStaff implements Initializable {
     @FXML
     void goToStaffLoggedIn(ActionEvent event) throws IOException {
         this.registerStaffButton.getScene().getWindow().hide();
-        Operations.loadWindow(this.getClass(), "/openjfx/staff/staffLoggedIn.fxml", "BlackFriday", 600, 730);
+        Operations.loadWindow(this.getClass(), "/view/staff/staffLoggedIn.fxml", "BlackFriday", 600, 730);
     }
 
     @Override
