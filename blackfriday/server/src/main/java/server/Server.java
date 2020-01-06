@@ -5,6 +5,8 @@ import store.Store;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class Server {
 
@@ -21,21 +23,18 @@ public class Server {
      */
     public void launch() {
 
-
-        int numberOfThreads = 0;
         ServerSocket serverSocket;
+        Executor threadPool = Executors.newFixedThreadPool(10);
         try {
             serverSocket = new ServerSocket(PORT);
             while (true) {
                 Socket socket;
                 socket = serverSocket.accept();
 
-
                 ClientThread clientThread = new ClientThread(socket, STORE);
-                numberOfThreads++;
                 Thread thread = new Thread(clientThread);
-                thread.start();
-                System.out.println("Thread with name " + (numberOfThreads - 1) + " started!!!");
+                threadPool.execute(thread);
+                System.out.println("Thread with id " + thread.getId() + " started!!!");
             }
         } catch (IOException e) {
             e.printStackTrace();
