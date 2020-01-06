@@ -64,7 +64,6 @@ public class ConstantMessages {
     public static final String PRODUCT_SIZE_CHANGED_UNSUCCESSFUL = "There was problem changing the size of the product please try again!";
 
 
-
     public static final String START_BLACK_FRIDAY = "Black friday started!";
     public static final String STOP_BLACK_FRIDAY = "Black friday stopped!";
 

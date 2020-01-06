@@ -2,7 +2,6 @@ package controllers.staff;
 
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
-import util.Operations;
 import controllers.product.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import openjfx.Main;
 import product.Product;
+import util.Operations;
 
 import java.io.*;
 import java.nio.file.Files;

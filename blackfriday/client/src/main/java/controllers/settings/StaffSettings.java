@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
-import util.Operations;
 import controllers.client.ClientLoggedIn;
 import controllers.staff.StaffLoggedIn;
 import javafx.animation.KeyFrame;
@@ -21,6 +20,7 @@ import openjfx.Main;
 import user.Client;
 import user.Staff;
 import user.interfaces.User;
+import util.Operations;
 
 import java.io.IOException;
 import java.net.URL;

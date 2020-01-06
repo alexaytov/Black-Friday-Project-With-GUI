@@ -5,7 +5,6 @@ import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
-import util.Operations;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -30,6 +29,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import openjfx.Main;
 import product.Product;
+import util.Operations;
 
 import java.io.*;
 import java.net.URL;

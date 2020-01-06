@@ -2,9 +2,12 @@ package exceptions;
 
 public class ProductAlreadyExistsException extends Exception {
 
-    public ProductAlreadyExistsException(String message){
+    public ProductAlreadyExistsException(String message) {
         super(message);
     }
 
-    public ProductAlreadyExistsException(){};
+    public ProductAlreadyExistsException() {
+    }
+
+    ;
 }

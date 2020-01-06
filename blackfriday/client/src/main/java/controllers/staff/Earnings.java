@@ -4,11 +4,11 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ExceptionMessages;
-import util.Operations;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import openjfx.Main;
+import util.Operations;
 import validator.Validator;
 
 import java.io.IOException;
@@ -72,7 +72,7 @@ public class Earnings {
         if (endDate.isBefore(startDate) || endDate.equals(startDate)) {
             //end data is before start data
             ExceptionMessages.showWarningDialog(ExceptionMessages.END_DATE_IS_BEFORE_START_DATE);
-        }else{
+        } else {
             // entered data is valid
             // sending data to server
             Main.store.getOos().writeObject("earnings period");
@@ -106,7 +106,7 @@ public class Earnings {
 
     @FXML
     void monthEarnings(ActionEvent event) throws IOException, ClassNotFoundException {
-        try{
+        try {
             // get year and mont from GUI
             int year = Integer.parseInt(this.mYearField.getText());
             int month = Integer.parseInt(this.mMonthField.getText());
@@ -121,7 +121,7 @@ public class Earnings {
             this.monthEarningsField.setText(String.valueOf(earnings));
 
 
-        }catch (NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             ExceptionMessages.showWarningDialog(ExceptionMessages.ENTER_NUMBER);
         }
     }

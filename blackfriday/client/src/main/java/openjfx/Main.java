@@ -21,7 +21,6 @@ public class Main extends Application {
     public static Store store;
 
 
-
     public static void main(String[] args) {
         launch();
     }

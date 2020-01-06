@@ -3,7 +3,6 @@ package controllers.client;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
-import util.Operations;
 import controllers.settings.StaffSettings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,6 +23,7 @@ import javafx.stage.Stage;
 import openjfx.Main;
 import product.Product;
 import user.interfaces.User;
+import util.Operations;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

@@ -170,7 +170,7 @@ public class Store {
      */
     public boolean changeUsername(User user, String newUsername) throws UserAlreadyExistsException {
         try {
-            if(this.clientDatabase.getData().containsKey(newUsername) || this.staffDatabase.getData().containsKey(newUsername)){
+            if (this.clientDatabase.getData().containsKey(newUsername) || this.staffDatabase.getData().containsKey(newUsername)) {
                 throw new UserAlreadyExistsException();
             }
             if (user instanceof Client) {
@@ -351,14 +351,14 @@ public class Store {
      * @throws NotFoundException if the product is not found
      */
     public boolean buyProduct(String productName, User user, int quantity) throws NotFoundException, NotEnoughQuantityException {
-        try{
+        try {
             Product product = this.productDatabase.getByName(productName);
             product.buy(user, quantity);
             this.productDatabase.saveAllChanges();
             Purchase purchase = new Purchase(productName, user.getUsername(), quantity, product.getPrice());
             earnings.logPurchase(purchase);
 
-        }catch (NotFoundException ex){
+        } catch (NotFoundException ex) {
             return false;
         }
         return true;

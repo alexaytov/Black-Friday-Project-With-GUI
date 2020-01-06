@@ -3,7 +3,6 @@ package controllers.product;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
-import util.Operations;
 import controllers.staff.StaffChosenProduct;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -14,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.util.Duration;
 import openjfx.Main;
 import product.Product;
+import util.Operations;
 
 import java.io.IOException;
 import java.net.URL;
@@ -58,7 +58,6 @@ public class ChangeDescription implements Initializable {
         controller.initProduct(product);
         this.checkIfAllDataIsValid.stop();
         this.descriptionField.getScene().getWindow().hide();
-
 
 
     }

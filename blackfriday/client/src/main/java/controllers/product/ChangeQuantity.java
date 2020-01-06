@@ -3,7 +3,6 @@ package controllers.product;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
-import util.Operations;
 import controllers.staff.StaffChosenProduct;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -14,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.util.Duration;
 import openjfx.Main;
 import product.Product;
+import util.Operations;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,16 +27,16 @@ public class ChangeQuantity implements Initializable {
 
     private Product product;
 
-    public void initProduct(Product product){
+    public void initProduct(Product product) {
         this.product = product;
     }
 
     private Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(10), event -> {
-        try{
+        try {
             this.quantity = Integer.parseInt(this.quantityField.getText());
             validateQuantity(quantity);
             this.submitButton.setDisable(false);
-        }catch (IllegalArgumentException ex){
+        } catch (IllegalArgumentException ex) {
             this.submitButton.setDisable(true);
         }
     }));
@@ -52,10 +52,10 @@ public class ChangeQuantity implements Initializable {
         Main.store.getOos().writeObject("change product quantity");
         Main.store.getOos().writeObject(this.quantity);
 
-        if((boolean) Main.store.getOis().readObject()){
+        if ((boolean) Main.store.getOis().readObject()) {
             ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_QUANTITY_CHANGED_SUCCESSFUL);
             this.product.setQuantity(this.quantity);
-        }else{
+        } else {
             ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_QUANTITY_CHANGED_UNSUCCESSFUL);
         }
 

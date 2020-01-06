@@ -3,13 +3,13 @@ package controllers.product;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
-import util.Operations;
 import controllers.staff.StaffChosenProduct;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import openjfx.Main;
 import product.Product;
+import util.Operations;
 
 import java.io.IOException;
 
@@ -17,7 +17,7 @@ public class ChangeSize {
 
     private Product product;
 
-    public void initProduct(Product product){
+    public void initProduct(Product product) {
         this.product = product;
     }
 
@@ -32,10 +32,10 @@ public class ChangeSize {
         Main.store.getOos().writeObject("change product size");
         Main.store.getOos().writeObject(this.sizeField.getText());
 
-        if((boolean) Main.store.getOis().readObject()){
+        if ((boolean) Main.store.getOis().readObject()) {
             ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_SIZE_CHANGED_SUCCESSFUL);
             this.product.setSize(this.sizeField.getText());
-        }else{
+        } else {
             ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_SIZE_CHANGED_SUCCESSFUL);
         }
 

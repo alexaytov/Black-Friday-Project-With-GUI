@@ -9,6 +9,7 @@ import static validator.Validator.validateMap;
 public abstract class BaseUserDatabase<T> implements Database<T> {
 
     private Map<String, T> data;
+
     BaseUserDatabase(Map<String, T> data) {
         this.setData(data);
     }

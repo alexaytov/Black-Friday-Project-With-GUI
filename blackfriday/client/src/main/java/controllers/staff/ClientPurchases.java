@@ -2,13 +2,13 @@ package controllers.staff;
 
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeView;
-import util.Operations;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
 import openjfx.Main;
 import store.earnings.Purchase;
+import util.Operations;
 
 import java.io.IOException;
 import java.net.URL;

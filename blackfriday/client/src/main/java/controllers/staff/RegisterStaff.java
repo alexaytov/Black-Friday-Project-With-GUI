@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
-import util.Operations;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import openjfx.Main;
 import user.Staff;
+import util.Operations;
 
 import java.io.IOException;
 import java.net.URL;

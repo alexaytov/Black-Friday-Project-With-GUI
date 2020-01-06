@@ -102,7 +102,6 @@ public class LogIn implements Initializable {
     }
 
 
-
     @FXML
     void signUp(ActionEvent event) throws IOException {
         Operations.changeWindows(logInButton, "Sign Up", "/openjfx/signUp.fxml", this.getClass(), 600, 550);

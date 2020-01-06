@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
-import util.Operations;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -17,6 +16,7 @@ import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 import openjfx.Main;
 import product.Product;
+import util.Operations;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -59,11 +59,11 @@ public class ChosenProduct implements Initializable {
         Main.store.getOos().writeObject(this.product.getName());
         Main.store.getOos().writeObject(wantedQuantity);
 
-        if((boolean) Main.store.getOis().readObject()){
+        if ((boolean) Main.store.getOis().readObject()) {
             ConstantMessages.confirmationPopUp(String.format("You just purchased %d of %s.", wantedQuantity, this.product.getName()));
             this.product.setQuantity(this.product.getQuantity() - wantedQuantity);
             this.quantityField.setText(String.valueOf(this.product.getQuantity()));
-        }else{
+        } else {
             ExceptionMessages.showWarningDialog("Sorry there was a problem with this purchase. Please Try again");
         }
     }
@@ -95,10 +95,10 @@ public class ChosenProduct implements Initializable {
         this.wantedQuantity.setValueFactory(integerSpinnerValueFactory);
 
         Timeline validateWantedQuantity = new Timeline(new KeyFrame(Duration.millis(50), event -> {
-            if(this.wantedQuantity.getValue() > this.product.getQuantity()){
+            if (this.wantedQuantity.getValue() > this.product.getQuantity()) {
                 this.wantedQuantity.setStyle("-fx-border-color: red;");
                 this.buyProductButton.setDisable(true);
-            }else{
+            } else {
                 this.wantedQuantity.setStyle("-fx-border-color: #23cba7;");
                 this.buyProductButton.setDisable(false);
             }

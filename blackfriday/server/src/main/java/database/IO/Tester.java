@@ -19,7 +19,6 @@ public class Tester {
         Store store = new Store(CLIENT_DATABASE_FILE_NAME, STAFF_DATABASE_FILE_NAME, PRODUCT_DATABASE_FILE_NAME, PURCHASES_DATABASE_FAIL_NAME);
 
 
-
         File file = new File("src/Database/images/shipping-cart.png");
 
 //        byte[] imageContent = Files.readAllBytes(file.toPath());

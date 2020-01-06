@@ -1,11 +1,11 @@
 package exceptions;
 
 public class UserAlreadyExistsException extends Exception {
-    public UserAlreadyExistsException(){
+    public UserAlreadyExistsException() {
 
     }
 
-    public UserAlreadyExistsException(String message){
+    public UserAlreadyExistsException(String message) {
         super(message);
     }
 }

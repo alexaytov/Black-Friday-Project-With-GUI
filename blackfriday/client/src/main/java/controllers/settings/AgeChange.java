@@ -3,11 +3,11 @@ package controllers.settings;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
-import util.Operations;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import openjfx.Main;
 import user.interfaces.User;
+import util.Operations;
 
 import java.io.IOException;
 

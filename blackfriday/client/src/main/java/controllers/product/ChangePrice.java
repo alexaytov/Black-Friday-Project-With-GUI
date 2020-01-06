@@ -4,7 +4,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
-import util.Operations;
 import controllers.staff.StaffChosenProduct;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -15,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.util.Duration;
 import openjfx.Main;
 import product.Product;
+import util.Operations;
 
 import java.io.IOException;
 import java.net.URL;
@@ -37,7 +37,7 @@ public class ChangePrice implements Initializable {
         }
     }));
 
-    public void initProduct(Product product){
+    public void initProduct(Product product) {
         this.product = product;
     }
 

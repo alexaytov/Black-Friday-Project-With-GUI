@@ -52,7 +52,7 @@ public class JSONReader {
                 double price = Double.parseDouble(kvp.getValue().get("price").toString());
                 double promotionalPricePercent = Double.parseDouble(kvp.getValue().get("promotionalPricePercent").toString());
                 double minimumPrice = Double.parseDouble(kvp.getValue().get("minimumPrice").toString());
-                String imageContentAsString =  kvp.getValue().get("imageContent").toString();
+                String imageContentAsString = kvp.getValue().get("imageContent").toString();
                 byte[] imageContent = parseImageContent(imageContentAsString);
                 Product product;
                 try {
@@ -66,7 +66,7 @@ public class JSONReader {
             return readProducts;
         } catch (ParseException ex) {
             return new HashMap<>();
-        }catch (IOException ex){
+        } catch (IOException ex) {
             ex.printStackTrace();
             return new HashMap<>();
         }

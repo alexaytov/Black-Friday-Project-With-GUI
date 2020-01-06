@@ -1,7 +1,7 @@
 package user;
 
-import validator.Validator;
 import user.interfaces.User;
+import validator.Validator;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -18,7 +18,7 @@ public abstract class BaseUser implements User, Serializable, Cloneable {
     private ZonedDateTime dateOfCreation;
 
 
-    protected BaseUser(String username, String password, String firstName, String lastName, int age, ZonedDateTime dateOfCreation){
+    protected BaseUser(String username, String password, String firstName, String lastName, int age, ZonedDateTime dateOfCreation) {
         this(username, password, firstName, lastName, age);
         this.setDateOfCreation(dateOfCreation);
     }
@@ -71,11 +71,13 @@ public abstract class BaseUser implements User, Serializable, Cloneable {
         Validator.validateString(firstName);
         this.firstName = firstName;
     }
+
     @Override
     public void setLastName(String lastName) {
         Validator.validateString(lastName);
         this.lastName = lastName;
     }
+
     @Override
     public void setAge(int age) {
         Validator.validateAge(age);

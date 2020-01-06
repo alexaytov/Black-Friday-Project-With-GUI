@@ -3,7 +3,6 @@ package controllers.product;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
-import util.Operations;
 import controllers.staff.StaffChosenProduct;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -13,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.util.Duration;
 import openjfx.Main;
+import util.Operations;
 
 import java.io.IOException;
 import java.net.URL;
@@ -47,9 +47,6 @@ public class ChangeName implements Initializable {
         controller.initProduct(this.nameField.getText());
         this.nameField.getScene().getWindow().hide();
     }
-
-
-
 
 
     @Override
