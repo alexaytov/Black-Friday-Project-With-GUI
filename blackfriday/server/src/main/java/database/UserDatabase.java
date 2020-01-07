@@ -1,22 +1,23 @@
 package database;
 
-import database.IO.JSONReader;
-import database.IO.JSONWriter;
+import database.interfaces.Database;
 import exceptions.NotFoundException;
 import user.interfaces.User;
 
 import java.io.IOException;
+import java.util.Map;
 
-public class UserDatabase<T extends User> extends BaseUserDatabase<T> {
+public class UserDatabase implements Database<User> {
     private final String filename;
+    private Map<String, User> data;
 
-    public UserDatabase(String fileName, String userType) throws IOException {
-        super(JSONReader.readUsers(fileName, userType));
+    public UserDatabase(String fileName) throws IOException {
+//        super(JSONReader.readUsers(fileName, userType));
         this.filename = fileName;
     }
 
-    public T getByName(String username) throws NotFoundException {
-        T user = super.getData().get(username);
+    public User getByName(String username) throws NotFoundException {
+        User user = this.data.get(username);
         if (user == null) {
             throw new NotFoundException();
         }
@@ -24,15 +25,15 @@ public class UserDatabase<T extends User> extends BaseUserDatabase<T> {
     }
 
     @Override
-    public synchronized void write(T user) {
-        super.getData().put(user.getUsername(), user);
+    public synchronized void write(User user) {
+        this.data.put(user.getUsername(), user);
         this.saveAllChanges();
 
     }
 
     @Override
     public synchronized void delete(String username) throws NotFoundException {
-        if (super.getData().remove(username) == null) {
+        if (this.data.remove(username) == null) {
             throw new NotFoundException();
         }
         this.saveAllChanges();
@@ -40,11 +41,16 @@ public class UserDatabase<T extends User> extends BaseUserDatabase<T> {
 
     @Override
     public boolean contains(User user) {
-        return super.getData().containsKey(user.getUsername());
+        return this.data.values().contains(user);
+    }
+
+    public boolean contains(String username) {
+        return this.data.containsKey(username);
     }
 
     @Override
     public void saveAllChanges() {
-        JSONWriter.writeUsers(super.getData(), filename);
+//        JSONWriter.writeUsers(super.getData(), filename);
+        //TODO save all change with the new library
     }
 }

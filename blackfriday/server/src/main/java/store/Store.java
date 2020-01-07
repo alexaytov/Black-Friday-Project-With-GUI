@@ -8,8 +8,6 @@ import exceptions.*;
 import product.Product;
 import store.earnings.Earnings;
 import store.earnings.Purchase;
-import user.Client;
-import user.Staff;
 import user.interfaces.User;
 
 import java.io.IOException;
@@ -24,17 +22,15 @@ import static validator.Validator.validateQuantity;
 
 public class Store {
 
-    private UserDatabase<Client> clientDatabase;
-    private UserDatabase<Staff> staffDatabase;
+    private UserDatabase userDatabase;
     private ProductDatabase productDatabase;
     private PurchaseDatabase purchaseDatabase;
     private Earnings earnings;
     private boolean blackFriday;
 
 
-    public Store(String clientDatabaseFileName, String staffDatabaseFileName, String productDatabaseFileName, String purchasesDatabaseFailName) throws IOException {
-        this.clientDatabase = new UserDatabase<>(clientDatabaseFileName, "client");
-        this.staffDatabase = new UserDatabase<>(staffDatabaseFileName, "staff");
+    public Store(String userDatabaseFileName, String productDatabaseFileName, String purchasesDatabaseFailName) throws IOException {
+        this.userDatabase = new UserDatabase(userDatabaseFileName);
         this.productDatabase = new ProductDatabase(productDatabaseFileName);
         this.purchaseDatabase = new PurchaseDatabase(purchasesDatabaseFailName);
         this.earnings = new Earnings(this.purchaseDatabase);
@@ -43,76 +39,43 @@ public class Store {
     }
 
     /**
-     * Checks if the client database contains client object
-     * with the same(@code username) and (@code password)
-     *
-     * @param username username of the client account to be checked
-     * @param password password of the client account to be checked
-     * @return Client object from the client database
-     * @throws NotFoundException      if there is client with this (@code username)
-     * @throws WrongPasswordException if the client registered with (@code username) has different password
+     * @param username the username of the client
+     * @param password the password of the client
+     * @return user object if the user is found and the password is correct
+     * @throws NotFoundException      if the user is not in the database
+     * @throws WrongPasswordException if the user exists but the passwords do not match
      */
-    public Client loginAsClient(String username, String password) throws NotFoundException, WrongPasswordException {
-        Client user = this.clientDatabase.getByName(username);
+    public User login(String username, String password) throws NotFoundException, WrongPasswordException {
+        User user = this.userDatabase.getByName(username);
         if (user.getPassword().equals(password)) {
             return user;
         }
         throw new WrongPasswordException(ExceptionMessages.WRONG_PASSWORD);
-
     }
 
     /**
-     * Checks if the staff database contains staff object
-     * with the same(@code username) and (@code password)
-     *
-     * @param username username of the staff account to be checked
-     * @param password password of the staff account to be checked
-     * @return Staff object from the staff database
-     * @throws NotFoundException      if there is staff with this (@code username)
-     * @throws WrongPasswordException if the staff registered with (@code username) has different password
+     * @param user the new user to be created
+     * @throws UserAlreadyExistsException if a user with the same username
+     *                                    already exists in the database
      */
-    public Staff loginAsStaff(String username, String password) throws NotFoundException, WrongPasswordException {
-        Staff user = this.staffDatabase.getByName(username);
-        if (user.getPassword().equals(password)) {
-            return user;
-        }
-        throw new WrongPasswordException();
-    }
-
-    /**
-     * Adds client account to the client database
-     *
-     * @param client client object to be added to the client database
-     * @throws UserAlreadyExistsException if client account with the same username already exists
-     */
-    public void registerClient(Client client) throws UserAlreadyExistsException {
-        if (this.clientDatabase.contains(client)) {
+    public void registerUser(User user) throws UserAlreadyExistsException {
+        if (this.userDatabase.contains(user)) {
             throw new UserAlreadyExistsException();
         }
-        this.clientDatabase.write(client);
+        this.userDatabase.write(user);
     }
 
     /**
-     * Adds staff account to the staff database
-     *
-     * @param staff staff object to be added to the staff database
-     * @throws UserAlreadyExistsException if staff account with the same username already exists
+     * @param username the username of the user to be deleted
+     * @throws NotFoundException if the user is not in the database
      */
-    public void registerStaff(Staff staff) throws UserAlreadyExistsException {
-        if (this.staffDatabase.contains(staff)) {
-            throw new UserAlreadyExistsException();
-        }
-        this.staffDatabase.write(staff);
+    public void deleteUser(String username) throws NotFoundException {
+        this.userDatabase.delete(username);
     }
 
-    public void deleteClient(String username) throws NotFoundException {
-        this.clientDatabase.delete(username);
-    }
-
-    public void deleteStaff(String username) throws NotFoundException {
-        this.staffDatabase.delete(username);
-    }
-
+    /**
+     * @return all of the client purchases
+     */
     public Map<String, List<Purchase>> getClientPurchases() {
         return this.purchaseDatabase.getAllPurchases();
     }
@@ -127,16 +90,11 @@ public class Store {
     public boolean changeUserFirstName(User user, String firstName) {
         try {
             user.setFirstName(firstName);
-            if (user instanceof Client) {
-                this.clientDatabase.saveAllChanges();
-            } else if (user instanceof Staff) {
-                this.staffDatabase.saveAllChanges();
-            }
+            this.userDatabase.saveAllChanges();
         } catch (IllegalArgumentException e) {
             return false;
         }
         return true;
-
     }
 
     /**
@@ -149,11 +107,7 @@ public class Store {
     public boolean changeUserLastName(User user, String lastName) {
         try {
             user.setLastName(lastName);
-            if (user instanceof Client) {
-                this.clientDatabase.saveAllChanges();
-            } else if (user instanceof Staff) {
-                this.staffDatabase.saveAllChanges();
-            }
+            this.userDatabase.saveAllChanges();
         } catch (IllegalArgumentException e) {
             return false;
         }
@@ -169,26 +123,16 @@ public class Store {
      * @return if the new username was set successfully
      */
     public boolean changeUsername(User user, String newUsername) throws UserAlreadyExistsException {
-        try {
-            if (this.clientDatabase.getData().containsKey(newUsername) || this.staffDatabase.getData().containsKey(newUsername)) {
-                throw new UserAlreadyExistsException();
-            }
-            if (user instanceof Client) {
-                this.clientDatabase.delete(user.getUsername());
-                user.setUsername(newUsername);
-                this.clientDatabase.write((Client) user);
-                this.clientDatabase.saveAllChanges();
-                user.setUsername(newUsername);
-            } else if (user instanceof Staff) {
-                this.staffDatabase.delete(user.getUsername());
-                user.setUsername(newUsername);
-                this.staffDatabase.write((Staff) user);
-                this.staffDatabase.saveAllChanges();
-            }
-        } catch (NotFoundException e) {
-            e.printStackTrace();
+
+        if (this.userDatabase.contains(newUsername)) {
+            throw new UserAlreadyExistsException();
+        }
+        try{
+            user.setUsername(newUsername);
+        }catch (IllegalArgumentException ex){
             return false;
         }
+        this.userDatabase.write(user);
         return true;
     }
 
@@ -202,11 +146,6 @@ public class Store {
     public boolean changePassword(User user, String newPassword) {
         try {
             user.setPassword(newPassword);
-            if (user instanceof Client) {
-                this.clientDatabase.saveAllChanges();
-            } else if (user instanceof Staff) {
-                this.staffDatabase.saveAllChanges();
-            }
         } catch (IllegalArgumentException e) {
             return false;
         }
@@ -223,11 +162,6 @@ public class Store {
     public boolean changeAge(User user, int newAge) {
         try {
             user.setAge(newAge);
-            if (user instanceof Client) {
-                this.clientDatabase.saveAllChanges();
-            } else if (user instanceof Staff) {
-                this.staffDatabase.saveAllChanges();
-            }
         } catch (IllegalArgumentException e) {
             return false;
         }

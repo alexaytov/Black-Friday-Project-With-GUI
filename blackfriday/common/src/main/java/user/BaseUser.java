@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 
 
-public abstract class BaseUser implements User, Serializable, Cloneable {
+public class BaseUser implements User, Serializable, Cloneable {
 
     private String firstName;
     private String lastName;
@@ -19,7 +19,7 @@ public abstract class BaseUser implements User, Serializable, Cloneable {
     private ZonedDateTime dateOfCreation;
 
 
-    protected BaseUser(String username, String password, String firstName, String lastName, int age, ZonedDateTime dateOfCreation) {
+    public BaseUser(String username, String password, String firstName, String lastName, int age, ZonedDateTime dateOfCreation) {
         this(username, password, firstName, lastName, age);
         this.setDateOfCreation(dateOfCreation);
     }
@@ -34,14 +34,30 @@ public abstract class BaseUser implements User, Serializable, Cloneable {
 
     }
 
+    @Override
+    public ZonedDateTime getDateOfCreation() {
+        return this.dateOfCreation;
+    }
+
     private void setDateOfCreation(ZonedDateTime dateOfCreation) {
         Validator.requireNonNull(dateOfCreation, ExceptionMessages.DATE_NULL);
         this.dateOfCreation = dateOfCreation;
     }
 
     @Override
-    public ZonedDateTime getDateOfCreation() {
-        return this.dateOfCreation;
+    public String getUsername() {
+        return this.username;
+    }
+
+    @Override
+    public void setUsername(String username) {
+        Validator.requireNonBlank(username, ExceptionMessages.NAME_NULL_OR_EMPTY);
+        this.username = username;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.password;
     }
 
     @Override
@@ -51,26 +67,18 @@ public abstract class BaseUser implements User, Serializable, Cloneable {
     }
 
     @Override
-    public void setUsername(String username) {
-        Validator.requireNonBlank(username, ExceptionMessages.NAME_NULL_OR_EMPTY);
-        this.username = username;
-    }
-
-
-    @Override
-    public String getUsername() {
-        return this.username;
-    }
-
-    @Override
-    public String getPassword() {
-        return this.password;
+    public String getFirstName() {
+        return this.firstName;
     }
 
     @Override
     public void setFirstName(String firstName) {
         Validator.requireNonBlank(firstName, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
     }
 
     @Override
@@ -80,25 +88,15 @@ public abstract class BaseUser implements User, Serializable, Cloneable {
     }
 
     @Override
-    public void setAge(int age) {
-        Validator.requireNonNegative(age, ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);
-        this.age = age;
-    }
-
-    @Override
-    public String getFirstName() {
-        return this.firstName;
-    }
-
-    public String getLastName() {
-        return this.lastName;
-    }
-
-    @Override
     public int getAge() {
         return this.age;
     }
 
+    @Override
+    public void setAge(int age) {
+        Validator.requireNonNegative(age, ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);
+        this.age = age;
+    }
 
     @Override
     public boolean equals(Object o) {

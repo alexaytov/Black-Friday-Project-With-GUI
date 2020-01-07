@@ -8,6 +8,7 @@ import store.Store;
 import user.BaseUser;
 import user.Client;
 import user.Staff;
+import user.interfaces.User;
 import validator.Validator;
 
 import java.io.IOException;
@@ -45,9 +46,9 @@ public class ClientThread implements Runnable {
                         String[] tokens = ((String) this.clientConnection.read()).split("\\s+");
                         try {
                             if (tokens[0].equals("client")) {
-                                this.user = this.store.loginAsClient(tokens[1], tokens[2]);
+                                this.user = this.store.login(tokens[1], tokens[2]);
                             } else {
-                                this.user = this.store.loginAsStaff(tokens[1], tokens[2]);
+                                this.user = this.store.login(tokens[1], tokens[2]);
                             }
                             this.clientConnection.write(user.clone());
                         } catch (WrongPasswordException | NotFoundException ex) {
@@ -56,18 +57,19 @@ public class ClientThread implements Runnable {
                         }
                         break;
                     case "register client":
-                        Client client = this.clientConnection.read();
+                        //TODO make one case register User
+                        User client = this.clientConnection.read();
                         try {
-                            this.store.registerClient(client);
+                            this.store.registerUser(client);
                             this.clientConnection.write("true");
                         } catch (UserAlreadyExistsException ex) {
                             this.clientConnection.write("false");
                         }
                         break;
                     case "register staff":
-                        Staff staff = this.clientConnection.read();
+                        User staff = this.clientConnection.read();
                         try {
-                            this.store.registerStaff(staff);
+                            this.store.registerUser(staff);
                             this.clientConnection.write(true);
                         } catch (UserAlreadyExistsException e) {
                             this.clientConnection.write(false);
@@ -180,7 +182,7 @@ public class ClientThread implements Runnable {
                     case "delete client":
                         //delete currently logged in client
                         try {
-                            this.store.deleteClient(this.user.getUsername());
+                            this.store.deleteUser(this.user.getUsername());
                             this.clientConnection.write(true);
                         } catch (NotFoundException ex) {
                             this.clientConnection.write(false);
@@ -189,7 +191,7 @@ public class ClientThread implements Runnable {
                     case "delete staff":
                         // deletes staff account currently logged in
                         try {
-                            this.store.deleteStaff(this.user.getUsername());
+                            this.store.deleteUser(this.user.getUsername());
                             this.clientConnection.write(true);
                         } catch (NotFoundException ex) {
                             this.clientConnection.write(false);
@@ -201,7 +203,7 @@ public class ClientThread implements Runnable {
                     case "delete client by username":
                         String usernameOfClientToBeDeleted = this.clientConnection.read().toString();
                         try {
-                            store.deleteClient(usernameOfClientToBeDeleted);
+                            store.deleteUser(usernameOfClientToBeDeleted);
                             this.clientConnection.write(true);
                         } catch (NotFoundException e) {
                             this.clientConnection.write(false);

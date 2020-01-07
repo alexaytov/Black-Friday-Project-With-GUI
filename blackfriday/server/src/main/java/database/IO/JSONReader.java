@@ -5,8 +5,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import product.Product;
 import store.earnings.Purchase;
-import user.Client;
-import user.Staff;
+import user.BaseUser;
 import user.interfaces.User;
 
 import java.io.File;
@@ -111,12 +110,7 @@ public class JSONReader {
                 String lastName = (String) userParameters.get("lastName");
                 int age = ((Long) userParameters.get("age")).intValue();
                 ZonedDateTime dateOfCreation = ZonedDateTime.parse(userParameters.get("dateOfCreation").toString());
-                T object = null;
-                if (classType.equals("client")) {
-                    object = (T) new Client(username, password, firstName, lastName, age, dateOfCreation);
-                } else if (classType.equals("staff")) {
-                    object = (T) new Staff(username, password, firstName, lastName, age, dateOfCreation);
-                }
+                T object = (T) new BaseUser(username, password, firstName, lastName, age, dateOfCreation);
                 data.put(username, object);
             }
             return data;
