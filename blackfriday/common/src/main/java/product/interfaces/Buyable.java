@@ -1,7 +1,7 @@
 package product.interfaces;
 
 import exceptions.NotEnoughQuantityException;
-import user.interfaces.User;
+import user.User;
 
 public interface Buyable {
 

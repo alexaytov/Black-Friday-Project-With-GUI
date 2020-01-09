@@ -1,7 +1,5 @@
 package database.IO;
 
-import store.Store;
-
 import java.io.File;
 import java.io.IOException;
 
@@ -16,7 +14,7 @@ public class Tester {
         final String PRODUCT_DATABASE_FILE_NAME = "src/Database/productDB.txt";
         final String PURCHASES_DATABASE_FAIL_NAME = "src/Database/purchaseDB.txt";
 
-        Store store = new Store(CLIENT_DATABASE_FILE_NAME, STAFF_DATABASE_FILE_NAME, PRODUCT_DATABASE_FILE_NAME, PURCHASES_DATABASE_FAIL_NAME);
+//        Store store = new Store(CLIENT_DATABASE_FILE_NAME, STAFF_DATABASE_FILE_NAME, PRODUCT_DATABASE_FILE_NAME, PURCHASES_DATABASE_FAIL_NAME);
 
 
         File file = new File("src/Database/images/shipping-cart.png");

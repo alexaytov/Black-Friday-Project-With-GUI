@@ -17,9 +17,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import openjfx.Main;
-import user.Client;
-import user.Staff;
-import user.interfaces.User;
+import user.Permission;
+import user.User;
 import util.Operations;
 
 import java.io.IOException;
@@ -92,11 +91,11 @@ public class StaffSettings implements Initializable {
         this.usernameField.getScene().getWindow().hide();
         FXMLLoader loader = null;
 
-        if (this.user instanceof Client) {
+        if ((this.user.getPermission().equals(Permission.CLIENT))) {
             loader = Operations.loadWindow(this.getClass(), "/view/client/clientLoggedIn.fxml", "Logged In", 600, 730);
             ClientLoggedIn controller = loader.getController();
             controller.initUser(this.user);
-        } else if (this.user instanceof Staff) {
+        } else if (this.user.getPermission().equals(Permission.ADMIN)) {
             loader = Operations.loadWindow(this.getClass(), "/view/staff/staffLoggedIn.fxml", "Logged In", 600, 600);
             StaffLoggedIn controller = loader.getController();
             controller.initUser(this.user);

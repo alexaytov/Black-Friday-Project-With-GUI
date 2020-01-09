@@ -6,7 +6,7 @@ module common {
     exports user.interfaces;
     exports user;
     exports exceptions;
-    exports validator;
+    exports validator to openjfx;
     exports connection;
     exports store.earnings;
 }

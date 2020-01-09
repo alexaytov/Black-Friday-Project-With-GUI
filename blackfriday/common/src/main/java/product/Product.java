@@ -4,7 +4,7 @@ import commonMessages.ExceptionMessages;
 import exceptions.NotEnoughQuantityException;
 import product.interfaces.Buyable;
 import product.interfaces.Promotional;
-import user.interfaces.User;
+import user.User;
 import validator.Validator;
 
 import java.io.Serializable;

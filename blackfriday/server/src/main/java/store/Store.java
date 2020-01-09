@@ -8,16 +8,17 @@ import exceptions.*;
 import product.Product;
 import store.earnings.Earnings;
 import store.earnings.Purchase;
-import user.interfaces.User;
+import user.User;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import static validator.Validator.validateQuantity;
+import static validator.Validator.requireNonBlank;
+import static validator.Validator.requireNonNull;
 
 
 public class Store {
@@ -29,10 +30,10 @@ public class Store {
     private boolean blackFriday;
 
 
-    public Store(String userDatabaseFileName, String productDatabaseFileName, String purchasesDatabaseFailName) throws IOException {
-        this.userDatabase = new UserDatabase(userDatabaseFileName);
-        this.productDatabase = new ProductDatabase(productDatabaseFileName);
-        this.purchaseDatabase = new PurchaseDatabase(purchasesDatabaseFailName);
+    public Store(Connection DBConnection) throws IOException, SQLException {
+        this.userDatabase = new UserDatabase(DBConnection);
+        this.productDatabase = new ProductDatabase(DBConnection);
+        this.purchaseDatabase = new PurchaseDatabase(DBConnection);
         this.earnings = new Earnings(this.purchaseDatabase);
         this.blackFriday = false;
 
@@ -45,7 +46,7 @@ public class Store {
      * @throws NotFoundException      if the user is not in the database
      * @throws WrongPasswordException if the user exists but the passwords do not match
      */
-    public User login(String username, String password) throws NotFoundException, WrongPasswordException {
+    public User login(String username, String password) throws NotFoundException, WrongPasswordException, IOException, SQLException {
         User user = this.userDatabase.getByName(username);
         if (user.getPassword().equals(password)) {
             return user;
@@ -55,43 +56,40 @@ public class Store {
 
     /**
      * @param user the new user to be created
-     * @throws UserAlreadyExistsException if a user with the same username
+     * @throws DataAlreadyExistsException if a user with the same username
      *                                    already exists in the database
      */
-    public void registerUser(User user) throws UserAlreadyExistsException {
-        if (this.userDatabase.contains(user)) {
-            throw new UserAlreadyExistsException();
-        }
-        this.userDatabase.write(user);
+    public void registerUser(User user) throws DataAlreadyExistsException, SQLException {
+        this.userDatabase.add(user);
     }
 
     /**
      * @param username the username of the user to be deleted
      * @throws NotFoundException if the user is not in the database
      */
-    public void deleteUser(String username) throws NotFoundException {
+    public void deleteUser(String username) throws NotFoundException, SQLException {
         this.userDatabase.delete(username);
     }
 
     /**
      * @return all of the client purchases
      */
-    public Map<String, List<Purchase>> getClientPurchases() {
-        return this.purchaseDatabase.getAllPurchases();
+    public List<Purchase> getClientPurchases() throws IOException, SQLException {
+        return this.purchaseDatabase.read("quantity != 0");
     }
 
     /**
      * Changes user first name
      *
-     * @param user      user object to be modified
+     * @param username  the username of the user object to be modified
      * @param firstName the new first name to be set to the user
-     * @return if the new first name was set successfully
+     * @return
      */
-    public boolean changeUserFirstName(User user, String firstName) {
+    public boolean changeUserFirstName(String username, String firstName) throws SQLException {
         try {
-            user.setFirstName(firstName);
-            this.userDatabase.saveAllChanges();
-        } catch (IllegalArgumentException e) {
+            requireNonBlank(firstName, ExceptionMessages.NAME_NULL_OR_EMPTY);
+            this.userDatabase.update(username, "first_name", firstName);
+        } catch (IllegalArgumentException ex) {
             return false;
         }
         return true;
@@ -100,14 +98,14 @@ public class Store {
     /**
      * Changes user last name
      *
-     * @param user     user object to be modified
+     * @param username the username of the user object to be modified
      * @param lastName the new last name to be set to the user
      * @return if the new last name was set successfully
      */
-    public boolean changeUserLastName(User user, String lastName) {
+    public boolean changeUserLastName(String username, String lastName) throws SQLException {
         try {
-            user.setLastName(lastName);
-            this.userDatabase.saveAllChanges();
+            requireNonBlank(lastName, ExceptionMessages.NAME_NULL_OR_EMPTY);
+            this.userDatabase.update(username, "last_name", lastName);
         } catch (IllegalArgumentException e) {
             return false;
         }
@@ -118,34 +116,35 @@ public class Store {
     /**
      * Changes user's username
      *
-     * @param user        user object to be modified
+     * @param username    the username of the user object to be modified
      * @param newUsername the new username to be set to the user
      * @return if the new username was set successfully
      */
-    public boolean changeUsername(User user, String newUsername) throws UserAlreadyExistsException {
+    public boolean changeUsername(String username, String newUsername) throws DataAlreadyExistsException, SQLException {
 
         if (this.userDatabase.contains(newUsername)) {
-            throw new UserAlreadyExistsException();
+            throw new DataAlreadyExistsException();
         }
-        try{
-            user.setUsername(newUsername);
-        }catch (IllegalArgumentException ex){
+        try {
+            requireNonBlank(newUsername, ExceptionMessages.NAME_NULL_OR_EMPTY);
+            this.userDatabase.update(username, "username", newUsername);
+        } catch (IllegalArgumentException ex) {
             return false;
         }
-        this.userDatabase.write(user);
         return true;
     }
 
     /**
      * Changes user password
      *
-     * @param user        user object to be modified
+     * @param username    the username of the user object to be modified
      * @param newPassword the new password to be set to the user
      * @return if the password was successfully changed
      */
-    public boolean changePassword(User user, String newPassword) {
+    public boolean changePassword(String username, String newPassword) throws SQLException {
         try {
-            user.setPassword(newPassword);
+            requireNonBlank(newPassword, ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
+            this.userDatabase.update(username, "password", newPassword);
         } catch (IllegalArgumentException e) {
             return false;
         }
@@ -155,13 +154,14 @@ public class Store {
     /**
      * Changes age of user
      *
-     * @param user   user object to be modified
-     * @param newAge the new age to be set to the user
+     * @param username the username of the user object to be modified
+     * @param newAge   the new age to be set to the user
      * @return if the new age is set successful
      */
-    public boolean changeAge(User user, int newAge) {
+    public boolean changeAge(String username, int newAge) throws SQLException {
         try {
-            user.setAge(newAge);
+            requireNonNull(newAge, ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);
+            this.userDatabase.update(username, "age", String.valueOf(newAge));
         } catch (IllegalArgumentException e) {
             return false;
         }
@@ -184,37 +184,31 @@ public class Store {
      *
      * @param blackFriday if is true
      */
-    public void setBlackFriday(boolean blackFriday) {
+    public void setBlackFriday(boolean blackFriday) throws IOException, SQLException {
         if (blackFriday) {
-            for (Map.Entry<String, Product> productEntry : this.productDatabase.getData().entrySet()) {
-                if (productEntry.getValue().getDiscountPercent() != 0) {
-                    productEntry.getValue().setDiscounted(true);
-                }
+            List<Product> productsWithDiscountPercent = this.productDatabase.read("discounted_percent > 0");
+            for (Product product : productsWithDiscountPercent) {
+                this.productDatabase.update(product.getName(), "is_discounted", "true");
             }
+
         } else {
-            for (Map.Entry<String, Product> productEntry : this.productDatabase.getData().entrySet()) {
-                productEntry.getValue().setDiscounted(false);
+            List<Product> discountedProducts = this.productDatabase.read("is_discounted == true");
+            for (Product discountedProduct : discountedProducts) {
+                this.productDatabase.update(discountedProduct.getName(), "is_discounted", "false");
             }
+
 
         }
         this.blackFriday = blackFriday;
-    }
-
-    public ProductDatabase getProductDatabase() {
-        return this.productDatabase;
     }
 
     /**
      * Adds the given product to the product database
      *
      * @param product object to be added
-     * @throws ProductAlreadyExistsException if the product already exists
      */
-    public void addProduct(Product product) throws ProductAlreadyExistsException {
-        if (this.productDatabase.getData().containsKey(product.getName())) {
-            throw new ProductAlreadyExistsException(String.format(ExceptionMessages.PRODUCT_ALREADY_EXISTS, product.getName()));
-        }
-        this.productDatabase.write(product);
+    public void addProduct(Product product) throws SQLException, DataAlreadyExistsException {
+        this.productDatabase.add(product);
     }
 
     /**
@@ -223,7 +217,7 @@ public class Store {
      * @param productName name of the product
      * @throws NotFoundException if the product isn't found in the database
      */
-    public void deleteProduct(String productName) throws NotFoundException {
+    public void deleteProduct(String productName) throws NotFoundException, SQLException {
         this.productDatabase.delete(productName);
     }
 
@@ -231,46 +225,29 @@ public class Store {
      * @return all promotional product names
      * which have quantity higher than 10
      */
-    public List<Product> getClientDiscountedProducts() {
-        return this.productDatabase
-                .getData().values().stream()
-                .filter(product -> product.isDiscounted() && product.getQuantity() > 0)
-                .collect(Collectors.toList());
+    public List<Product> getClientDiscountedProducts() throws IOException, SQLException {
+        return this.productDatabase.read("quantity != 0", "is_discounted == true");
     }
 
     /**
      * @return all the products which are discounted
      */
-    public List<Product> getStaffDiscountedProducts() {
-        return this.productDatabase
-                .getData().values().stream()
-                .filter(product -> product.getDiscountPercent() != 0)
-                .collect(Collectors.toList());
+    public List<Product> getStaffDiscountedProducts() throws IOException, SQLException {
+        return this.productDatabase.read("is_discounted == true");
     }
 
     /**
      * @return all the product names from the
      * database which have quantity higher than 10
      */
-    public List<String> getProductNamesForClient() {
-        return this.getProductDatabase()
-                .getData().values().stream()
-                .filter(product -> product.getQuantity() > 0)
+    public List<String> getProductNamesForClient() throws IOException, SQLException {
+        return this.productDatabase.read("quantity > 0")
+                .stream()
                 .map(Product::getName)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * @return all product names in the database
-     */
-    public List<String> getProductNamesForStaff() {
-        return this.getProductDatabase()
-                .getData().values().stream()
-                .map(Product::getName)
-                .collect(Collectors.toList());
-    }
-
-    public Product getProductByName(String name) throws NotFoundException {
+    public Product getProductByName(String name) throws NotFoundException, IOException, SQLException {
         return this.productDatabase.getByName(name);
     }
 
@@ -284,121 +261,85 @@ public class Store {
      * @return if the purchase was successful
      * @throws NotFoundException if the product is not found
      */
-    public boolean buyProduct(String productName, User user, int quantity) throws NotFoundException, NotEnoughQuantityException {
-        try {
-            Product product = this.productDatabase.getByName(productName);
-            product.buy(user, quantity);
-            this.productDatabase.saveAllChanges();
-            Purchase purchase = new Purchase(productName, user.getUsername(), quantity, product.getPrice());
-            earnings.logPurchase(purchase);
+    public boolean buyProduct(String productName, User user, int quantity) throws NotFoundException, NotEnoughQuantityException, IOException, SQLException {
 
-        } catch (NotFoundException ex) {
-            return false;
-        }
+        Product product = this.productDatabase.getByName(productName);
+        product.buy(user, quantity);
+        this.productDatabase.update(productName, "quantity", String.valueOf(product.getQuantity()));
+        Purchase purchase = new Purchase(productName, user.getUsername(), quantity, product.getPrice());
+        earnings.logPurchase(purchase);
         return true;
     }
 
-    /**
-     * @param quantity maximum quantity
-     * @return all product names with quantity lower than (@code quantity)
-     */
-    public List<String> getProductNamesBelowQuantity(int quantity) {
-        validateQuantity(quantity);
-        return this.productDatabase.getData().values()
-                .stream()
-                .filter(product -> product.getQuantity() < quantity)
-                .map(Product::getName)
-                .collect(Collectors.toList());
-    }
-
-    public void changeProductName(Product product, String newProductName) throws NotFoundException, ProductAlreadyExistsException {
-        if (this.productDatabase.getData().containsKey(newProductName)) {
-            throw new ProductAlreadyExistsException();
+    public void changeProductName(String productName, String newProductName) throws ProductAlreadyExistsException, SQLException {
+        if (this.productDatabase.contains(newProductName)) {
+            throw new ProductAlreadyExistsException(String.format(ExceptionMessages.PRODUCT_ALREADY_EXISTS, newProductName));
         }
-        this.productDatabase.delete(product.getName());
-        product.setName(newProductName);
-        this.productDatabase.write(product);
-        this.productDatabase.saveAllChanges();
+        this.productDatabase.update(productName, "name", newProductName);
     }
 
-    public void changeProductDescription(String productName, String newDescription) throws NotFoundException {
-        this.productDatabase.getData().get(productName).setDescription(newDescription);
-        this.productDatabase.saveAllChanges();
+    public void changeProductDescription(String productName, String newDescription) throws SQLException {
+        this.productDatabase.update(productName, "description", newDescription);
     }
 
-    public void changeProductDiscountPercent(String productName, double newDiscountPercent) throws NotFoundException {
-        this.productDatabase.getData().get(productName).setDiscountPercent(newDiscountPercent);
-        this.productDatabase.saveAllChanges();
+    public void changeProductDiscountPercent(String productName, double newDiscountPercent) {
+
     }
 
-    public void changeProductSize(String productName, String newSize) throws NotFoundException {
-        this.productDatabase.getData().get(productName).setSize(newSize);
-        this.productDatabase.saveAllChanges();
+    public void changeProductSize(String productName, String newSize) throws NotFoundException, SQLException {
+        this.productDatabase.update(productName, "size", newSize);
     }
 
-    public void changeProductQuantity(String productName, int quantity) throws NotFoundException {
-        this.productDatabase.getData().get(productName).setQuantity(quantity);
-        this.productDatabase.saveAllChanges();
+    public void changeProductQuantity(String productName, int quantity) throws SQLException {
+        this.productDatabase.update(productName, "quantity", String.valueOf(quantity));
     }
 
-    public double getEarnings(int year) {
+    public double getEarnings(int year) throws IOException, SQLException {
         return earnings.getEarnings(year);
     }
 
-    public double getEarnings(int month, int year) {
+    public double getEarnings(int month, int year) throws IOException, SQLException {
         return earnings.getEarnings(month, year);
     }
 
-    public double getEarnings(LocalDate startDate, LocalDate endDate) {
+    public double getEarnings(LocalDate startDate, LocalDate endDate) throws IOException, SQLException {
         return earnings.getEarnings(startDate, endDate);
     }
 
-    public double getEarnings(LocalDate date) {
+    public double getEarnings(LocalDate date) throws IOException, SQLException {
         return earnings.getEarnings(date);
     }
 
 
-    public List<Product> getStaffProducts() {
-        return new ArrayList<>(this.productDatabase.getData().values());
+    public List<Product> getStaffProducts() throws IOException, SQLException {
+        return this.productDatabase.read();
     }
 
 
-    public List<Product> getClientProducts() {
-
-        return this.productDatabase.getData().values()
-                .stream()
-                .filter(product -> product.getQuantity() > 0)
-                .collect(Collectors.toList());
+    public List<Product> getClientProducts() throws IOException, SQLException {
+        return this.productDatabase.read("quantity > 0");
     }
 
-    public void changeProductPrice(String name, double newPrice) {
-        this.productDatabase.getData().get(name).setPrice(newPrice);
+    public void changeProductPrice(String name, double newPrice) throws IOException, SQLException, NotFoundException {
+        Product product = this.productDatabase.getByName(name);
+        product.setPrice(newPrice);
+        this.productDatabase.update(name, "price", String.valueOf(newPrice));
     }
 
     public void changeProductImage(String productName, byte[] newImageContent) {
-        this.productDatabase.getData().get(productName)
-                .setImageContent(newImageContent);
+        this.productDatabase.updateProductImage(productName, newImageContent);
 
     }
 
-    public List<Product> searchAllProducts(String searchedAllProductsName) {
-        return this.productDatabase.getData().values()
-                .stream()
-                .filter(product -> product.getName().toLowerCase().contains(searchedAllProductsName.toLowerCase()))
-                .collect(Collectors.toList());
+    public List<Product> searchAllProducts(String searchedAllProductsName) throws IOException, SQLException {
+        return this.productDatabase.read("name LIKE '%" + searchedAllProductsName + "%'");
     }
 
-    public List<Product> searchDiscountedProducts(String searchedDiscountedProductsName) {
-        return this.productDatabase.getData().values()
-                .stream()
-                .filter(product -> product.isDiscounted() && product.getName().toLowerCase().contains(searchedDiscountedProductsName.toLowerCase()))
-                .collect(Collectors.toList());
+    public List<Product> searchDiscountedProducts(String searchedDiscountedProductsName) throws IOException, SQLException {
+        return this.productDatabase.read(String.format("is_discounted = true", "name LIKE %%s%", searchedDiscountedProductsName));
     }
 
-    public List<Product> searchQuantityControl(int maximumQuantity) {
-        return this.productDatabase.getData().values()
-                .stream()
-                .filter(product -> product.getQuantity() < maximumQuantity)
-                .collect(Collectors.toList());
+    public List<Product> searchQuantityControl(int maximumQuantity) throws IOException, SQLException {
+        return this.productDatabase.read("quantity < " + maximumQuantity);
     }
 }

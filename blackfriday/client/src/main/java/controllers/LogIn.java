@@ -13,7 +13,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import openjfx.Main;
-import user.interfaces.User;
+import user.Permission;
+import user.User;
 import util.Operations;
 import validator.Validator;
 
@@ -44,10 +45,6 @@ public class LogIn implements Initializable {
 
     @FXML
     void logIn(ActionEvent event) {
-        // show progress animation
-//        progress.setVisible(true);
-
-        // get username and password
         String username = usernameField.getText();
         String password = passwordField.getText();
 
@@ -57,36 +54,26 @@ public class LogIn implements Initializable {
             User user;
             //try to login as client;
             try {
-                user = login("client", username, password);
+                user = login(username, password);
 
                 // logged in as client
                 this.usernameField.getScene().getWindow().hide();
-                FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/client/clientLoggedIn.fxml", "Welcome", 650, 800);
-                ClientLoggedIn controller = loader.getController();
-                controller.initUser(user);
+                if (user.getPermission().equals(Permission.CLIENT)) {
+                    FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/client/clientLoggedIn.fxml", "asd", 650, 800);
+                    ClientLoggedIn controller = loader.getController();
+                    controller.initUser(user);
+                } else {
+                    FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffLoggedIn.fxml", "Staff", 600, 600);
+                    StaffLoggedIn controller = loader.getController();
+                    controller.initUser(user);
+                }
 
             } catch (WrongPasswordException e) {
                 System.out.println("wrong password");
                 ExceptionMessages.showWarningDialog("Invalid password");
             } catch (NotFoundException e) {
-                try {
-                    user = login("controllers/staff", username, password);
-                    // logged in as staff
-//                    util.Operations.changeWindows(logInButton, "StaffLoggedIn", "FXML/staffLoggedIn.fxml", this.getClass(), 600, 600);
-                    this.usernameField.getScene().getWindow().hide();
-                    FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffLoggedIn.fxml", "Staff", 600, 600);
-                    StaffLoggedIn controller = loader.getController();
-                    controller.initUser(user);
-
-                } catch (IOException | ClassNotFoundException ex) {
-                    ex.printStackTrace();
-                } catch (NotFoundException ex) {
-                    System.out.println("not found exception");
-                    ExceptionMessages.showWarningDialog("Account not found");
-                } catch (WrongPasswordException ex) {
-                    System.out.println("wrong password");
-                    ExceptionMessages.showWarningDialog("Wrong password");
-                }
+                System.out.println("not found exception");
+                ExceptionMessages.showWarningDialog("Account not found");
             } catch (IOException | ClassNotFoundException e) {
                 //TODO throw exceptions
                 e.printStackTrace();
@@ -96,9 +83,6 @@ public class LogIn implements Initializable {
             passwordField.clear();
             ExceptionMessages.showWarningDialog("You entered blank fields");
         }
-
-//        progress.setVisible(false);
-
     }
 
     @FXML
@@ -108,10 +92,10 @@ public class LogIn implements Initializable {
     }
 
 
-    private User login(String type, String username, String password) throws WrongPasswordException, NotFoundException, IOException, ClassNotFoundException {
+    private User login(String username, String password) throws WrongPasswordException, NotFoundException, IOException, ClassNotFoundException {
         StringBuilder sb = new StringBuilder();
         Main.tcpServer.write("login");
-        sb.append(type.toLowerCase()).append(" ").append(username).append(" ").append(password);
+        sb.append(username).append(" ").append(password);
         Main.tcpServer.write(sb.toString());
         User user = Main.tcpServer.read();
         if (user == null) {

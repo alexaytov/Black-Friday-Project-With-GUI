@@ -1,6 +1,6 @@
 package openjfx;
 
-import connection.Connection;
+import connection.ServerClientConnection;
 import connection.TCPConnection;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -20,7 +20,7 @@ import static commonMessages.ExceptionMessages.showWarningDialog;
  */
 public class Main extends Application {
 
-    public static Connection tcpServer;
+    public static ServerClientConnection tcpServer;
 
 
     public static void main(String[] args) {

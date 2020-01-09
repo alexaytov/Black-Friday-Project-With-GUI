@@ -1,6 +1,6 @@
 package server;
 
-import connection.Connection;
+import connection.ServerClientConnection;
 import connection.TCPConnection;
 import store.Store;
 
@@ -32,7 +32,7 @@ public class Server {
             while (true) {
                 Socket socket;
                 socket = serverSocket.accept();
-                Connection clientConnection = new TCPConnection(socket);
+                ServerClientConnection clientConnection = new TCPConnection(socket);
                 ClientThread clientThread = new ClientThread(clientConnection, STORE);
                 Thread thread = new Thread(clientThread);
                 threadPool.execute(thread);

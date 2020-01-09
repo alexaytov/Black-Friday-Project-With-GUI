@@ -1,77 +1,87 @@
 package user;
 
 import commonMessages.ExceptionMessages;
-import user.interfaces.User;
 import validator.Validator;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 
-public class BaseUser implements User, Serializable, Cloneable {
+public class User implements Serializable, Cloneable {
 
     private String firstName;
     private String lastName;
     private String username;
     private String password;
     private int age;
-    private ZonedDateTime dateOfCreation;
+    private LocalDateTime dateOfCreation;
+    private Permission permission;
 
 
-    public BaseUser(String username, String password, String firstName, String lastName, int age, ZonedDateTime dateOfCreation) {
-        this(username, password, firstName, lastName, age);
+    public User(String username, String password, Permission permission, String firstName, String lastName, int age, LocalDateTime dateOfCreation) {
+        this(username, password, permission, firstName, lastName, age);
         this.setDateOfCreation(dateOfCreation);
     }
 
-    protected BaseUser(String username, String password, String firstName, String lastName, int age) {
+    public  User(String username, String password, Permission permission, String firstName, String lastName, int age) {
         this.setUsername(username);
         this.setPassword(password);
+        this.setPermission(permission);
         this.setFirstName(firstName);
         this.setLastName(lastName);
         this.setAge(age);
-        this.dateOfCreation = ZonedDateTime.now();
+
+        this.dateOfCreation = LocalDateTime.now();
 
     }
 
-    @Override
-    public ZonedDateTime getDateOfCreation() {
+    public Permission getPermission() {
+        return permission;
+    }
+
+    public void setPermission(Permission permission) {
+        Validator.requireNonNull(permission, ExceptionMessages.PERMISSION_NULL);
+        this.permission = permission;
+    }
+
+    public LocalDateTime DateOfCreation() {
         return this.dateOfCreation;
     }
 
-    private void setDateOfCreation(ZonedDateTime dateOfCreation) {
+    private void setDateOfCreation(LocalDateTime dateOfCreation) {
         Validator.requireNonNull(dateOfCreation, ExceptionMessages.DATE_NULL);
         this.dateOfCreation = dateOfCreation;
     }
 
-    @Override
+
     public String getUsername() {
         return this.username;
     }
 
-    @Override
+
     public void setUsername(String username) {
         Validator.requireNonBlank(username, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.username = username;
     }
 
-    @Override
+
     public String getPassword() {
         return this.password;
     }
 
-    @Override
+
     public void setPassword(String password) {
         Validator.requireNonBlank(password, ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
         this.password = password;
     }
 
-    @Override
+
     public String getFirstName() {
         return this.firstName;
     }
 
-    @Override
+
     public void setFirstName(String firstName) {
         Validator.requireNonBlank(firstName, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.firstName = firstName;
@@ -81,28 +91,32 @@ public class BaseUser implements User, Serializable, Cloneable {
         return this.lastName;
     }
 
-    @Override
+
     public void setLastName(String lastName) {
         Validator.requireNonBlank(lastName, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.lastName = lastName;
     }
 
-    @Override
+
     public int getAge() {
         return this.age;
     }
 
-    @Override
+
     public void setAge(int age) {
         Validator.requireNonNegative(age, ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);
         this.age = age;
+    }
+
+    public LocalDateTime getDateOfCreation() {
+        return dateOfCreation;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BaseUser baseUser = (BaseUser) o;
+        User baseUser = (User) o;
         return username.equals(baseUser.username);
     }
 

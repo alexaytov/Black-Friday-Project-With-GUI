@@ -5,7 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class TCPConnection implements Connection {
+public class TCPConnection implements ServerClientConnection {
 
     private ObjectOutputStream objectOutputStream;
     private ObjectInputStream objectInputStream;

@@ -11,7 +11,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import openjfx.Main;
-import user.Staff;
+import user.Permission;
+import user.User;
 import util.Operations;
 
 import java.io.IOException;
@@ -60,8 +61,8 @@ public class RegisterStaff implements Initializable {
     void registerStaff(ActionEvent event) throws IOException, ClassNotFoundException {
         if (checkAllFields()) {
             Main.tcpServer.write("register staff");
-            Staff staff = new Staff(this.username, this.password, this.firstName, this.lastName, this.age);
-            Main.tcpServer.write(staff);
+            User user = new User(this.username, this.password, Permission.ADMIN, this.firstName, this.lastName, this.age);
+            Main.tcpServer.write(user);
             if (Main.tcpServer.read()) {
                 ConstantMessages.confirmationPopUp(ConstantMessages.STAFF_REGISTERED);
             } else {

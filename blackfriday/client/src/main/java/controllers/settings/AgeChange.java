@@ -5,7 +5,7 @@ import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import user.interfaces.User;
+import user.User;
 import util.Operations;
 
 import java.io.IOException;

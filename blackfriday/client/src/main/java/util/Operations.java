@@ -36,7 +36,7 @@ public class Operations {
     }
 
     public static FXMLLoader loadWindow(Class clazz, String fxmlPath, String stageTitle, int width, int height) throws IOException {
-        FXMLLoader loader = new FXMLLoader(clazz.getResource(fxmlPath));
+        FXMLLoader loader = new FXMLLoader(Operations.class.getResource(fxmlPath));
         Parent root = loader.load();
         Scene scene = new Scene(root, width, height);
         Stage stage = new Stage();

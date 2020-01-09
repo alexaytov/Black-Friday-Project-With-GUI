@@ -1,48 +1,73 @@
 package database;
 
-import database.IO.JSONReader;
-import database.IO.JSONWriter;
-import exceptions.NotFoundException;
+import database.parsers.ProductParser;
+import exceptions.DataAlreadyExistsException;
 import product.Product;
 
-public class ProductDatabase extends BaseUserDatabase<Product> {
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
 
-    private String filename;
+public class ProductDatabase extends BaseDatabase<Product> {
 
-    public ProductDatabase(String fileName) {
-        super(JSONReader.readProducts(fileName));
-        this.filename = fileName;
+    private static String tableName = "products";
+    private static String primaryKey = "name";
+    private Statement statement;
+    private Connection DBConnection;
+
+    public ProductDatabase(Connection DBConnection) throws IOException, SQLException {
+        super(DBConnection, tableName, primaryKey, new ProductParser());
+        this.DBConnection = DBConnection;
+        this.statement = DBConnection.createStatement();
     }
 
-    public Product getByName(String name) throws NotFoundException {
-        Product product = super.getData().get(name);
-        if (product == null) {
-            throw new NotFoundException();
+
+    public void updateProductImage(String productName, byte[] imageContent) {
+        // update sql
+        String updateSQL = "UPDATE products SET image_content = ? WHERE name = ?";
+
+        try (PreparedStatement pstmt = this.DBConnection.prepareStatement(updateSQL)) {
+
+            // create input stream from byte array
+
+            InputStream input = new ByteArrayInputStream(imageContent);
+
+            // set parameters
+            pstmt.setBinaryStream(1, input);
+            pstmt.setString(2, productName);
+
+            // store image content in the database
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-        return product;
     }
 
     @Override
-    public synchronized void write(Product data) {
-        super.getData().put(data.getName(), data);
-        this.saveAllChanges();
-    }
-
-    @Override
-    public boolean contains(Product data) {
-        return super.getData().containsKey(data.getName());
-    }
-
-    @Override
-    public synchronized void delete(String productName) throws NotFoundException {
-        if (super.getData().remove(productName) == null) {
-            throw new NotFoundException();
+    public void add(Product data) throws SQLException, DataAlreadyExistsException {
+        if (super.contains(data.getName())) {
+            throw new DataAlreadyExistsException();
         }
-        this.saveAllChanges();
+        String sql = String.format(
+                "INSERT INTO products(`name`, `description`, `quantity`, `price`, `minimum_price`, `discounted_percent`, `is_discounted`, `size`) " +
+                        "VALUES('%s', '%s', '%d', %f, %f, %f, %s, '%s');",
+                data.getName(),
+                data.getDescription(),
+                data.getQuantity(),
+                data.getPrice(),
+                data.getMinimumPrice(),
+                data.getDiscountPercent(),
+                String.valueOf(data.isDiscounted()),
+                data.getSize()
+        );
+        this.statement.execute(sql);
+
+        updateProductImage(data.getName(), data.getImageContent());
     }
 
-    @Override
-    public void saveAllChanges() {
-        JSONWriter.writeProducts(super.getData(), this.filename);
-    }
 }

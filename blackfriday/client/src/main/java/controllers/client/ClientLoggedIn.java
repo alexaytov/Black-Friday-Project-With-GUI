@@ -22,7 +22,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import openjfx.Main;
 import product.Product;
-import user.interfaces.User;
+import user.User;
 import util.Operations;
 
 import java.io.ByteArrayInputStream;

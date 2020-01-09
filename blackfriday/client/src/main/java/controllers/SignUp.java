@@ -11,8 +11,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import openjfx.Main;
-import user.Client;
-import user.interfaces.User;
+import user.Permission;
+import user.User;
 
 import java.io.IOException;
 
@@ -66,9 +66,9 @@ public class SignUp {
             requireNonBlank(password, ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
             requireNonNegative(age, ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);
 
-            Client client = new Client(username, password, firstName, lastName, age);
+            User user = new User(username, password, Permission.CLIENT, firstName, lastName, age);
 
-            if (registerUser(client)) {
+            if (registerUser(user)) {
                 // client registered successfully
                 signUpButton.getScene().getWindow().hide();
                 Stage logIn = new Stage();
@@ -91,13 +91,13 @@ public class SignUp {
 
     private boolean registerUser(User toBeRegisteredUser) {
         try {
-            Main.tcpServer.write("register client");
+            Main.tcpServer.write("register user");
             Main.tcpServer.write(toBeRegisteredUser);
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            return Main.tcpServer.read().equals("true");
+            return Main.tcpServer.read();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

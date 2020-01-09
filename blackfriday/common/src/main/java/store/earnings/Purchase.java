@@ -3,7 +3,7 @@ package store.earnings;
 import commonMessages.ExceptionMessages;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 import static validator.Validator.*;
 
@@ -24,9 +24,9 @@ public class Purchase implements Serializable {
     private String userName;
     private int quantity;
     private double price;
-    private ZonedDateTime date;
+    private LocalDateTime date;
 
-    public Purchase(String productName, String userName, int quantity, double price, ZonedDateTime date) {
+    public Purchase(String productName, String userName, int quantity, double price, LocalDateTime date) {
         this.setProductName(productName);
         this.setQuantity(quantity);
         this.setPrice(price);
@@ -39,7 +39,7 @@ public class Purchase implements Serializable {
         this.setQuantity(quantity);
         this.setPrice(price);
         this.setUserName(userName);
-        this.date = ZonedDateTime.now();
+        this.date = LocalDateTime.now();
     }
 
     public String getProductName() {
@@ -78,7 +78,7 @@ public class Purchase implements Serializable {
         this.price = price;
     }
 
-    public ZonedDateTime getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 

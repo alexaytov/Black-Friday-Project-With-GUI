@@ -9,7 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import openjfx.Main;
-import user.interfaces.User;
+import user.User;
 import util.Operations;
 
 import java.io.IOException;

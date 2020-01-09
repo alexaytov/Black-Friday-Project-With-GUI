@@ -2,7 +2,7 @@ package connection;
 
 import java.io.IOException;
 
-public interface Connection {
+public interface ServerClientConnection {
 
     <T> void write(T data) throws IOException;
 
