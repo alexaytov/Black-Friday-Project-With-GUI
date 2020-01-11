@@ -22,11 +22,12 @@ public class PurchaseDatabase extends BaseDatabase<Purchase> {
 
     @Override
     public void add(Purchase data) throws SQLException {
-        String sql = String.format("INSERT INTO `enaleks`.`purchases` (`username`, `product_name`, `quantity`, `product_price`) VALUES ('%s', '%s', '%d', '%f');",
+        String sql = String.format("INSERT INTO `enaleks`.`purchases` (`username`, `product_name`, `quantity`, `product_price`, `purchase_date`) VALUES ('%s', '%s', '%d', '%f', '%s');",
                 data.getUserName(),
                 data.getProductName(),
                 data.getQuantity(),
-                data.getPrice());
+                data.getPrice(),
+                data.getDate().toString());
         this.statement.execute(sql);
     }
 

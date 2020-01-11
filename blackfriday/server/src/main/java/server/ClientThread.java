@@ -3,6 +3,7 @@ package server;
 import commonMessages.ExceptionMessages;
 import connection.ServerClientConnection;
 import exceptions.*;
+import passwordHasher.interfaces.Hasher;
 import product.Product;
 import store.Store;
 import user.User;
@@ -40,15 +41,40 @@ public class ClientThread implements Runnable {
                     case "login":
                         // tokens
                         // type 2 -> username 3 -> password
-                        String[] tokens = ((String) this.clientConnection.read()).split("\\s+");
-                        try {
-                            this.user = this.store.login(tokens[0], tokens[1]);
 
-                            this.clientConnection.write(user.clone());
-                        } catch (WrongPasswordException | NotFoundException ex) {
+                        // get password
+                        // send salt
+                        // comapre password
+
+
+                        String username = this.clientConnection.read();
+                        User userToBeLoggedIn = null;
+                        try {
+                            userToBeLoggedIn = this.store.getUser(username);
+                            String salt = Hasher.getSalt(userToBeLoggedIn.getPassword());
+                            this.clientConnection.write(salt);
+                            String enteredHashedPassword = this.clientConnection.read();
+                            if(enteredHashedPassword.equals(userToBeLoggedIn.getPassword())){
+                                this.user = userToBeLoggedIn;
+                                this.clientConnection.write(user.clone());
+                            }else{
+                                throw new WrongPasswordException();
+                            }
+                        } catch (NotFoundException | WrongPasswordException e) {
                             this.clientConnection.write(null);
-                            this.clientConnection.write(ex.getClass().getSimpleName());
+                            this.clientConnection.write(e.getClass().getSimpleName());
                         }
+
+
+//                        this.store.getUser(tokens[0]);
+//                        try {
+//                            this.user = this.store.login(tokens[0], tokens[1]);
+//
+//                            this.clientConnection.write(user.clone());
+//                        } catch (WrongPasswordException | NotFoundException ex) {
+//                            this.clientConnection.write(null);
+//                            this.clientConnection.write(ex.getClass().getSimpleName());
+//                        }
                         break;
                     case "register user":
                         User user = this.clientConnection.read();

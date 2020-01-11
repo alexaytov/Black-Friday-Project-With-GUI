@@ -20,6 +20,7 @@ public class UserParser implements DataParser<User> {
         String dateOfRegistrationAsString = resultSet.getString("date_of_registration");
         dateOfRegistrationAsString = dateOfRegistrationAsString.replace(' ', 'T');
         LocalDateTime dateOfRegistration = LocalDateTime.parse(dateOfRegistrationAsString);
+        
         return new User(username, password, Permission.valueOf(permission.toUpperCase()), firstName, lastName, age, dateOfRegistration);
     }
 }

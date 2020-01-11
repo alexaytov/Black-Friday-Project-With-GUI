@@ -5,6 +5,7 @@ import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import passwordHasher.interfaces.Hasher;
 import user.User;
 import util.Operations;
 
@@ -24,12 +25,13 @@ public class PasswordChange {
         try {
             String newPassword = passwordField.getText();
             requireNonBlank(newPassword, ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
+            newPassword = Hasher.hash(newPassword);
             boolean isPasswordChanged = Operations.changeUserField("change password",
-                    passwordField.getText(),
+                    newPassword,
                     ConstantMessages.PASSWORD_CHANGE_SUCCESSFUL,
                     ConstantMessages.PASSWORD_CHANGE_UNSUCCESSFUL);
             if (isPasswordChanged) {
-                this.user.setPassword(newPassword);
+                this.user.setPasswordHash(newPassword);
             }
         } catch (IllegalArgumentException ex) {
             ExceptionMessages.showWarningDialog(ExceptionMessages.STRING_NULL_OR_EMPTY);

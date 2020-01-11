@@ -2,6 +2,7 @@ module common {
     requires javafx.controls;
     requires javafx.fxml;
     exports commonMessages;
+    requires jbcrypt;
     exports product;
     exports user.interfaces;
     exports user;
@@ -9,4 +10,5 @@ module common {
     exports validator to openjfx;
     exports connection;
     exports store.earnings;
+    exports passwordHasher.interfaces;
 }

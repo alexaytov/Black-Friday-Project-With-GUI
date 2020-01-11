@@ -1,7 +1,6 @@
 package controllers.settings;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
 import controllers.client.ClientLoggedIn;
@@ -40,9 +39,6 @@ public class StaffSettings implements Initializable {
 
     @FXML
     private JFXTextField usernameField;
-
-    @FXML
-    private JFXPasswordField passwordField;
 
     @FXML
     private JFXButton backButton;
@@ -92,7 +88,7 @@ public class StaffSettings implements Initializable {
         FXMLLoader loader = null;
 
         if ((this.user.getPermission().equals(Permission.CLIENT))) {
-            loader = Operations.loadWindow(this.getClass(), "/view/client/clientLoggedIn.fxml", "Logged In", 600, 730);
+            loader = Operations.loadWindow(this.getClass(), "/view/client/clientLoggedIn.fxml", "Logged In", 650, 800);
             ClientLoggedIn controller = loader.getController();
             controller.initUser(this.user);
         } else if (this.user.getPermission().equals(Permission.ADMIN)) {
@@ -105,7 +101,7 @@ public class StaffSettings implements Initializable {
     @FXML
     void deleteAccount(ActionEvent event) throws IOException, ClassNotFoundException {
         Main.tcpServer.write("delete staff");
-        if ((boolean) Main.tcpServer.read()) {
+        if (Main.tcpServer.read()) {
             ConstantMessages.confirmationPopUp("User successfully deleted!");
             this.backButton.getScene().getWindow().hide();
             Operations.loadWindow(this.getClass(), "/view/login.fxml", "Log In", 600, 600);
@@ -142,7 +138,6 @@ public class StaffSettings implements Initializable {
         lastNameField.setText(this.user.getLastName());
         ageField.setText(String.valueOf(this.user.getAge()));
         usernameField.setText(this.user.getUsername());
-        passwordField.setText(this.user.getPassword());
     }
 
     public void initUser(User user) {

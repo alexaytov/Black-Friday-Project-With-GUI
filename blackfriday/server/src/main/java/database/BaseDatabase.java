@@ -46,8 +46,7 @@ public abstract class BaseDatabase<T> implements Database<T> {
         List<T> data = new ArrayList<>();
         String sql;
         if (constraints.length != 0) {
-            sql = String.format("SELECT * FROM %s WHERE ", this.tableName)
-                    + String.join(" && ", constraints);
+            sql = String.format("SELECT * FROM %s WHERE ", this.tableName) + String.join(" && ", constraints);
         } else {
             sql = String.format("SELECT * FROM %s", this.tableName);
         }
@@ -85,4 +84,7 @@ public abstract class BaseDatabase<T> implements Database<T> {
                 primaryKeyValue);
         this.statement.execute(sql);
     }
+
+
+
 }

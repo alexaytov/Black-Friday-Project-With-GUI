@@ -82,7 +82,7 @@ public class ClientLoggedIn implements Initializable {
     @FXML
     void settings(ActionEvent event) throws IOException {
         this.vBoxWithProducts.getScene().getWindow().hide();
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffSettings.fxml", "Settings", 600, 600);
+        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffSettings.fxml", "Settings", 600, 400);
         StaffSettings staffSettings = loader.getController();
         staffSettings.initUser(this.user);
     }

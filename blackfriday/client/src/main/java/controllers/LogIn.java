@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import openjfx.Main;
+import passwordHasher.interfaces.Hasher;
 import user.Permission;
 import user.User;
 import util.Operations;
@@ -69,10 +70,8 @@ public class LogIn implements Initializable {
                 }
 
             } catch (WrongPasswordException e) {
-                System.out.println("wrong password");
                 ExceptionMessages.showWarningDialog("Invalid password");
             } catch (NotFoundException e) {
-                System.out.println("not found exception");
                 ExceptionMessages.showWarningDialog("Account not found");
             } catch (IOException | ClassNotFoundException e) {
                 //TODO throw exceptions
@@ -93,11 +92,24 @@ public class LogIn implements Initializable {
 
 
     private User login(String username, String password) throws WrongPasswordException, NotFoundException, IOException, ClassNotFoundException {
-        StringBuilder sb = new StringBuilder();
         Main.tcpServer.write("login");
-        sb.append(username).append(" ").append(password);
-        Main.tcpServer.write(sb.toString());
-        User user = Main.tcpServer.read();
+
+        // get user password salt
+        Main.tcpServer.write(username);
+        String salt = Main.tcpServer.read();
+        User user = null;
+        if(salt != null){
+            // hash password with same salt
+            String hashedPassword = Hasher.hash(password, salt);
+
+            // send password
+            Main.tcpServer.write(hashedPassword);
+
+            // get user, if null read exception
+            user = Main.tcpServer.read();
+
+        }
+
         if (user == null) {
             String exceptionType = Main.tcpServer.read().toString();
             if (exceptionType.equals("WrongPasswordException")) {

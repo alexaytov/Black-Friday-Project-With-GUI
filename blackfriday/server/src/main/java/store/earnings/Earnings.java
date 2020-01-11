@@ -1,7 +1,6 @@
 package store.earnings;
 
 import database.PurchaseDatabase;
-import exceptions.DataAlreadyExistsException;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -30,7 +29,7 @@ public class Earnings {
      * @return all the earnings which happened in that year
      */
     public double getEarnings(int year) throws IOException, SQLException {
-        List<Purchase> purchases = this.purchaseDatabase.read("year == " + year);
+        List<Purchase> purchases = this.purchaseDatabase.read("YEAR(purchase_date) = " + year);
         return purchases.stream()
                 .mapToDouble(Purchase::getCost)
                 .sum();
@@ -44,7 +43,8 @@ public class Earnings {
      */
     public double getEarnings(int month, int year) throws IOException, SQLException {
         // TODO FIX purchase date
-        List<Purchase> purchases = this.purchaseDatabase.read("pruchase_date == " + month, "year == " + year);
+        List<Purchase> purchases = this.purchaseDatabase.read(String.format("MONTH(purchase_date) = %d AND YEAR(purchase_date) = %d",
+                month, year));
         return purchases.stream()
                 .mapToDouble(Purchase::getCost)
                 .sum();
@@ -56,7 +56,7 @@ public class Earnings {
      * @return all earnings made between the startDate and endDate exclusive
      */
     public double getEarnings(LocalDate startDate, LocalDate endDate) throws IOException, SQLException {
-        List<Purchase> purchases = this.purchaseDatabase.read("purchase_date > " + startDate, "purchase_date <" + endDate);
+        List<Purchase> purchases = this.purchaseDatabase.read(String.format("DATE(purchase_date) BETWEEN %s AND %s", startDate.toString(), endDate.toString()));
         return purchases.stream()
                 .mapToDouble(Purchase::getCost)
                 .sum();
@@ -67,7 +67,7 @@ public class Earnings {
      * @return all earnings made on the given date
      */
     public double getEarnings(LocalDate date) throws IOException, SQLException {
-        List<Purchase> purchases = this.purchaseDatabase.read("purchase_date == " + date);
+        List<Purchase> purchases = this.purchaseDatabase.read("DATE(purchase_date) = " + date);
         return purchases.stream()
                 .mapToDouble(Purchase::getCost)
                 .sum();

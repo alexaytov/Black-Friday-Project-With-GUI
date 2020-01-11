@@ -5,6 +5,7 @@ import database.ProductDatabase;
 import database.PurchaseDatabase;
 import database.UserDatabase;
 import exceptions.*;
+import passwordHasher.interfaces.Hasher;
 import product.Product;
 import store.earnings.Earnings;
 import store.earnings.Purchase;
@@ -14,7 +15,10 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static validator.Validator.requireNonBlank;
@@ -48,11 +52,16 @@ public class Store {
      */
     public User login(String username, String password) throws NotFoundException, WrongPasswordException, IOException, SQLException {
         User user = this.userDatabase.getByName(username);
-        if (user.getPassword().equals(password)) {
+        if (Hasher.validate(user.getPassword(), password)) {
             return user;
         }
         throw new WrongPasswordException(ExceptionMessages.WRONG_PASSWORD);
     }
+
+    public User getUser(String username) throws IOException, SQLException, NotFoundException {
+        return this.userDatabase.getByName(username);
+    }
+
 
     /**
      * @param user the new user to be created
@@ -74,8 +83,18 @@ public class Store {
     /**
      * @return all of the client purchases
      */
-    public List<Purchase> getClientPurchases() throws IOException, SQLException {
-        return this.purchaseDatabase.read("quantity != 0");
+    public Map<String, List<Purchase>> getClientPurchases() throws IOException, SQLException {
+        List<Purchase> purchases = this.purchaseDatabase.read("quantity != 0");
+        HashMap<String, List<Purchase>> purchaseMap = new HashMap<>();
+        for (Purchase purchase : purchases) {
+            if (purchaseMap.containsKey(purchase.getUserName())) {
+                purchaseMap.get(purchase.getUserName()).add(purchase);
+            } else {
+                purchaseMap.put(purchase.getUserName(), new ArrayList<>());
+                purchaseMap.get(purchase.getUserName()).add(purchase);
+            }
+        }
+        return purchaseMap;
     }
 
     /**
@@ -188,13 +207,13 @@ public class Store {
         if (blackFriday) {
             List<Product> productsWithDiscountPercent = this.productDatabase.read("discounted_percent > 0");
             for (Product product : productsWithDiscountPercent) {
-                this.productDatabase.update(product.getName(), "is_discounted", "true");
+                this.productDatabase.update(product.getName(), "is_discounted", "1");
             }
 
         } else {
-            List<Product> discountedProducts = this.productDatabase.read("is_discounted == true");
+            List<Product> discountedProducts = this.productDatabase.read("is_discounted = true");
             for (Product discountedProduct : discountedProducts) {
-                this.productDatabase.update(discountedProduct.getName(), "is_discounted", "false");
+                this.productDatabase.update(discountedProduct.getName(), "is_discounted", "0");
             }
 
 
@@ -226,14 +245,14 @@ public class Store {
      * which have quantity higher than 10
      */
     public List<Product> getClientDiscountedProducts() throws IOException, SQLException {
-        return this.productDatabase.read("quantity != 0", "is_discounted == true");
+        return this.productDatabase.read("quantity != 0", "is_discounted = true");
     }
 
     /**
      * @return all the products which are discounted
      */
     public List<Product> getStaffDiscountedProducts() throws IOException, SQLException {
-        return this.productDatabase.read("is_discounted == true");
+        return this.productDatabase.read("is_discounted = true");
     }
 
     /**

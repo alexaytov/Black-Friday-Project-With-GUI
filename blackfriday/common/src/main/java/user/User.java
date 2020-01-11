@@ -1,6 +1,7 @@
 package user;
 
 import commonMessages.ExceptionMessages;
+import passwordHasher.interfaces.Hasher;
 import validator.Validator;
 
 import java.io.Serializable;
@@ -21,19 +22,24 @@ public class User implements Serializable, Cloneable {
 
     public User(String username, String password, Permission permission, String firstName, String lastName, int age, LocalDateTime dateOfCreation) {
         this(username, password, permission, firstName, lastName, age);
+        this.setUsername(username);
+        this.setPasswordHash(password);
+        this.setPermission(permission);
+        this.setFirstName(firstName);
+        this.setLastName(lastName);
+        this.setAge(age);
         this.setDateOfCreation(dateOfCreation);
     }
 
-    public  User(String username, String password, Permission permission, String firstName, String lastName, int age) {
+
+    public User(String username, String password, Permission permission, String firstName, String lastName, int age) {
         this.setUsername(username);
         this.setPassword(password);
         this.setPermission(permission);
         this.setFirstName(firstName);
         this.setLastName(lastName);
         this.setAge(age);
-
         this.dateOfCreation = LocalDateTime.now();
-
     }
 
     public Permission getPermission() {
@@ -49,38 +55,28 @@ public class User implements Serializable, Cloneable {
         return this.dateOfCreation;
     }
 
-    private void setDateOfCreation(LocalDateTime dateOfCreation) {
-        Validator.requireNonNull(dateOfCreation, ExceptionMessages.DATE_NULL);
-        this.dateOfCreation = dateOfCreation;
-    }
-
-
     public String getUsername() {
         return this.username;
     }
-
 
     public void setUsername(String username) {
         Validator.requireNonBlank(username, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.username = username;
     }
 
-
     public String getPassword() {
         return this.password;
     }
 
-
     public void setPassword(String password) {
         Validator.requireNonBlank(password, ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
+        password = Hasher.hash(password);
         this.password = password;
     }
-
 
     public String getFirstName() {
         return this.firstName;
     }
-
 
     public void setFirstName(String firstName) {
         Validator.requireNonBlank(firstName, ExceptionMessages.NAME_NULL_OR_EMPTY);
@@ -91,17 +87,14 @@ public class User implements Serializable, Cloneable {
         return this.lastName;
     }
 
-
     public void setLastName(String lastName) {
         Validator.requireNonBlank(lastName, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.lastName = lastName;
     }
 
-
     public int getAge() {
         return this.age;
     }
-
 
     public void setAge(int age) {
         Validator.requireNonNegative(age, ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);
@@ -110,6 +103,16 @@ public class User implements Serializable, Cloneable {
 
     public LocalDateTime getDateOfCreation() {
         return dateOfCreation;
+    }
+
+    private void setDateOfCreation(LocalDateTime dateOfCreation) {
+        Validator.requireNonNull(dateOfCreation, ExceptionMessages.DATE_NULL);
+        this.dateOfCreation = dateOfCreation;
+    }
+
+    public void setPasswordHash(String password){
+        Validator.requireNonBlank(password, ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
+        this.password = password;
     }
 
     @Override
