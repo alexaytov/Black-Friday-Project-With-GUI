@@ -37,7 +37,7 @@ public class StaffChosenProduct {
     @FXML
     private JFXTextField minimumPriceField;
     @FXML
-    private JFXTextField discountedPriceField;
+    private JFXTextField discountedPercentField;
     @FXML
     private JFXTextField pictureField;
 
@@ -46,17 +46,13 @@ public class StaffChosenProduct {
         Main.tcpServer.write(productName);
         Product product = Main.tcpServer.read();
         fillProductFieldsWithInformation(product);
-
-
         this.product = product;
-
     }
 
     public void initProduct(Product product) throws IOException {
         Main.tcpServer.write("set product");
         Main.tcpServer.write(product);
         this.product = product;
-        this.discountedPrice.setText(String.valueOf(product.getDiscountedPrice()));
         fillProductFieldsWithInformation(product);
 
     }
@@ -68,7 +64,9 @@ public class StaffChosenProduct {
         this.sizeField.setText(product.getSize());
         this.priceField.setText(String.valueOf(product.getPrice()));
         this.minimumPriceField.setText(String.valueOf(product.getMinimumPrice()));
-        this.discountedPriceField.setText(String.valueOf(product.getDiscountPercent()));
+        this.discountedPercentField.setText(String.format("%.2f",product.getDiscountPercent()));
+        this.discountedPrice.setText(String.format("%.2f", product.getDiscountedPrice()));
+
         InputStream is = new ByteArrayInputStream(product.getImageContent());
         this.image.setImage(new Image(is));
     }

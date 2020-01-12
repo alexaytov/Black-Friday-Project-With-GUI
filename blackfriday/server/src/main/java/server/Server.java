@@ -1,5 +1,6 @@
 package server;
 
+import commandEnterpreter.CommandFactory;
 import connection.ServerClientConnection;
 import connection.TCPConnection;
 import store.Store;
@@ -33,7 +34,8 @@ public class Server {
                 Socket socket;
                 socket = serverSocket.accept();
                 ServerClientConnection clientConnection = new TCPConnection(socket);
-                ClientThread clientThread = new ClientThread(clientConnection, STORE);
+                CommandFactory commandFactory = new CommandFactory(STORE, clientConnection);
+                ClientThread clientThread = new ClientThread(clientConnection, STORE, commandFactory);
                 Thread thread = new Thread(clientThread);
                 threadPool.execute(thread);
                 System.out.println("Thread with id " + thread.getId() + " started!!!");

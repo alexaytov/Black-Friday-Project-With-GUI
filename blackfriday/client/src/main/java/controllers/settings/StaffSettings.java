@@ -11,9 +11,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import openjfx.Main;
 import user.Permission;
@@ -100,36 +97,28 @@ public class StaffSettings implements Initializable {
 
     @FXML
     void deleteAccount(ActionEvent event) throws IOException, ClassNotFoundException {
-        Main.tcpServer.write("delete staff");
+        Main.tcpServer.write("delete user");
         if (Main.tcpServer.read()) {
             ConstantMessages.confirmationPopUp("User successfully deleted!");
             this.backButton.getScene().getWindow().hide();
-            Operations.loadWindow(this.getClass(), "/view/login.fxml", "Log In", 600, 600);
+            Operations.loadWindow(this.getClass(), "/view/login.fxml", "Log In", 600, 350);
         } else {
             ConstantMessages.confirmationPopUp("There was a problem deleting user!");
         }
     }
 
-
-    private void changePopUpWindow(String variableName, String fxmlFilePath) throws IOException {
-        Parent root = FXMLLoader.load(Operations.class.getResource(fxmlFilePath));
-        Scene scene = new Scene(root, 400, 150);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle(variableName);
-        stage.show();
-        stage.setResizable(false);
-
-
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
+            Main.tcpServer.write("get logged in user");
+            this.user = Main.tcpServer.read();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
-        Timeline refreshTextFieldsTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> refreshTextFields()));
+        Timeline refreshTextFieldsTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> refreshTextFields()));
         refreshTextFieldsTimeline.setCycleCount(Timeline.INDEFINITE);
         refreshTextFieldsTimeline.play();
-
 
     }
 
@@ -140,8 +129,4 @@ public class StaffSettings implements Initializable {
         usernameField.setText(this.user.getUsername());
     }
 
-    public void initUser(User user) {
-        this.user = user;
-        refreshTextFields();
-    }
 }

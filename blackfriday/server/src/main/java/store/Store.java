@@ -4,8 +4,10 @@ import commonMessages.ExceptionMessages;
 import database.ProductDatabase;
 import database.PurchaseDatabase;
 import database.UserDatabase;
-import exceptions.*;
-import passwordHasher.interfaces.Hasher;
+import exceptions.DataAlreadyExistsException;
+import exceptions.NotEnoughQuantityException;
+import exceptions.NotFoundException;
+import exceptions.ProductAlreadyExistsException;
 import product.Product;
 import store.earnings.Earnings;
 import store.earnings.Purchase;
@@ -32,6 +34,8 @@ public class Store {
     private PurchaseDatabase purchaseDatabase;
     private Earnings earnings;
     private boolean blackFriday;
+    private User loggedInUser;
+    private Product chosenProduct;
 
 
     public Store(Connection DBConnection) throws IOException, SQLException {
@@ -40,28 +44,29 @@ public class Store {
         this.purchaseDatabase = new PurchaseDatabase(DBConnection);
         this.earnings = new Earnings(this.purchaseDatabase);
         this.blackFriday = false;
-
+        this.loggedInUser = null;
+        this.chosenProduct = null;
     }
 
-    /**
-     * @param username the username of the client
-     * @param password the password of the client
-     * @return user object if the user is found and the password is correct
-     * @throws NotFoundException      if the user is not in the database
-     * @throws WrongPasswordException if the user exists but the passwords do not match
-     */
-    public User login(String username, String password) throws NotFoundException, WrongPasswordException, IOException, SQLException {
-        User user = this.userDatabase.getByName(username);
-        if (Hasher.validate(user.getPassword(), password)) {
-            return user;
-        }
-        throw new WrongPasswordException(ExceptionMessages.WRONG_PASSWORD);
+    public void setLoggedInUser(User loggedInUser) {
+        this.loggedInUser = loggedInUser;
+    }
+
+    public Product getChosenProduct() {
+        return this.chosenProduct;
+    }
+
+    public void setChosenProduct(Product chosenProduct) {
+        this.chosenProduct = chosenProduct;
+    }
+
+    public User getLoggedInUser() {
+        return loggedInUser;
     }
 
     public User getUser(String username) throws IOException, SQLException, NotFoundException {
         return this.userDatabase.getByName(username);
     }
-
 
     /**
      * @param user the new user to be created
@@ -267,7 +272,8 @@ public class Store {
     }
 
     public Product getProductByName(String name) throws NotFoundException, IOException, SQLException {
-        return this.productDatabase.getByName(name);
+        this.chosenProduct = this.productDatabase.getByName(name);
+        return this.chosenProduct;
     }
 
     /**
@@ -290,27 +296,28 @@ public class Store {
         return true;
     }
 
-    public void changeProductName(String productName, String newProductName) throws ProductAlreadyExistsException, SQLException {
+    public void changeProductName(String newProductName) throws ProductAlreadyExistsException, SQLException {
         if (this.productDatabase.contains(newProductName)) {
             throw new ProductAlreadyExistsException(String.format(ExceptionMessages.PRODUCT_ALREADY_EXISTS, newProductName));
         }
-        this.productDatabase.update(productName, "name", newProductName);
+        this.productDatabase.update(this.chosenProduct.getName(), "name", newProductName);
     }
 
-    public void changeProductDescription(String productName, String newDescription) throws SQLException {
-        this.productDatabase.update(productName, "description", newDescription);
+    public void changeProductDescription(String newDescription) throws SQLException {
+        this.productDatabase.update(this.chosenProduct.getName(), "description", newDescription);
     }
 
-    public void changeProductDiscountPercent(String productName, double newDiscountPercent) {
-
+    public void changeProductDiscountPercent(double newDiscountPercent) throws SQLException {
+        this.chosenProduct.setDiscountPercent(newDiscountPercent);
+        this.productDatabase.update(this.chosenProduct.getName(), "discounted_percent", String.valueOf(newDiscountPercent));
     }
 
-    public void changeProductSize(String productName, String newSize) throws NotFoundException, SQLException {
-        this.productDatabase.update(productName, "size", newSize);
+    public void changeProductSize(String newSize) throws NotFoundException, SQLException {
+        this.productDatabase.update(this.chosenProduct.getName(), "size", newSize);
     }
 
-    public void changeProductQuantity(String productName, int quantity) throws SQLException {
-        this.productDatabase.update(productName, "quantity", String.valueOf(quantity));
+    public void changeProductQuantity(int quantity) throws SQLException {
+        this.productDatabase.update(this.chosenProduct.getName(), "quantity", String.valueOf(quantity));
     }
 
     public double getEarnings(int year) throws IOException, SQLException {
@@ -339,15 +346,13 @@ public class Store {
         return this.productDatabase.read("quantity > 0");
     }
 
-    public void changeProductPrice(String name, double newPrice) throws IOException, SQLException, NotFoundException {
-        Product product = this.productDatabase.getByName(name);
-        product.setPrice(newPrice);
-        this.productDatabase.update(name, "price", String.valueOf(newPrice));
+    public void changeProductPrice(double newPrice) throws SQLException {
+        this.chosenProduct.setPrice(newPrice);
+        this.productDatabase.update(this.chosenProduct.getName(), "price", String.valueOf(newPrice));
     }
 
-    public void changeProductImage(String productName, byte[] newImageContent) {
-        this.productDatabase.updateProductImage(productName, newImageContent);
-
+    public void changeProductImage(byte[] newImageContent) {
+        this.productDatabase.updateProductImage(this.chosenProduct.getName(), newImageContent);
     }
 
     public List<Product> searchAllProducts(String searchedAllProductsName) throws IOException, SQLException {
@@ -360,5 +365,10 @@ public class Store {
 
     public List<Product> searchQuantityControl(int maximumQuantity) throws IOException, SQLException {
         return this.productDatabase.read("quantity < " + maximumQuantity);
+    }
+
+    public void changeProductMinimumPrice(double minimumPrice) throws SQLException {
+        this.chosenProduct.setMinimumPrice(minimumPrice);
+        this.productDatabase.update(this.chosenProduct.getName(), "minimum_price", String.valueOf(minimumPrice));
     }
 }

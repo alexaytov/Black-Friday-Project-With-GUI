@@ -2,7 +2,6 @@ package controllers.staff;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXToggleButton;
-import controllers.settings.StaffSettings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -61,7 +60,7 @@ public class StaffLoggedIn implements Initializable {
 
     @FXML
     void earnings(ActionEvent event) throws IOException {
-        Operations.changeWindows(this.earningsButton, "store/earnings", "/view/staff/earnings.fxml", this.getClass(), 600, 400);
+        Operations.changeWindows(this.earningsButton, "store/earnings", "/view/staff/earnings.fxml", this.getClass(), 600, 500);
     }
 
     @FXML
@@ -85,15 +84,13 @@ public class StaffLoggedIn implements Initializable {
     void settings(ActionEvent event) throws IOException {
         this.welcomeLabel.getScene().getWindow().hide();
         FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffSettings.fxml", "Settings", 600, 400);
-        StaffSettings controller = loader.getController();
-        controller.initUser(this.user);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         try {
-            Main.tcpServer.write("has promotions");
+            Main.tcpServer.write("is blackFriday");
             if (Main.tcpServer.read()) {
                 blackFriday.selectedProperty().setValue(true);
             } else {

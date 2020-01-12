@@ -8,7 +8,6 @@ import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import openjfx.Main;
 import user.Permission;
@@ -33,9 +32,6 @@ public class RegisterStaff implements Initializable {
 
     @FXML
     private JFXButton registerStaffButton;
-
-    @FXML
-    private ImageView progress;
 
     @FXML
     private JFXTextField firstNameField;
@@ -76,7 +72,7 @@ public class RegisterStaff implements Initializable {
     @FXML
     void goToStaffLoggedIn(ActionEvent event) throws IOException {
         this.registerStaffButton.getScene().getWindow().hide();
-        Operations.loadWindow(this.getClass(), "/view/staff/staffLoggedIn.fxml", "BlackFriday", 600, 730);
+        Operations.loadWindow(this.getClass(), "/view/staff/staffLoggedIn.fxml", "BlackFriday", 600, 600);
     }
 
     @Override

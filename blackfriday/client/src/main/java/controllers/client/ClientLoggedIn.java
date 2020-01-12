@@ -3,7 +3,6 @@ package controllers.client;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
-import controllers.settings.StaffSettings;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -83,8 +82,6 @@ public class ClientLoggedIn implements Initializable {
     void settings(ActionEvent event) throws IOException {
         this.vBoxWithProducts.getScene().getWindow().hide();
         FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffSettings.fxml", "Settings", 600, 400);
-        StaffSettings staffSettings = loader.getController();
-        staffSettings.initUser(this.user);
     }
 
 
@@ -98,16 +95,14 @@ public class ClientLoggedIn implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            Main.tcpServer.write("has promotions");
-            boolean storeHasPromotions = (boolean) Main.tcpServer.read();
+            Main.tcpServer.write("IsBlackFriday");
+            boolean storeHasPromotions = Main.tcpServer.read();
             if (storeHasPromotions) {
                 productsFilterChoice.setVisible(true);
             } else {
                 productsFilterChoice.setVisible(false);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
 

@@ -1,75 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXToggleButton?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.staff.StaffLoggedIn">
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.staff.StaffLoggedIn">
     <children>
         <Pane prefHeight="100.0" prefWidth="600.0">
-            <children>
-                <Pane layoutX="150.0" prefHeight="100.0" prefWidth="300.0"
-                      style="-fx-border-color: #23cba7; -fx-background-color: #23cba7; -fx-border-width: 2;">
-                    <children>
-                        <Label layoutX="31.0" layoutY="19.0" text="ЕНАлекс" textAlignment="CENTER" textFill="WHITE">
-                            <font>
-                                <Font name="Verdana Bold" size="48.0"/>
-                            </font>
-                        </Label>
-                    </children>
-                </Pane>
-            </children>
+         <children>
+            <Pane layoutX="150.0" prefHeight="100.0" prefWidth="300.0" style="-fx-border-color: #23cba7; -fx-background-color: #23cba7; -fx-border-width: 2;">
+               <children>
+                  <Label layoutX="40.0" layoutY="19.0" text="ENAleks" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="Verdana Bold" size="48.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
         </Pane>
-        <Pane layoutY="150.0" prefHeight="450.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
-              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
+        <Pane layoutY="150.0" prefHeight="450.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="150.0">
             <children>
                 <VBox alignment="CENTER" layoutX="200.0" layoutY="14.0" spacing="20.0">
                     <children>
-                        <JFXToggleButton fx:id="blackFriday" contentDisplay="RIGHT" onAction="#blackFridaySwitch"
-                                         prefHeight="60.0" prefWidth="200.0" text="Blackfriday">
+                        <JFXToggleButton fx:id="blackFriday" contentDisplay="RIGHT" onAction="#blackFridaySwitch" prefHeight="60.0" prefWidth="200.0" text="Blackfriday">
                             <font>
-                                <Font size="14.0"/>
+                                <Font size="14.0" />
                             </font>
                         </JFXToggleButton>
-                        <JFXButton fx:id="productsButton" onAction="#products" prefHeight="40.0" prefWidth="200.0"
-                                   style="-fx-background-color: #23cba7;" text="Products" textAlignment="CENTER">
+                        <JFXButton fx:id="productsButton" onAction="#products" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #23cba7;" text="Products" textAlignment="CENTER">
                             <font>
-                                <Font size="14.0"/>
+                                <Font size="14.0" />
                             </font>
                         </JFXButton>
-                        <JFXButton fx:id="clientsButton" layoutX="20.0" layoutY="90.0" onAction="#clients"
-                                   prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #23cba7;"
-                                   text="Clients" textAlignment="CENTER">
+                        <JFXButton fx:id="clientsButton" layoutX="20.0" layoutY="90.0" onAction="#clients" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #23cba7;" text="Clients" textAlignment="CENTER">
                             <font>
-                                <Font size="14.0"/>
+                                <Font size="14.0" />
                             </font>
                         </JFXButton>
-                        <JFXButton fx:id="earningsButton" layoutX="20.0" layoutY="160.0" onAction="#earnings"
-                                   prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #23cba7;"
-                                   text="Earnings" textAlignment="CENTER">
+                        <JFXButton fx:id="earningsButton" layoutX="20.0" layoutY="160.0" onAction="#earnings" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #23cba7;" text="Earnings" textAlignment="CENTER">
                             <font>
-                                <Font size="14.0"/>
+                                <Font size="14.0" />
                             </font>
                         </JFXButton>
-                        <JFXButton fx:id="settingsButton" layoutX="20.0" layoutY="230.0" onAction="#settings"
-                                   prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #23cba7;"
-                                   text="Settings" textAlignment="CENTER">
+                        <JFXButton fx:id="settingsButton" layoutX="20.0" layoutY="230.0" onAction="#settings" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #23cba7;" text="Settings" textAlignment="CENTER">
                             <font>
-                                <Font size="14.0"/>
+                                <Font size="14.0" />
                             </font>
                         </JFXButton>
-                        <JFXButton fx:id="registerStaffButton" layoutX="20.0" layoutY="300.0" onAction="#registerStaff"
-                                   prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #23cba7;"
-                                   text="Register staff" textAlignment="CENTER">
+                        <JFXButton fx:id="registerStaffButton" layoutX="20.0" layoutY="300.0" onAction="#registerStaff" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #23cba7;" text="Register staff" textAlignment="CENTER">
                             <font>
-                                <Font size="14.0"/>
+                                <Font size="14.0" />
                             </font>
                         </JFXButton>
-                        <JFXButton fx:id="logoutButton" onAction="#logout" prefHeight="40.0" prefWidth="200.0"
-                                   style="-fx-background-color: #23cba7;" text="Exit" textAlignment="CENTER">
+                        <JFXButton fx:id="logoutButton" onAction="#logout" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #23cba7;" text="Exit" textAlignment="CENTER">
                             <font>
-                                <Font size="14.0"/>
+                                <Font size="14.0" />
                             </font>
                         </JFXButton>
                     </children>
@@ -80,7 +70,7 @@
             <children>
                 <Label fx:id="welcomeLabel" alignment="CENTER" prefHeight="50.0" prefWidth="600.0" wrapText="true">
                     <font>
-                        <Font size="14.0"/>
+                        <Font size="14.0" />
                     </font>
                 </Label>
             </children>

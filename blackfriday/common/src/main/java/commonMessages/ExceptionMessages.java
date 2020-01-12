@@ -11,6 +11,7 @@ public class ExceptionMessages {
     public static final String FILL_IN_ALL_FIELDS = "Please fill in all the fields above!!!";
     public static final String ENTER_NUMBER = "Please enter a number!!!";
     public static final String END_DATE_IS_BEFORE_START_DATE = "End date can't be before start date!!!";
+    public static final String STORE_NULL = "Store can't be nulL!!!";
     public static String AGE_MUST_BE_POSITIVE_NUMBER = "Age must be a positive number!!!";
     public static String STRING_NULL_OR_EMPTY = "Text can't be null or empty!!!";
     public static String PASSWORD_NULL_OR_EMPTY = "Password can't be null or empty!!!";

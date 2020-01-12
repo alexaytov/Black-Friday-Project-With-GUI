@@ -1,5 +1,6 @@
 package database;
 
+import commonMessages.ExceptionMessages;
 import database.interfaces.Database;
 import database.parsers.DataParser;
 import exceptions.NotFoundException;
@@ -60,10 +61,11 @@ public abstract class BaseDatabase<T> implements Database<T> {
 
     @Override
     public void delete(String name) throws NotFoundException, SQLException {
-        String sql = String.format("DELETE FROM %s WHERE %s = '%s';", this.tableName, this.primaryKey, name);
-        if (!this.statement.execute(sql)) {
-            throw new NotFoundException();
+        if(!this.contains(name)){
+            throw new NotFoundException(String.format(ExceptionMessages.USER_NOT_FOUND, name));
         }
+        String sql = String.format("DELETE FROM %s WHERE %s = '%s';", this.tableName, this.primaryKey, name);
+        this.statement.execute(sql);
     }
 
     @Override
