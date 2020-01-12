@@ -16,8 +16,17 @@ public class ChangeProductDiscountPercent implements Executable {
     @Inject
     private ServerClientConnection clientConnection;
 
+    /**
+     * Changes chosen product colcount percent
+     * and return to client if operation was successful
+     *
+     * @throws IOException            if IO error occurs
+     * @throws SQLException           if SQL error occurs
+     * @throws ClassNotFoundException if class read by
+     *                                (@code clientConnection) is not found
+     */
     @Override
-    public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
+    public void execute() throws IOException, SQLException, ClassNotFoundException {
         double newDiscountPercentage = this.clientConnection.read();
         try {
             this.store.changeProductDiscountPercent(newDiscountPercentage);

@@ -48,20 +48,16 @@ public class Store {
         this.chosenProduct = null;
     }
 
-    public void setLoggedInUser(User loggedInUser) {
-        this.loggedInUser = loggedInUser;
-    }
-
-    public Product getChosenProduct() {
-        return this.chosenProduct;
-    }
-
     public void setChosenProduct(Product chosenProduct) {
         this.chosenProduct = chosenProduct;
     }
 
     public User getLoggedInUser() {
         return loggedInUser;
+    }
+
+    public void setLoggedInUser(User loggedInUser) {
+        this.loggedInUser = loggedInUser;
     }
 
     public User getUser(String username) throws IOException, SQLException, NotFoundException {
@@ -134,7 +130,6 @@ public class Store {
             return false;
         }
         return true;
-
     }
 
     /**
@@ -145,7 +140,6 @@ public class Store {
      * @return if the new username was set successfully
      */
     public boolean changeUsername(String username, String newUsername) throws DataAlreadyExistsException, SQLException {
-
         if (this.userDatabase.contains(newUsername)) {
             throw new DataAlreadyExistsException();
         }
@@ -214,14 +208,11 @@ public class Store {
             for (Product product : productsWithDiscountPercent) {
                 this.productDatabase.update(product.getName(), "is_discounted", "1");
             }
-
         } else {
             List<Product> discountedProducts = this.productDatabase.read("is_discounted = true");
             for (Product discountedProduct : discountedProducts) {
                 this.productDatabase.update(discountedProduct.getName(), "is_discounted", "0");
             }
-
-
         }
         this.blackFriday = blackFriday;
     }
@@ -287,7 +278,6 @@ public class Store {
      * @throws NotFoundException if the product is not found
      */
     public boolean buyProduct(String productName, User user, int quantity) throws NotFoundException, NotEnoughQuantityException, IOException, SQLException {
-
         Product product = this.productDatabase.getByName(productName);
         product.buy(user, quantity);
         this.productDatabase.update(productName, "quantity", String.valueOf(product.getQuantity()));
@@ -296,6 +286,13 @@ public class Store {
         return true;
     }
 
+    /**
+     * Changes chosen product's name
+     *
+     * @param newProductName the new product name
+     * @throws ProductAlreadyExistsException if a product with the same name already exists
+     * @throws SQLException                  if a SQL error occurs
+     */
     public void changeProductName(String newProductName) throws ProductAlreadyExistsException, SQLException {
         if (this.productDatabase.contains(newProductName)) {
             throw new ProductAlreadyExistsException(String.format(ExceptionMessages.PRODUCT_ALREADY_EXISTS, newProductName));
@@ -303,70 +300,177 @@ public class Store {
         this.productDatabase.update(this.chosenProduct.getName(), "name", newProductName);
     }
 
+    /**
+     * Changes chosen product's description
+     *
+     * @param newDescription the new description
+     * @throws SQLException if a SQL error occurs
+     */
     public void changeProductDescription(String newDescription) throws SQLException {
         this.productDatabase.update(this.chosenProduct.getName(), "description", newDescription);
     }
 
+    /**
+     * Changes chosen product discount percent
+     *
+     * @param newDiscountPercent the new discount percent
+     * @throws SQLException if a SQL exception occurs
+     */
     public void changeProductDiscountPercent(double newDiscountPercent) throws SQLException {
         this.chosenProduct.setDiscountPercent(newDiscountPercent);
         this.productDatabase.update(this.chosenProduct.getName(), "discounted_percent", String.valueOf(newDiscountPercent));
     }
 
-    public void changeProductSize(String newSize) throws NotFoundException, SQLException {
+    /**
+     * Changes chosen product size
+     *
+     * @param newSize the new size of the product
+     * @throws SQLException if a SQL error occurs
+     */
+    public void changeProductSize(String newSize) throws SQLException {
         this.productDatabase.update(this.chosenProduct.getName(), "size", newSize);
     }
 
+    /**
+     * Changes chosen product quantity
+     *
+     * @param quantity the new quantity of the product
+     * @throws SQLException if a SQL error occurs
+     */
     public void changeProductQuantity(int quantity) throws SQLException {
         this.productDatabase.update(this.chosenProduct.getName(), "quantity", String.valueOf(quantity));
     }
 
+    /**
+     * Return the earnings for a specified year
+     *
+     * @param year the chosen year for the earnings
+     * @return the earnings in a specific year
+     * @throws IOException  if IO error occurs
+     * @throws SQLException if SQL error occurs
+     */
     public double getEarnings(int year) throws IOException, SQLException {
         return earnings.getEarnings(year);
     }
 
+    /**
+     * Return the earnings for a specified month and year
+     *
+     * @param month the specified month
+     * @param year  the specified year
+     * @return Earnings from the specified month in the chosen year
+     * @throws IOException  if IO error occurs
+     * @throws SQLException if SQL error occurs
+     */
     public double getEarnings(int month, int year) throws IOException, SQLException {
         return earnings.getEarnings(month, year);
     }
 
+    /**
+     * Return the earnings between the start date and end date
+     *
+     * @param startDate the start data
+     * @param endDate   the end date
+     * @return all earnings that happened between the start and end date
+     * @throws IOException  if IO error occurs
+     * @throws SQLException if SQL error occurs
+     */
     public double getEarnings(LocalDate startDate, LocalDate endDate) throws IOException, SQLException {
         return earnings.getEarnings(startDate, endDate);
     }
 
+    /**
+     * Return the earnings for a specific date
+     *
+     * @param date the date
+     * @return all earnings that happened on the specified date
+     * @throws IOException  if IO error occurs
+     * @throws SQLException if SQL error occurs
+     */
     public double getEarnings(LocalDate date) throws IOException, SQLException {
         return earnings.getEarnings(date);
     }
 
-
+    /**
+     * @return Returns all products in the product database
+     * @throws IOException  if IO error occurs
+     * @throws SQLException if SQL error occurs
+     */
     public List<Product> getStaffProducts() throws IOException, SQLException {
         return this.productDatabase.read();
     }
 
-
+    /**
+     * @return All product in product database with quantity bigger than zero
+     * @throws IOException  if IO error occurs
+     * @throws SQLException if SQL error occurs
+     */
     public List<Product> getClientProducts() throws IOException, SQLException {
         return this.productDatabase.read("quantity > 0");
     }
 
+    /**
+     * Changes chosen product price
+     *
+     * @param newPrice the new price
+     * @throws SQLException if SQL error occurs
+     */
     public void changeProductPrice(double newPrice) throws SQLException {
         this.chosenProduct.setPrice(newPrice);
         this.productDatabase.update(this.chosenProduct.getName(), "price", String.valueOf(newPrice));
     }
 
+    /**
+     * Changes the chosen product image
+     *
+     * @param newImageContent the new image
+     */
     public void changeProductImage(byte[] newImageContent) {
         this.productDatabase.updateProductImage(this.chosenProduct.getName(), newImageContent);
     }
 
+    /**
+     * Searches all product by name
+     *
+     * @param searchedAllProductsName the name for the search
+     * @return all the products with name that contain the (@code searchedAllProductsName)
+     * @throws IOException  if IO error occurs
+     * @throws SQLException if SQL error occurs
+     */
     public List<Product> searchAllProducts(String searchedAllProductsName) throws IOException, SQLException {
         return this.productDatabase.read("name LIKE '%" + searchedAllProductsName + "%'");
     }
 
+    /**
+     * Searches discounted products by name
+     *
+     * @param searchedDiscountedProductsName the name for the search
+     * @return all discounted products with name that contains (@code searchedDiscountedProductsName)
+     * @throws IOException  if IO error occurs
+     * @throws SQLException if SQL error occurs
+     */
     public List<Product> searchDiscountedProducts(String searchedDiscountedProductsName) throws IOException, SQLException {
         return this.productDatabase.read(String.format("is_discounted = true", "name LIKE %%s%", searchedDiscountedProductsName));
     }
 
+    /**
+     * Searches products based on quantity
+     *
+     * @param maximumQuantity the maximum quantity for the search not inclusive
+     * @return return all products below the (@code maximumQuantity)
+     * @throws IOException  if IO error occurs
+     * @throws SQLException if SQL error occurs
+     */
     public List<Product> searchQuantityControl(int maximumQuantity) throws IOException, SQLException {
         return this.productDatabase.read("quantity < " + maximumQuantity);
     }
 
+    /**
+     * Changes the chosen product minimum price
+     *
+     * @param minimumPrice the new minimum price
+     * @throws SQLException if SQl error occurs
+     */
     public void changeProductMinimumPrice(double minimumPrice) throws SQLException {
         this.chosenProduct.setMinimumPrice(minimumPrice);
         this.productDatabase.update(this.chosenProduct.getName(), "minimum_price", String.valueOf(minimumPrice));

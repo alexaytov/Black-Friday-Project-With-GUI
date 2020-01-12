@@ -42,7 +42,6 @@ public class Earnings {
      * @return total earnings for the specified month and year
      */
     public double getEarnings(int month, int year) throws IOException, SQLException {
-        // TODO FIX purchase date
         List<Purchase> purchases = this.purchaseDatabase.read(String.format("MONTH(purchase_date) = %d AND YEAR(purchase_date) = %d",
                 month, year));
         return purchases.stream()

@@ -16,8 +16,16 @@ public class SearchClientAllProducts implements Executable {
     @Inject
     private Store store;
 
+    /**
+     * Searches all products for users with permission
+     * client
+     *
+     * @throws IOException            if IO error occurs
+     * @throws SQLException           if SQL error occurs
+     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     */
     @Override
-    public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
+    public void execute() throws IOException, SQLException, ClassNotFoundException {
         String searchedAllProductsName = this.clientConnection.read().toString();
         this.clientConnection.write(this.store.searchAllProducts(searchedAllProductsName));
     }

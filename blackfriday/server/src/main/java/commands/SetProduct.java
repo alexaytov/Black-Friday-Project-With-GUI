@@ -16,6 +16,13 @@ public class SetProduct implements Executable {
     @Inject
     private Store store;
 
+    /**
+     * Sets store's chosen product
+     *
+     * @throws IOException            if IO error occurs
+     * @throws SQLException           if SQL error occurs
+     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     */
     @Override
     public void execute() throws IOException, SQLException, ClassNotFoundException {
         this.store.setChosenProduct(this.clientConnection.read());

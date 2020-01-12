@@ -16,6 +16,14 @@ public class ChangeProductPrice implements Executable {
     @Inject
     private Store store;
 
+    /**
+     * Changes chosen product price
+     * and return to client if operation was successful
+     *
+     * @throws IOException            if IO error occurs
+     * @throws SQLException           if SQL error occurs
+     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     */
     @Override
     public void execute() throws IOException, SQLException, ClassNotFoundException {
         double newPrice = this.clientConnection.read();

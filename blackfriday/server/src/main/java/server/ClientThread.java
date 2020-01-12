@@ -1,6 +1,6 @@
 package server;
 
-import commandEnterpreter.CommandInterpreter;
+import commandEnterpreter.interfaces.CommandInterpreter;
 import commandEnterpreter.interfaces.Executable;
 import commonMessages.ExceptionMessages;
 import connection.ServerClientConnection;
@@ -44,8 +44,13 @@ public class ClientThread implements Runnable {
     public void run() {
         try {
             while (true) {
+                // read command from client
                 String command = this.clientConnection.read();
+
+                // get command from command interpreter
                 Executable executable = this.commandInterpreter.interpretCommand(command);
+
+                // execute command
                 executable.execute();
             }
         } catch (IOException ex) {

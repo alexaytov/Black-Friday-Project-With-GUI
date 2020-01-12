@@ -17,8 +17,16 @@ public class ChangeProductName implements Executable {
     @Inject
     private ServerClientConnection clientConnection;
 
+    /**
+     * Changes chosen product name
+     * and return to client if operation was successful
+     *
+     * @throws IOException            if IO error occurs
+     * @throws SQLException           if SQL error occurs
+     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     */
     @Override
-    public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
+    public void execute() throws IOException, SQLException, ClassNotFoundException {
         String newName = this.clientConnection.read().toString();
         try {
             this.store.changeProductName(newName);

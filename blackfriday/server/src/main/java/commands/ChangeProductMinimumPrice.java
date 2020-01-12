@@ -16,6 +16,14 @@ public class ChangeProductMinimumPrice implements Executable {
     @Inject
     private Store store;
 
+    /**
+     * Changes chosen product minimum price
+     * and return to client if operation was successful
+     *
+     * @throws IOException            if IO error occurs
+     * @throws SQLException           if SQL error occurs
+     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     */
     @Override
     public void execute() throws IOException, ClassNotFoundException, SQLException {
         double minimumPrice = this.clientConnection.read();

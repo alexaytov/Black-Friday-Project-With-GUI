@@ -32,11 +32,18 @@ public class Server {
             serverSocket = new ServerSocket(PORT);
             while (true) {
                 Socket socket;
+                // accept new connection
                 socket = serverSocket.accept();
                 ServerClientConnection clientConnection = new TCPConnection(socket);
+
+                // create command factory for this connection
                 CommandFactory commandFactory = new CommandFactory(STORE, clientConnection);
+
+                // create thread to handle this connection
                 ClientThread clientThread = new ClientThread(clientConnection, STORE, commandFactory);
                 Thread thread = new Thread(clientThread);
+
+                // execute thread
                 threadPool.execute(thread);
                 System.out.println("Thread with id " + thread.getId() + " started!!!");
             }

@@ -16,8 +16,16 @@ public class ChangeProductImage implements Executable {
     @Inject
     private ServerClientConnection clientConnection;
 
+    /**
+     * Changes chosen product image
+     * and return to client if operation was successful
+     *
+     * @throws IOException            if IO error occurs
+     * @throws SQLException           if SQL error occurs
+     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     */
     @Override
-    public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
+    public void execute() throws IOException, SQLException, ClassNotFoundException {
         byte[] newImageContent = this.clientConnection.read();
         try {
             this.store.changeProductImage(newImageContent);

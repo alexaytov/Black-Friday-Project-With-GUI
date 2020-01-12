@@ -16,8 +16,16 @@ public class EarningsYear implements Executable {
     @Inject
     private ServerClientConnection clientConnection;
 
+    /**
+     * Gets earnings for specific year
+     * and send them trough (@code clientConnection)
+     *
+     * @throws IOException            if IO error occurs
+     * @throws SQLException           if SQL error occurs
+     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     */
     @Override
-    public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
+    public void execute() throws IOException, SQLException, ClassNotFoundException {
         int year = this.clientConnection.read();
         this.clientConnection.write(store.getEarnings(year));
     }

@@ -17,8 +17,16 @@ public class DeleteUser implements Executable {
     @Inject
     private ServerClientConnection clientConnection;
 
+    /**
+     * Delete user and to client
+     * if the operation was successful
+     *
+     * @throws IOException            if IO error occurs
+     * @throws SQLException           if SQL error occurs
+     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     */
     @Override
-    public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
+    public void execute() throws IOException, SQLException, ClassNotFoundException {
         try {
             this.store.deleteUser(this.store.getLoggedInUser().getUsername());
             this.clientConnection.write(true);

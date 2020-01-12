@@ -16,8 +16,15 @@ public class GetLoggedInUser implements Executable {
     @Inject
     private Store store;
 
+    /**
+     * Gets currently logged in user in store
+     *
+     * @throws IOException            if IO error occurs
+     * @throws SQLException           if SQL error occurs
+     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     */
     @Override
-    public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
+    public void execute() throws IOException, SQLException, ClassNotFoundException {
         this.clientConnection.write(store.getLoggedInUser());
     }
 }

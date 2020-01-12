@@ -27,13 +27,10 @@ public class ProductDatabase extends BaseDatabase<Product> {
 
 
     public void updateProductImage(String productName, byte[] imageContent) {
-        // update sql
         String updateSQL = "UPDATE products SET image_content = ? WHERE name = ?";
-
         try (PreparedStatement pstmt = this.DBConnection.prepareStatement(updateSQL)) {
 
             // create input stream from byte array
-
             InputStream input = new ByteArrayInputStream(imageContent);
 
             // set parameters
@@ -48,6 +45,13 @@ public class ProductDatabase extends BaseDatabase<Product> {
         }
     }
 
+    /**
+     * Adds new Product to the database
+     *
+     * @param data the data to be added
+     * @throws SQLException               if SQL error occurs
+     * @throws DataAlreadyExistsException if a product with the same name already exists
+     */
     @Override
     public void add(Product data) throws SQLException, DataAlreadyExistsException {
         if (super.contains(data.getName())) {
@@ -66,7 +70,6 @@ public class ProductDatabase extends BaseDatabase<Product> {
                 data.getSize()
         );
         this.statement.execute(sql);
-
         updateProductImage(data.getName(), data.getImageContent());
     }
 

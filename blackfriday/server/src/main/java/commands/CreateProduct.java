@@ -18,6 +18,13 @@ public class CreateProduct implements Executable {
     @Inject
     private ServerClientConnection clientConnection;
 
+    /**
+     * Adds product to product database from (@code clientConnection)
+     *
+     * @throws IOException            if IO error occurs
+     * @throws SQLException           if SQL error occurs
+     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     */
     @Override
     public void execute() throws IOException, SQLException, ClassNotFoundException {
         Product product = this.clientConnection.read();

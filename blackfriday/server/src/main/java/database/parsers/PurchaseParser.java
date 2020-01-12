@@ -7,6 +7,14 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 public class PurchaseParser implements DataParser<Purchase> {
+
+    /**
+     * Parses purchase from result set
+     *
+     * @param resultSet the result set with information
+     * @return purchase object parsed from the result set
+     * @throws SQLException if SQL error occurs
+     */
     @Override
     public Purchase parseData(ResultSet resultSet) throws SQLException {
         String username = resultSet.getString("username");

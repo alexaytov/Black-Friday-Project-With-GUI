@@ -18,6 +18,15 @@ public class GetProductByName implements Executable {
     @Inject
     private ServerClientConnection clientConnection;
 
+    /**
+     * Gets product by name and sends them
+     * trough (@code clientConnection)
+     *
+     * @throws IOException                if IO error occurs
+     * @throws SQLException               if SQL error occurs
+     * @throws ClassNotFoundException     if read class by (@code clientConnection) is not found
+     * @throws CloneNotSupportedException if Product class doesn't support cloneable interface
+     */
     @Override
     public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
         String name = this.clientConnection.read().toString();

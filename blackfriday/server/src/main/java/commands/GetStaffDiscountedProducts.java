@@ -16,8 +16,16 @@ public class GetStaffDiscountedProducts implements Executable {
     @Inject
     private ServerClientConnection clientConnection;
 
+    /**
+     * Gets discounted products for user with staff permission
+     * and sends them trough (@code clientConnection)
+     *
+     * @throws IOException            if IO error occurs
+     * @throws SQLException           if SQL error occurs
+     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     */
     @Override
-    public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
+    public void execute() throws IOException, SQLException, ClassNotFoundException {
         this.clientConnection.write(store.getStaffDiscountedProducts());
     }
 }

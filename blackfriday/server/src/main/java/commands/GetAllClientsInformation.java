@@ -16,8 +16,15 @@ public class GetAllClientsInformation implements Executable {
     @Inject
     private ServerClientConnection clientConnection;
 
+    /**
+     * Gets client information and sends
+     * it through (@code clientConnection)
+     *
+     * @throws IOException  if IO error occurs
+     * @throws SQLException if SQL error occurs
+     */
     @Override
-    public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
+    public void execute() throws IOException, SQLException {
         this.clientConnection.write(store.getClientPurchases());
     }
 }

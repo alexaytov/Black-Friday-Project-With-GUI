@@ -1,6 +1,4 @@
-package commandEnterpreter;
-
-import commandEnterpreter.interfaces.Executable;
+package commandEnterpreter.interfaces;
 
 public interface CommandInterpreter {
 

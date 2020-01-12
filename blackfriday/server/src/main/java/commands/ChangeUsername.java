@@ -17,8 +17,17 @@ public class ChangeUsername implements Executable {
     @Inject
     private Store store;
 
+    /**
+     * Changes logged in user's username
+     * and sends thorough client connection if
+     * change was successful
+     *
+     * @throws IOException            if IO error occurs
+     * @throws SQLException           if SQL error occurs
+     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     */
     @Override
-    public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
+    public void execute() throws IOException, SQLException, ClassNotFoundException {
         boolean isUsernameChangeSuccessful;
         try {
             isUsernameChangeSuccessful = this.store.changeUsername(this.store.getLoggedInUser().getUsername(), this.clientConnection.read());

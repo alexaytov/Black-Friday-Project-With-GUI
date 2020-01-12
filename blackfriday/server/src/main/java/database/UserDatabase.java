@@ -20,6 +20,13 @@ public class UserDatabase extends BaseDatabase<User> {
         statement = DBConnection.createStatement();
     }
 
+    /**
+     * Adds new user to the database
+     *
+     * @param user the user to be added
+     * @throws SQLException               if SQL error occurs
+     * @throws DataAlreadyExistsException if a user with the same username already exists
+     */
     @Override
     public synchronized void add(User user) throws SQLException, DataAlreadyExistsException {
         if (this.contains(user.getUsername())) {

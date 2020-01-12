@@ -16,6 +16,13 @@ public class SearchStaffDiscountedProducts implements Executable {
     @Inject
     private Store store;
 
+    /**
+     * Searches products for users with permission admin
+     *
+     * @throws IOException            if IO error occurs
+     * @throws SQLException           if SQL error occurs
+     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     */
     @Override
     public void execute() throws IOException, SQLException, ClassNotFoundException {
         String searchedDiscountedProductsName = this.clientConnection.read().toString();

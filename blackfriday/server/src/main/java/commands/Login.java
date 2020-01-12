@@ -20,6 +20,16 @@ public class Login implements Executable {
     @Inject
     private Store store;
 
+    /**
+     * Sends used salt for hashed password for this specific user trough (@code clientConnection)
+     * Reads hashed password from (@code clientConnection) and compares it with stored password.
+     * If user is logged in sets (@code loggedInUser) field in store and sends it trough (@code clientConnection)
+     *
+     * @throws IOException                if IO error occurs
+     * @throws SQLException               if SQL error occurs
+     * @throws ClassNotFoundException     if read class by (@code clientConnection) is not found
+     * @throws CloneNotSupportedException if User class doesn't support cloneable interface
+     */
     @Override
     public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
 
