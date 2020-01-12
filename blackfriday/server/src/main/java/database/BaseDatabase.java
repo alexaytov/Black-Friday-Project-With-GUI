@@ -39,7 +39,7 @@ public abstract class BaseDatabase<T> implements Database<T> {
      * @throws IOException       if IO error occurs
      */
     @Override
-    public T getByName(String name) throws SQLException, NotFoundException, IOException {
+    public synchronized T getByName(String name) throws SQLException, NotFoundException, IOException {
         String sql = String.format("SELECT * FROM %s WHERE %s = '%s'", this.tableName, this.primaryKey, name);
         ResultSet resultSet = this.statement.executeQuery(sql);
         if (resultSet.next()) {
@@ -58,7 +58,7 @@ public abstract class BaseDatabase<T> implements Database<T> {
      * @throws IOException  if IO error occurs
      */
     @Override
-    public List<T> read(String... constraints) throws SQLException, IOException {
+    public synchronized List<T> read(String... constraints) throws SQLException, IOException {
         requireNonNull(constraints);
         List<T> data = new ArrayList<>();
         String sql;
@@ -83,7 +83,7 @@ public abstract class BaseDatabase<T> implements Database<T> {
      * @throws SQLException      if SQL error occurs
      */
     @Override
-    public void delete(String name) throws NotFoundException, SQLException {
+    public synchronized void delete(String name) throws NotFoundException, SQLException {
         if (!this.contains(name)) {
             throw new NotFoundException(String.format(ExceptionMessages.USER_NOT_FOUND, name));
         }
@@ -113,7 +113,7 @@ public abstract class BaseDatabase<T> implements Database<T> {
      * @throws SQLException if SQl error occurs
      */
     @Override
-    public void update(String primaryKeyValue, String variableName, String newValue) throws SQLException {
+    public synchronized void update(String primaryKeyValue, String variableName, String newValue) throws SQLException {
         String sql = String.format("UPDATE %s SET %s = '%s' WHERE %s = '%s'",
                 this.tableName,
                 variableName,

@@ -26,7 +26,7 @@ public class ProductDatabase extends BaseDatabase<Product> {
     }
 
 
-    public void updateProductImage(String productName, byte[] imageContent) {
+    public synchronized void updateProductImage(String productName, byte[] imageContent) {
         String updateSQL = "UPDATE products SET image_content = ? WHERE name = ?";
         try (PreparedStatement pstmt = this.DBConnection.prepareStatement(updateSQL)) {
 
@@ -53,7 +53,7 @@ public class ProductDatabase extends BaseDatabase<Product> {
      * @throws DataAlreadyExistsException if a product with the same name already exists
      */
     @Override
-    public void add(Product data) throws SQLException, DataAlreadyExistsException {
+    public synchronized void add(Product data) throws SQLException, DataAlreadyExistsException {
         if (super.contains(data.getName())) {
             throw new DataAlreadyExistsException();
         }
