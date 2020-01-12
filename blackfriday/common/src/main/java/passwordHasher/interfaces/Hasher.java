@@ -12,10 +12,6 @@ public interface Hasher {
         return BCrypt.hashpw(password, salt);
     }
 
-    static boolean validate(String hashOne, String hashTwo){
-        return hashOne.equals(hashTwo);
-    }
-
     static String getSalt(String hash){
         return hash.substring(0, 29);
     }

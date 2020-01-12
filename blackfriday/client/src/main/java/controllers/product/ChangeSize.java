@@ -1,6 +1,5 @@
 package controllers.product;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
 import controllers.staff.StaffChosenProduct;
@@ -13,13 +12,13 @@ import util.Operations;
 
 import java.io.IOException;
 
+import static util.Operations.confirmationPopUp;
+
 public class ChangeSize {
 
     private Product product;
     @FXML
     private JFXTextField sizeField;
-    @FXML
-    private JFXButton submitButton;
 
     public void initProduct(Product product) {
         this.product = product;
@@ -27,17 +26,18 @@ public class ChangeSize {
 
     @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
+        // send change product size command to server
         Main.tcpServer.write("change product size");
         Main.tcpServer.write(this.sizeField.getText());
-
+        // shows if executed command was successful
         if (Main.tcpServer.read()) {
-            ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_SIZE_CHANGED_SUCCESSFUL);
+            confirmationPopUp(ConstantMessages.PRODUCT_SIZE_CHANGED_SUCCESSFUL);
             this.product.setSize(this.sizeField.getText());
         } else {
-            ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_SIZE_CHANGED_SUCCESSFUL);
+            confirmationPopUp(ConstantMessages.PRODUCT_SIZE_CHANGED_SUCCESSFUL);
         }
-
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffChosenProduct.fxml", "Product", 600, 600);
+        // load staff chosen product window
+        FXMLLoader loader = Operations.loadWindow("/view/staff/staffChosenProduct.fxml", 600, 600);
         StaffChosenProduct controller = loader.getController();
         controller.initProduct(this.product);
         this.sizeField.getScene().getWindow().hide();

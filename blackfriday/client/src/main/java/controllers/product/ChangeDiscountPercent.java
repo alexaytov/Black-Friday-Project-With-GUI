@@ -3,7 +3,6 @@ package controllers.product;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
-import commonMessages.ExceptionMessages;
 import controllers.staff.StaffChosenProduct;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -20,6 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static util.Operations.confirmationPopUp;
 import static validator.Validator.validateDiscountPercent;
 
 
@@ -27,7 +27,16 @@ public class ChangeDiscountPercent implements Initializable {
 
     private Product product;
 
+    private double discountPercent;
+
+    @FXML
+    private JFXTextField discountPercentField;
+
+    @FXML
+    private JFXButton submitButton;
+
     private Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(10), event -> {
+        // enables/disable submit button based on entered data in the discountPercentField
         try {
             this.discountPercent = Double.parseDouble(this.discountPercentField.getText());
             this.submitButton.setDisable(false);
@@ -36,47 +45,38 @@ public class ChangeDiscountPercent implements Initializable {
         }
     }));
 
-    private double discountPercent;
-
     public void initProduct(Product product) {
         this.product = product;
     }
 
     @FXML
-    private JFXTextField discountPercentField;
-
-    @FXML
-    private JFXButton submitButton;
-
-    @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
-        try {
-            validateDiscountPercent(this.discountPercent, product.getPrice(), product.getMinimumPrice());
-            Main.tcpServer.write("change product discount percent");
-            Main.tcpServer.write(this.discountPercent);
-
-            if (Main.tcpServer.read()) {
-                ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_DISCOUNT_PERCENT_CHANGED_SUCCESSFUL);
-                this.product.setDiscountPercent(this.discountPercent);
-
-            } else {
-                ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_DISCOUNT_PERCENT_CHANGED_UNSUCCESSFUL);
-            }
-        } catch (IllegalArgumentException ex) {
-            ExceptionMessages.showWarningDialog(ex.getMessage());
+        // validate new discount percent before sending to server
+        validateDiscountPercent(this.discountPercent, product.getPrice(), product.getMinimumPrice());
+        // send change discount percent command to server
+        Main.tcpServer.write("change product discount percent");
+        Main.tcpServer.write(this.discountPercent);
+        // shows to user if the change was successful
+        if (Main.tcpServer.read()) {
+            confirmationPopUp(ConstantMessages.PRODUCT_DISCOUNT_PERCENT_CHANGED_SUCCESSFUL);
+            this.product.setDiscountPercent(this.discountPercent);
+        } else {
+            confirmationPopUp(ConstantMessages.PRODUCT_DISCOUNT_PERCENT_CHANGED_UNSUCCESSFUL);
         }
-
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffChosenProduct.fxml", "Product", 600, 600);
+        // load staff chosen product window
+        FXMLLoader loader = Operations.loadWindow("/view/staff/staffChosenProduct.fxml", 600, 600);
+        // initialize product to StaffChosenProduct controller
         StaffChosenProduct controller = loader.getController();
         controller.initProduct(product);
+        // stop data validation timeline
         this.checkIfAllDataIsValid.stop();
         this.discountPercentField.getScene().getWindow().hide();
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // start data validation timeline
         this.checkIfAllDataIsValid.setCycleCount(Timeline.INDEFINITE);
         this.checkIfAllDataIsValid.play();
-
     }
 }

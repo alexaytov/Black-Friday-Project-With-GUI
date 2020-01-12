@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static util.Operations.confirmationPopUp;
 import static validator.Validator.requireNonBlank;
 
 public class ChangeName implements Initializable {
@@ -29,38 +30,41 @@ public class ChangeName implements Initializable {
     @FXML
     private JFXButton submitButton;
 
+    Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(10), event -> {
+        // enables/disable submit button based on information entered in nameField
+        try {
+            requireNonBlank(this.nameField.getText(), ExceptionMessages.NAME_NULL_OR_EMPTY);
+            this.submitButton.setDisable(false);
+        } catch (IllegalArgumentException ex) {
+            this.submitButton.setDisable(true);
+        }
+    }));
+
     @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
+        // send change product name command to server
         Main.tcpServer.write("change product name");
         Main.tcpServer.write(this.nameField.getText());
-
+        // shows confirmation of executed command to user
         if (Main.tcpServer.read()) {
-            ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_NAME_CHANGED_SUCCESSFUL);
+            confirmationPopUp(ConstantMessages.PRODUCT_NAME_CHANGED_SUCCESSFUL);
         } else {
-            ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_NAME_CHANGED_UNSUCCESSFUL);
+            confirmationPopUp(ConstantMessages.PRODUCT_NAME_CHANGED_UNSUCCESSFUL);
         }
-
-        this.submitButton.getScene().getWindow().hide();
-
         // load product window
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffChosenProduct.fxml", this.nameField.getText(), 600, 600);
+        FXMLLoader loader = Operations.loadWindow("/view/staff/staffChosenProduct.fxml", 600, 600);
+        // initialize product in StaffChosenProduct controller
         StaffChosenProduct controller = loader.getController();
         controller.initProduct(this.nameField.getText());
+        // hides this window
+        this.checkIfAllDataIsValid.stop();
         this.nameField.getScene().getWindow().hide();
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(10), event -> {
-            try {
-                requireNonBlank(this.nameField.getText(), ExceptionMessages.NAME_NULL_OR_EMPTY);
-                this.submitButton.setDisable(false);
-            } catch (IllegalArgumentException ex) {
-                this.submitButton.setDisable(true);
-            }
-        }));
-        checkIfAllDataIsValid.setCycleCount(Timeline.INDEFINITE);
-        checkIfAllDataIsValid.play();
+        // start data nameField data validation timeline
+        this.checkIfAllDataIsValid.setCycleCount(Timeline.INDEFINITE);
+        this.checkIfAllDataIsValid.play();
     }
 }

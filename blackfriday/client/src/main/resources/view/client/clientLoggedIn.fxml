@@ -53,6 +53,11 @@
                                         <Font size="18.0" />
                                     </font>
                                 </JFXButton>
+                        <JFXButton layoutX="326.0" layoutY="20.0" onAction="#showAllProducts" prefHeight="39.0" prefWidth="171.0" style="-fx-background-color: #23cba7;" text="Show All Products">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </JFXButton>
                                 <MenuButton mnemonicParsing="false" style="-fx-background-color: white; -fx-border-color: white white black white;" text="Sort">
                                     <items>
                                         <MenuItem mnemonicParsing="false">

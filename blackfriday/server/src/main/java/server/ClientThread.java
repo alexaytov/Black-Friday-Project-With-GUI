@@ -15,7 +15,6 @@ import static java.util.Objects.requireNonNull;
 public class ClientThread implements Runnable {
 
     private ServerClientConnection clientConnection;
-    private Store store;
     private CommandInterpreter commandInterpreter;
 
 
@@ -38,7 +37,6 @@ public class ClientThread implements Runnable {
 
     public void setStore(Store store) {
         requireNonNull(store);
-        this.store = store;
     }
 
     public void run() {
@@ -46,10 +44,8 @@ public class ClientThread implements Runnable {
             while (true) {
                 // read command from client
                 String command = this.clientConnection.read();
-
                 // get command from command interpreter
                 Executable executable = this.commandInterpreter.interpretCommand(command);
-
                 // execute command
                 executable.execute();
             }

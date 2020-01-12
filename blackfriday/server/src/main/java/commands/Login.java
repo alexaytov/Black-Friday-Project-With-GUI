@@ -32,9 +32,8 @@ public class Login implements Executable {
      */
     @Override
     public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
-
         String username = this.clientConnection.read();
-        User userToBeLoggedIn = null;
+        User userToBeLoggedIn;
         try {
             userToBeLoggedIn = this.store.getUser(username);
             String salt = Hasher.getSalt(userToBeLoggedIn.getPassword());

@@ -21,17 +21,23 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static util.Operations.confirmationPopUp;
 import static validator.Validator.validatePrice;
 
 public class ChangePrice implements Initializable {
 
     private Product product;
+
     private double price;
+
     @FXML
     private JFXTextField priceField;
+
     @FXML
     private JFXButton submitButton;
+
     private Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(10), event -> {
+        // enables/disable submit button based on entered price in priceField
         try {
             this.price = Double.parseDouble(this.priceField.getText());
             Validator.requireNonNegative(this.price, ExceptionMessages.MINIMUM_PRICE_MUST_BE_POSITIVE);
@@ -47,33 +53,28 @@ public class ChangePrice implements Initializable {
 
     @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
-        try {
-            validatePrice(this.price, product.getMinimumPrice());
-            Main.tcpServer.write("change product price");
-            Main.tcpServer.write(this.price);
-
-            if (Main.tcpServer.read()) {
-                ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_PRICE_CHANGED_SUCCESSFUL);
-                this.product.setPrice(this.price);
-            } else {
-                ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_PRICE_CHANGED_UNCCESSFUL);
-            }
-        } catch (IllegalArgumentException ex) {
-            ExceptionMessages.showWarningDialog(ex.getMessage());
+        // send change product price command to server
+        validatePrice(this.price, product.getMinimumPrice());
+        Main.tcpServer.write("change product price");
+        Main.tcpServer.write(this.price);
+        // show if executed command was successful to user
+        if (Main.tcpServer.read()) {
+            confirmationPopUp(ConstantMessages.PRODUCT_PRICE_CHANGED_SUCCESSFUL);
+            this.product.setPrice(this.price);
+        } else {
+            confirmationPopUp(ConstantMessages.PRODUCT_PRICE_CHANGED_UNCCESSFUL);
         }
-
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffChosenProduct.fxml", "Product", 600, 600);
+        // load staff chosen product window
+        FXMLLoader loader = Operations.loadWindow("/view/staff/staffChosenProduct.fxml", 600, 600);
+        // initialize product StaffChosenProduct controller
         StaffChosenProduct controller = loader.getController();
         controller.initProduct(product);
         this.checkIfAllDataIsValid.stop();
         this.priceField.getScene().getWindow().hide();
-
     }
-
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         checkIfAllDataIsValid.setCycleCount(Timeline.INDEFINITE);
         checkIfAllDataIsValid.play();
     }

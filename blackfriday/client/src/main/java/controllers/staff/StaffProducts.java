@@ -16,7 +16,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -38,6 +37,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static commonMessages.ConstantMessages.STAGE_TITLE;
+import static util.Operations.confirmationPopUp;
+import static util.Operations.showWarningDialog;
 import static validator.Validator.*;
 
 public class StaffProducts implements Initializable {
@@ -55,19 +57,10 @@ public class StaffProducts implements Initializable {
     private JFXRadioButton allProductsButton;
 
     @FXML
-    private ToggleGroup productGroup;
-
-    @FXML
-    private JFXRadioButton blackFridayButton;
-
-    @FXML
     private JFXTextField productSearch;
 
     @FXML
     private JFXRadioButton productsSortByNameButton;
-
-    @FXML
-    private ToggleGroup sortGroup;
 
     @FXML
     private JFXRadioButton productsSortByPriceAscendingButton;
@@ -85,22 +78,22 @@ public class StaffProducts implements Initializable {
     private JFXButton quantityControlSearchButton;
 
     @FXML
-    private JFXRadioButton quantityCOntrolSortByNameButton;
-
-    @FXML
-    private ToggleGroup sortGroup1;
+    private JFXRadioButton quantityControlSortByNameButton;
 
     @FXML
     private JFXRadioButton quantityControlSortByPriceAscendingButton;
 
     @FXML
-    private JFXRadioButton quantityControlSortByPriceDescnedingButton;
+    private JFXRadioButton quantityControlSortByPriceDescendingButton;
 
     @FXML
     private VBox vBoxWithProductsQualityControl;
 
     @FXML
     private Tab createProductTab;
+
+    @FXML
+    private JFXRadioButton blackFridayButton;
 
     @FXML
     private JFXTextField nameTextField;
@@ -136,6 +129,7 @@ public class StaffProducts implements Initializable {
     void selectPictureForNewProduct() throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Pick image");
+        // acceptable extension for picture
         FileChooser.ExtensionFilter pngExtensionFilter = new FileChooser.ExtensionFilter("PNG Images", "*.png");
         FileChooser.ExtensionFilter jpgExtensionFilter = new FileChooser.ExtensionFilter("JPG Images", "*.jpg");
         fileChooser.getExtensionFilters().addAll(pngExtensionFilter, jpgExtensionFilter);
@@ -149,16 +143,19 @@ public class StaffProducts implements Initializable {
 
     @FXML
     void productsSelected() throws IOException, ClassNotFoundException {
+        // products tab is selected
+        // load all products in GUI
         this.allProductsButton.selectedProperty().setValue(true);
         Main.tcpServer.write("get staff products");
-        List<Product> nameImageContentOfProductList = Main.tcpServer.read();
-        fillVBoxWithProducts(nameImageContentOfProductList, this.vBoxWithProducts);
+        List<Product> products = Main.tcpServer.read();
+        fillVBoxWithProducts(products, this.vBoxWithProducts);
     }
 
     @FXML
     void searchQuantityControl() throws IOException, ClassNotFoundException {
-
+        // clear previously loaded products in GUI
         this.vBoxWithProductsQualityControl.getChildren().clear();
+        // execute quantity control command
         Main.tcpServer.write("search quantity control");
         Main.tcpServer.write(this.maximumQuantity);
         List<Product> products = Main.tcpServer.read();
@@ -171,22 +168,28 @@ public class StaffProducts implements Initializable {
     }
 
     private void fillVBoxWithProducts(List<Product> products, VBox vBoxWithProducts) {
+        // clear previously shown products
         vBoxWithProducts.getChildren().clear();
         this.products = products;
+        // use productTab/quantityControlTab sort button based on which tab is selected
         if (productsTab.isSelected()) {
             sortProducts(products, productsSortByNameButton, productsSortByPriceAscendingButton, productsSortByPriceDescendingButton);
-        } else {
-            sortProducts(products, quantityCOntrolSortByNameButton, quantityControlSortByPriceAscendingButton, quantityControlSortByPriceDescnedingButton);
+        } else if (quantityControlTab.isSelected()) {
+            sortProducts(products, quantityControlSortByNameButton, quantityControlSortByPriceAscendingButton, quantityControlSortByPriceDescendingButton);
         }
+        // fill GUI with products
+        fillVBoxWithHBoxWithProducts(products, vBoxWithProducts);
+    }
+
+    private void fillVBoxWithHBoxWithProducts(List<Product> products, VBox vBoxWithProducts) {
+        // fills VBox with two columns of products
+        // which include picture product name and price
         int index = 0;
         HBox hbox = new HBox();
         hbox.setAlignment(Pos.CENTER);
-
         for (Product product : products) {
-
-            hbox.getChildren().add(createProductVBox(product));
             index++;
-
+            hbox.getChildren().add(createProductVBox(product));
             if ((index % 2 == 0 && index != 0) || products.size() == 1) {
                 vBoxWithProducts.getChildren().add(hbox);
                 hbox = new HBox();
@@ -194,17 +197,20 @@ public class StaffProducts implements Initializable {
             }
         }
         if (products.size() % 2 != 0) {
-            hbox.setAlignment(Pos.CENTER_LEFT);
             vBoxWithProducts.getChildren().add(hbox);
+            hbox.setAlignment(Pos.CENTER_LEFT);
         }
     }
 
     private VBox createProductVBox(Product product) {
         VBox vbox = new VBox();
+        // load image in ImageView
         InputStream is = new ByteArrayInputStream(product.getImageContent());
-        ImageView imageView = new ImageView(new Image(is));
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(100);
+        ImageView image = new ImageView(new Image(is));
+        image.setPreserveRatio(true);
+        image.setFitWidth(200);
+        // adds on mouse clicked event handler
+        // to go to staff chosen product window
         vbox.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             this.vBoxWithProducts.getScene().getWindow().hide();
             FXMLLoader loader = new FXMLLoader();
@@ -217,7 +223,7 @@ public class StaffProducts implements Initializable {
                 e.printStackTrace();
             }
             Scene scene = new Scene(root, 600, 600);
-            stage.setTitle("Product");
+            stage.setTitle(STAGE_TITLE);
             StaffChosenProduct controller = loader.getController();
             try {
                 controller.initProduct(product);
@@ -231,17 +237,23 @@ public class StaffProducts implements Initializable {
 
         HBox hbox = new HBox();
         hbox.setSpacing(10);
-        double productPrice = product.getPrice();
+        // chases purchase price is all products button is selected
+        // and discounted price if black friday products button is selected
+        double productPrice;
+        if (blackFridayButton.isSelected()) {
+            productPrice = product.getDiscountedPrice();
+        } else {
+            productPrice = product.getPurchasePrice();
+        }
+        // format product price to two decimal places
         productPrice = ((int) (productPrice * 100)) / 100.0;
-
+        // create product label - product name + product price
         Label name = new Label(product.getName() + " " + productPrice + " лв.");
-
         hbox.getChildren().add(name);
         name.setFont(new Font(14));
-
+        // set HBox and VBox properties
         hbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().addAll(imageView, hbox);
-
+        vbox.getChildren().addAll(image, hbox);
         vbox.setPrefWidth(290);
         vbox.spacingProperty().setValue(10);
         vbox.alignmentProperty().set(Pos.CENTER);
@@ -254,6 +266,7 @@ public class StaffProducts implements Initializable {
     }
 
     private void sortProducts(List<Product> products, JFXRadioButton sortByNameButton, JFXRadioButton sortByPriceAscendingButton, JFXRadioButton sortByPriceDescendingButton) {
+        // sort products based on which option is selected
         if (sortByNameButton.isSelected()) {
             products.sort(Comparator.comparing(a -> a.getName().toLowerCase()));
         } else if (sortByPriceAscendingButton.isSelected()) {
@@ -265,41 +278,51 @@ public class StaffProducts implements Initializable {
 
     @FXML
     void loadAllProducts(ActionEvent event) throws IOException, ClassNotFoundException {
+        loadProductsFromServerToGUI("get staff products");
+    }
+
+    private void loadProductsFromServerToGUI(String serverCommand) throws IOException, ClassNotFoundException {
+        // clears previously loaded products in GUI
         this.vBoxWithProducts.getChildren().clear();
-        Main.tcpServer.write("get staff products");
-        List<Product> nameImageContentOfProductList = Main.tcpServer.read();
-        fillVBoxWithProducts(nameImageContentOfProductList, this.vBoxWithProducts);
-        if (nameImageContentOfProductList.size() == 0) {
+        Main.tcpServer.write(serverCommand);
+        List<Product> products = Main.tcpServer.read();
+        fillVBoxWithProducts(products, this.vBoxWithProducts);
+        if (products.size() == 0) {
             noResultsMessage();
         }
+    }
 
+    @FXML
+    void showAllProducts(ActionEvent event) throws IOException, ClassNotFoundException {
+        // loads all products to GUI based on selected
+        // radio button - all products, black friday products
+        if (allProductsButton.isSelected()) {
+            loadProductsFromServerToGUI("get staff products");
+        } else {
+            loadProductsFromServerToGUI("get staff discounted products");
+        }
     }
 
     @FXML
     void loadDiscountedProducts(ActionEvent event) throws IOException, ClassNotFoundException {
-        this.vBoxWithProducts.getChildren().clear();
-        Main.tcpServer.write("get staff discounted products");
-        List<Product> nameImageContentOfProductList = Main.tcpServer.read();
-        fillVBoxWithProducts(nameImageContentOfProductList, this.vBoxWithProducts);
-        if (nameImageContentOfProductList.size() == 0) {
-            noResultsMessage();
-        }
+        loadProductsFromServerToGUI("get staff discounted products");
     }
 
     @FXML
     void searchProduct(ActionEvent event) throws IOException, ClassNotFoundException {
+        // clear products from UI
         this.vBoxWithProducts.getChildren().clear();
+        // send search command based of selected type of products
         if (allProductsButton.isSelected()) {
             Main.tcpServer.write("search staff all products");
-            Main.tcpServer.write(this.productSearch.getText());
-            List<Product> products = Main.tcpServer.read();
-            fillVBoxWithProducts(products, this.vBoxWithProducts);
         } else {
             Main.tcpServer.write("search staff discounted products");
-            Main.tcpServer.write(this.productSearch.getText());
-            List<Product> products = Main.tcpServer.read();
-            fillVBoxWithProducts(products, this.vBoxWithProducts);
         }
+        Main.tcpServer.write(this.productSearch.getText());
+        // get products from server
+        List<Product> products = Main.tcpServer.read();
+        // fill UI with products
+        fillVBoxWithProducts(products, this.vBoxWithProducts);
         if (vBoxWithProducts.getChildren().size() == 0) {
             // no results found
             noResultsMessage();
@@ -307,12 +330,12 @@ public class StaffProducts implements Initializable {
     }
 
     private void noResultsMessage() {
+        // create label with no result message
         Label noResultsLabel = new Label(ConstantMessages.NO_RESULTS);
-        HBox hBox = new HBox(noResultsLabel);
         noResultsLabel.setAlignment(Pos.CENTER);
+        HBox hBox = new HBox(noResultsLabel);
         hBox.setAlignment(Pos.CENTER);
         this.vBoxWithProducts.setAlignment(Pos.CENTER);
-
         noResultsLabel.setStyle("-fx-alignment: center; -fx-font-size: 14pt; -fx-fill-width: true;");
         this.vBoxWithProducts.getChildren().add(hBox);
     }
@@ -320,8 +343,8 @@ public class StaffProducts implements Initializable {
 
     @FXML
     void goToMainMenu(ActionEvent event) throws IOException {
-        Operations.changeWindows(nameTextField, "Settings", "/view/staff/staffLoggedIn.fxml", this.getClass(), 600, 600);
-
+        this.nameTextField.getScene().getWindow().hide();
+        Operations.loadWindow("/view/staff/staffLoggedIn.fxml", 600, 600);
     }
 
     @FXML
@@ -332,12 +355,13 @@ public class StaffProducts implements Initializable {
 
     @FXML
     void quantityControlSortButtonSelected() {
-        sortProducts(this.products, this.quantityCOntrolSortByNameButton, this.quantityControlSortByPriceAscendingButton, this.quantityControlSortByPriceDescnedingButton);
+        sortProducts(this.products, this.quantityControlSortByNameButton, this.quantityControlSortByPriceAscendingButton, this.quantityControlSortByPriceDescendingButton);
         fillVBoxWithProducts(this.products, this.vBoxWithProductsQualityControl);
     }
 
     @FXML
     void createProduct(ActionEvent event) throws IOException, ClassNotFoundException {
+        // gets all fields information
         GetProductInformationFromTextFields getProductInformationFromTextFields = new GetProductInformationFromTextFields().invoke();
         String name = getProductInformationFromTextFields.getName();
         String description = getProductInformationFromTextFields.getDescription();
@@ -347,19 +371,20 @@ public class StaffProducts implements Initializable {
         double minimumPrice = getProductInformationFromTextFields.getMinimumPrice();
         double discountPercent = getProductInformationFromTextFields.getDiscountPercent();
         Product product = new Product(name, description, quantity, price, minimumPrice, discountPercent, Files.readAllBytes(this.createProductPictureFile.toPath()), size);
-
+        // send new product ot server
         Main.tcpServer.write("create product");
         Main.tcpServer.write(product);
-
+        // shows uer if product was created successfully
         if (Main.tcpServer.read()) {
-            ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_CREATED);
+            confirmationPopUp(ConstantMessages.PRODUCT_CREATED);
             resetAllCreateProductField();
         } else {
-            ExceptionMessages.showWarningDialog(ExceptionMessages.Product_ALREADY_EXISTS);
+            showWarningDialog(ExceptionMessages.Product_ALREADY_EXISTS);
         }
     }
 
     private void resetAllCreateProductField() {
+        // remove all information from GUI fields
         this.nameTextField.setText("");
         this.descriptionTextField.setText("");
         this.sizeTextField.setText("");
@@ -373,7 +398,7 @@ public class StaffProducts implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        // sets quantityControl button disable/enable based on input in quantityControlField
         Timeline verifyQuantityControlField = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             try {
                 int quantity = Integer.parseInt(this.quantityControlField.getText());
@@ -385,7 +410,8 @@ public class StaffProducts implements Initializable {
             }
         }));
         verifyQuantityControlField.setCycleCount(Timeline.INDEFINITE);
-
+        // start quantityControl field validation based on if the
+        // quantity control tab is selected
         this.quantityControlTab.selectedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 verifyQuantityControlField.stop();
@@ -394,7 +420,8 @@ public class StaffProducts implements Initializable {
 
             }
         });
-
+        // sets create product button disable/enable
+        // based on validation of all fields
         Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             if (areAllFieldsValid()) {
                 this.createProductButton.setDisable(false);
@@ -403,6 +430,8 @@ public class StaffProducts implements Initializable {
             }
         }));
         checkIfAllDataIsValid.setCycleCount(Timeline.INDEFINITE);
+        // start all field validation based on
+        // if the create product tab is selected
         this.createProductTab.selectedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 checkIfAllDataIsValid.stop();
@@ -410,10 +439,9 @@ public class StaffProducts implements Initializable {
                 checkIfAllDataIsValid.play();
             }
         });
-
-
         Color textFieldDefaultUnfocusedColor = Color.valueOf(ConstantMessages.TEXT_FIELD_UNFOCUSED_COLOR);
-
+        // when field is unfocused set unfocused color to
+        // red/default unfocused color based if data is invalid/valid
         nameTextField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 try {
@@ -424,25 +452,30 @@ public class StaffProducts implements Initializable {
                 }
             }
         });
-
+        // when field is unfocused set unfocused color to
+        // red/default unfocused color based if data is invalid/valid
         descriptionTextField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 textFieldColorChangeValidation(textFieldDefaultUnfocusedColor, descriptionTextField);
             }
         });
-
+        // when field is unfocused set unfocused color to
+        // red/default unfocused color based if data is invalid/valid
         sizeTextField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 textFieldColorChangeValidation(textFieldDefaultUnfocusedColor, sizeTextField);
             }
         });
-
+        // when field is unfocused set unfocused color to
+        // red/default unfocused color based if data is invalid/valid
         priceTextField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 priceMinimumPriceDiscountPercentValidation(textFieldDefaultUnfocusedColor);
             }
         });
-
+        // when field is unfocused set unfocused color to
+        // red/default unfocused color and sets create product
+        // button to disabled/enabled based if data is invalid/valid
         quantityTextField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 try {
@@ -455,23 +488,33 @@ public class StaffProducts implements Initializable {
                 }
             }
         });
-
+        // when minimumPriceTextField is unfocused
+        // execute validation of:
+        // minimum price
+        // price
+        // discount percent
         minimumPriceTextField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 priceMinimumPriceDiscountPercentValidation(textFieldDefaultUnfocusedColor);
             }
         });
-
+        // when minimumPriceTextField is unfocused
+        // execute validation of:
+        // minimum price
+        // price
+        // discount percent
         discountPercentField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 priceMinimumPriceDiscountPercentValidation(textFieldDefaultUnfocusedColor);
             }
         });
-
-
     }
 
     private void priceMinimumPriceDiscountPercentValidation(Color textFieldDefaultUnfocusedColor) {
+        // validates:
+        // minimum price
+        // discount percent
+        // price
         try {
             double discountPercent = Double.parseDouble(discountPercentField.getText());
             double price = Double.parseDouble(priceTextField.getText());
@@ -489,6 +532,8 @@ public class StaffProducts implements Initializable {
     }
 
     private void textFieldColorChangeValidation(Color textFieldDefaultUnfocusedColor, JFXTextField textField) {
+        // sets textField unfocused color to red and
+        // disables create product button if input data is invalid
         try {
             requireNonBlank(textField.getText(), ExceptionMessages.NAME_NULL_OR_EMPTY);
             textField.setUnFocusColor(textFieldDefaultUnfocusedColor);
@@ -500,9 +545,11 @@ public class StaffProducts implements Initializable {
 
     private boolean areAllFieldsValid() {
         try {
+            // check if an image was selected
             if (this.createProductPictureFile == null) {
                 throw new IllegalArgumentException();
             }
+            // get all input data from fields
             String name = this.nameTextField.getText();
             String description = this.descriptionTextField.getText();
             String size = this.sizeTextField.getText();
@@ -510,19 +557,17 @@ public class StaffProducts implements Initializable {
             double minimumPrice = Double.parseDouble(this.minimumPriceTextField.getText());
             double discountPercent = Double.parseDouble(this.discountPercentField.getText());
             int quantity = Integer.parseInt(this.quantityTextField.getText());
-
+            // validate all fields
             requireNonBlank(name, ExceptionMessages.NAME_NULL_OR_EMPTY);
             requireNonBlank(size, ExceptionMessages.SIZE_NULL_OR_EMPTY);
             requireNonBlank(description, ExceptionMessages.DESCRIPTION_NULL_OR_EMPTY);
             validateQuantity(quantity);
             validateDiscountPercent(discountPercent, price, minimumPrice);
-
             return true;
         } catch (IllegalArgumentException ex) {
             return false;
         }
     }
-
 
     private class GetProductInformationFromTextFields {
         private String name;
@@ -537,7 +582,7 @@ public class StaffProducts implements Initializable {
             return name;
         }
 
-        public String getDescription() {
+        String getDescription() {
             return description;
         }
 
@@ -545,7 +590,7 @@ public class StaffProducts implements Initializable {
             return size;
         }
 
-        public int getQuantity() {
+        int getQuantity() {
             return quantity;
         }
 
@@ -562,6 +607,7 @@ public class StaffProducts implements Initializable {
         }
 
         GetProductInformationFromTextFields invoke() {
+            // gets all input information from text fields
             name = StaffProducts.this.nameTextField.getText();
             description = StaffProducts.this.descriptionTextField.getText();
             size = StaffProducts.this.sizeTextField.getText();

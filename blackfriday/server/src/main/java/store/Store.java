@@ -33,7 +33,6 @@ public class Store {
     private ProductDatabase productDatabase;
     private PurchaseDatabase purchaseDatabase;
     private Earnings earnings;
-    private boolean blackFriday;
     private User loggedInUser;
     private Product chosenProduct;
 
@@ -43,7 +42,6 @@ public class Store {
         this.productDatabase = new ProductDatabase(DBConnection);
         this.purchaseDatabase = new PurchaseDatabase(DBConnection);
         this.earnings = new Earnings(this.purchaseDatabase);
-        this.blackFriday = false;
         this.loggedInUser = null;
         this.chosenProduct = null;
     }
@@ -186,8 +184,8 @@ public class Store {
         return true;
     }
 
-    public boolean isBlackFriday() {
-        return blackFriday;
+    public boolean isBlackFriday() throws IOException, SQLException {
+        return !this.productDatabase.read("is_discounted = 1").isEmpty();
     }
 
     /**
@@ -214,7 +212,6 @@ public class Store {
                 this.productDatabase.update(discountedProduct.getName(), "is_discounted", "0");
             }
         }
-        this.blackFriday = blackFriday;
     }
 
     /**
@@ -248,7 +245,7 @@ public class Store {
      * @return all the products which are discounted
      */
     public List<Product> getStaffDiscountedProducts() throws IOException, SQLException {
-        return this.productDatabase.read("is_discounted = true");
+        return this.productDatabase.read("discounted_percent != 0");
     }
 
     /**
@@ -450,7 +447,7 @@ public class Store {
      * @throws SQLException if SQL error occurs
      */
     public List<Product> searchDiscountedProducts(String searchedDiscountedProductsName) throws IOException, SQLException {
-        return this.productDatabase.read(String.format("is_discounted = true", "name LIKE %%s%", searchedDiscountedProductsName));
+        return this.productDatabase.read("is_discounted = true", "name LIKE '%" + searchedDiscountedProductsName + "%'");
     }
 
     /**
@@ -474,5 +471,9 @@ public class Store {
     public void changeProductMinimumPrice(double minimumPrice) throws SQLException {
         this.chosenProduct.setMinimumPrice(minimumPrice);
         this.productDatabase.update(this.chosenProduct.getName(), "minimum_price", String.valueOf(minimumPrice));
+    }
+
+    public Object searchDiscountedStaffProducts(String searchedDiscountedProductsName) throws IOException, SQLException {
+        return this.productDatabase.read("discounted_percent != 0", "name LIKE '%" + searchedDiscountedProductsName + "%'");
     }
 }

@@ -2,10 +2,12 @@ package commands;
 
 import commandEnterpreter.interfaces.Executable;
 import commandEnterpreter.interfaces.Inject;
+import commonMessages.ExceptionMessages;
 import connection.ServerClientConnection;
 import exceptions.NotFoundException;
 import product.Product;
 import store.Store;
+import validator.Validator;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -29,6 +31,7 @@ public class GetProductByName implements Executable {
      */
     @Override
     public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
+        Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         String name = this.clientConnection.read().toString();
         Product chosenProduct;
         try {

@@ -11,6 +11,7 @@ import util.Operations;
 
 import java.io.IOException;
 
+import static util.Operations.showWarningDialog;
 import static validator.Validator.requireNonBlank;
 
 
@@ -34,12 +35,14 @@ public class LastNameChange {
                     lastNameField.getText(),
                     ConstantMessages.LAST_NAME_CHANGE_SUCCESSFUL,
                     ConstantMessages.LAST_NAME_CHANGE_UNSUCCESSFUL);
+            // is last name was changed update user property
             if (isLastNameChanged) {
                 this.user.setLastName(newLastName);
             }
         } catch (IllegalArgumentException ex) {
-            ExceptionMessages.showWarningDialog(ExceptionMessages.STRING_NULL_OR_EMPTY);
+            showWarningDialog(ExceptionMessages.STRING_NULL_OR_EMPTY);
         }
+        // hide this window
         this.lastNameField.getScene().getWindow().hide();
     }
 

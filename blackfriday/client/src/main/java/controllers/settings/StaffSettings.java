@@ -2,7 +2,6 @@ package controllers.settings;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import commonMessages.ConstantMessages;
 import controllers.client.ClientLoggedIn;
 import controllers.staff.StaffLoggedIn;
 import javafx.animation.KeyFrame;
@@ -20,6 +19,8 @@ import util.Operations;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static util.Operations.confirmationPopUp;
 
 public class StaffSettings implements Initializable {
 
@@ -43,53 +44,50 @@ public class StaffSettings implements Initializable {
 
     @FXML
     void ChangeAge(ActionEvent event) throws IOException {
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/settings/ageChange.fxml", "Age Change", 600, 200);
+        FXMLLoader loader = Operations.loadWindow("/view/settings/ageChange.fxml", 600, 200);
         AgeChange controller = loader.getController();
         controller.initUser(this.user);
-
     }
 
     @FXML
     void changeFirstName(ActionEvent event) throws IOException {
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/settings/firstNameChange.fxml", "First Name Change", 600, 200);
+        FXMLLoader loader = Operations.loadWindow("/view/settings/firstNameChange.fxml", 600, 200);
         FirstNameChange controller = loader.getController();
         controller.initUser(this.user);
     }
 
     @FXML
     void changeLastName(ActionEvent event) throws IOException {
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/settings/lastNameChange.fxml", "Last Name Change", 600, 200);
+        FXMLLoader loader = Operations.loadWindow("/view/settings/lastNameChange.fxml", 600, 200);
         LastNameChange controller = loader.getController();
         controller.initUser(this.user);
     }
 
     @FXML
     void changePassword(ActionEvent event) throws IOException {
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/settings/passwordChange.fxml", "Password Change", 600, 200);
+        FXMLLoader loader = Operations.loadWindow("/view/settings/passwordChange.fxml", 600, 200);
         PasswordChange controller = loader.getController();
         controller.initUser(this.user);
-
     }
 
     @FXML
     void changeUsername(ActionEvent event) throws IOException {
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/settings/usernameChange.fxml", "Username Change", 600, 200);
+        FXMLLoader loader = Operations.loadWindow("/view/settings/usernameChange.fxml", 600, 200);
         UsernameChange controller = loader.getController();
         controller.initUser(this.user);
-
     }
 
     @FXML
     void goBack(ActionEvent event) throws IOException {
         this.usernameField.getScene().getWindow().hide();
-        FXMLLoader loader = null;
-
+        FXMLLoader loader;
+        // load admin/client window based on user permission
         if ((this.user.getPermission().equals(Permission.CLIENT))) {
-            loader = Operations.loadWindow(this.getClass(), "/view/client/clientLoggedIn.fxml", "Logged In", 650, 800);
+            loader = Operations.loadWindow("/view/client/clientLoggedIn.fxml", 650, 800);
             ClientLoggedIn controller = loader.getController();
             controller.initUser(this.user);
         } else if (this.user.getPermission().equals(Permission.ADMIN)) {
-            loader = Operations.loadWindow(this.getClass(), "/view/staff/staffLoggedIn.fxml", "Logged In", 600, 600);
+            loader = Operations.loadWindow("/view/staff/staffLoggedIn.fxml", 600, 600);
             StaffLoggedIn controller = loader.getController();
             controller.initUser(this.user);
         }
@@ -98,35 +96,36 @@ public class StaffSettings implements Initializable {
     @FXML
     void deleteAccount(ActionEvent event) throws IOException, ClassNotFoundException {
         Main.tcpServer.write("delete user");
+        // show user if command was executed successfully
         if (Main.tcpServer.read()) {
-            ConstantMessages.confirmationPopUp("User successfully deleted!");
+            confirmationPopUp("User successfully deleted!");
             this.backButton.getScene().getWindow().hide();
-            Operations.loadWindow(this.getClass(), "/view/login.fxml", "Log In", 600, 350);
+            Operations.loadWindow("/view/login.fxml", 600, 350);
         } else {
-            ConstantMessages.confirmationPopUp("There was a problem deleting user!");
+            confirmationPopUp("There was a problem deleting user!");
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // get currently logged user information from server
         try {
             Main.tcpServer.write("get logged in user");
             this.user = Main.tcpServer.read();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
+        // refresh all fields text properties
         Timeline refreshTextFieldsTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> refreshTextFields()));
         refreshTextFieldsTimeline.setCycleCount(Timeline.INDEFINITE);
         refreshTextFieldsTimeline.play();
-
     }
 
     private void refreshTextFields() {
+        // update all user information fields
         firstNameField.setText(this.user.getFirstName());
         lastNameField.setText(this.user.getLastName());
         ageField.setText(String.valueOf(this.user.getAge()));
         usernameField.setText(this.user.getUsername());
     }
-
 }

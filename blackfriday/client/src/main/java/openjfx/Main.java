@@ -4,16 +4,15 @@ import connection.ServerClientConnection;
 import connection.TCPConnection;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+import util.Operations;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import static commonMessages.ExceptionMessages.showWarningDialog;
+import static util.Operations.showWarningDialog;
+
 
 /**
  * JavaFX Main
@@ -29,13 +28,10 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/view/login.fxml"));
-        primaryStage.setTitle("Log In");
-        primaryStage.setScene(new Scene(root, 600, 350));
-        primaryStage.show();
-        primaryStage.setResizable(false);
-
+        Operations.loadWindow("/view/login.fxml", 600, 350);
+        // use localhost ip for server
         InetAddress ip = InetAddress.getLocalHost();
+        // get port number from environment variables
         final int port = Integer.parseInt(System.getenv("PORT"));
         try {
             Socket socket = new Socket(ip, port);

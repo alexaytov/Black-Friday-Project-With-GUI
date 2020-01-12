@@ -11,6 +11,7 @@ import util.Operations;
 
 import java.io.IOException;
 
+import static util.Operations.showWarningDialog;
 import static validator.Validator.requireNonBlank;
 
 public class PasswordChange {
@@ -30,12 +31,14 @@ public class PasswordChange {
                     newPassword,
                     ConstantMessages.PASSWORD_CHANGE_SUCCESSFUL,
                     ConstantMessages.PASSWORD_CHANGE_UNSUCCESSFUL);
+            // if password was changed update user property
             if (isPasswordChanged) {
                 this.user.setPasswordHash(newPassword);
             }
         } catch (IllegalArgumentException ex) {
-            ExceptionMessages.showWarningDialog(ExceptionMessages.STRING_NULL_OR_EMPTY);
+            showWarningDialog(ExceptionMessages.STRING_NULL_OR_EMPTY);
         }
+        // hide this window
         this.passwordField.getScene().getWindow().hide();
     }
 

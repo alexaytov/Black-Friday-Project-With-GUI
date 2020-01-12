@@ -20,16 +20,21 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static util.Operations.confirmationPopUp;
 import static validator.Validator.requireNonBlank;
 
 public class ChangeDescription implements Initializable {
 
     private Product product;
+
     @FXML
     private JFXTextField descriptionField;
+
     @FXML
     private JFXButton submitButton;
+
     private Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(10), event -> {
+        // enables/disable submit button based on entered data in descriptionField
         try {
             requireNonBlank(this.descriptionField.getText(), ExceptionMessages.DESCRIPTION_NULL_OR_EMPTY);
             this.submitButton.setDisable(false);
@@ -40,28 +45,30 @@ public class ChangeDescription implements Initializable {
 
     @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
-        System.out.println(" addddd");
+        // send command to server to change product description
         Main.tcpServer.write("change product description");
+        // get confirmation from server
         Main.tcpServer.write(this.descriptionField.getText());
-
+        // shows confirmation from server to userw
         if (Main.tcpServer.read()) {
-            ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_DESCRIPTION_CHANGED_SUCCESSFUL);
+            confirmationPopUp(ConstantMessages.PRODUCT_DESCRIPTION_CHANGED_SUCCESSFUL);
             product.setDescription(this.descriptionField.getText());
         } else {
-            ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_DESCRIPTION_CHANGED_UNSUCCESSFUL);
+            confirmationPopUp(ConstantMessages.PRODUCT_DESCRIPTION_CHANGED_UNSUCCESSFUL);
         }
-
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffChosenProduct.fxml", "Product", 600, 600);
+        // load staff chosen product window
+        FXMLLoader loader = Operations.loadWindow("/view/staff/staffChosenProduct.fxml", 600, 600);
+        // initialize product for staff chosen product controller
         StaffChosenProduct controller = loader.getController();
         controller.initProduct(product);
+        // stop data validation timeline
         this.checkIfAllDataIsValid.stop();
         this.descriptionField.getScene().getWindow().hide();
-
-
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // start data validation timeline
         checkIfAllDataIsValid.setCycleCount(Timeline.INDEFINITE);
         checkIfAllDataIsValid.play();
     }

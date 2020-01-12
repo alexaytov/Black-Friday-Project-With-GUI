@@ -2,7 +2,6 @@ package controllers.client;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -23,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import static util.Operations.confirmationPopUp;
 
 public class ChosenProduct implements Initializable {
 
@@ -54,30 +55,32 @@ public class ChosenProduct implements Initializable {
 
     @FXML
     void buyProduct(ActionEvent event) throws IOException, ClassNotFoundException {
+        // get entered wanted quantity
         int wantedQuantity = this.wantedQuantity.getValue();
+        // send information to server
         Main.tcpServer.write("buy product");
         Main.tcpServer.write(this.product.getName());
         Main.tcpServer.write(wantedQuantity);
-
+        // get server confirmation
         if (Main.tcpServer.read()) {
-            ConstantMessages.confirmationPopUp(String.format("You just purchased %d of %s.", wantedQuantity, this.product.getName()));
+            confirmationPopUp(String.format("You just purchased %d of %s.", wantedQuantity, this.product.getName()));
             this.product.setQuantity(this.product.getQuantity() - wantedQuantity);
             this.quantityField.setText(String.valueOf(this.product.getQuantity()));
         } else {
-            ExceptionMessages.showWarningDialog("Sorry there was a problem with this purchase. Please Try again");
+            Operations.showWarningDialog(ExceptionMessages.PURCHASE_PROBLEM);
         }
     }
 
     @FXML
     void goBack(ActionEvent event) throws IOException {
+        // go to previous window
         this.nameField.getScene().getWindow().hide();
-        Operations.loadWindow(this.getClass(), "/view/client/clientLoggedIn.fxml", "Client", 650, 800);
-
+        Operations.loadWindow("/view/client/clientLoggedIn.fxml", 650, 800);
     }
 
     public void initProduct(Product product) {
         this.product = product;
-
+        // set text fields values
         this.nameField.setText(this.product.getName());
         this.descriptionField.setText(this.product.getDescription());
         this.sizeField.setText(this.product.getSize());
@@ -85,15 +88,14 @@ public class ChosenProduct implements Initializable {
         this.priceField.setText(String.valueOf(this.product.getPurchasePrice()));
         InputStream is = new ByteArrayInputStream(product.getImageContent());
         this.productImage.setImage(new Image(is));
-
-
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // initialize spinner for wanted quantity
         SpinnerValueFactory<Integer> integerSpinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, Integer.MAX_VALUE, 1);
         this.wantedQuantity.setValueFactory(integerSpinnerValueFactory);
-
+        // timeline to check if wanted quantity is acceptable
         Timeline validateWantedQuantity = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             if (this.wantedQuantity.getValue() > this.product.getQuantity()) {
                 this.wantedQuantity.setStyle("-fx-border-color: red;");
@@ -103,6 +105,7 @@ public class ChosenProduct implements Initializable {
                 this.buyProductButton.setDisable(false);
             }
         }));
+        // start validateWantedQuantity timeline
         validateWantedQuantity.setCycleCount(Timeline.INDEFINITE);
         validateWantedQuantity.play();
     }

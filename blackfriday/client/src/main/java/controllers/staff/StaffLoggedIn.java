@@ -23,19 +23,7 @@ public class StaffLoggedIn implements Initializable {
     private JFXToggleButton blackFriday;
 
     @FXML
-    private JFXButton productsButton;
-
-    @FXML
-    private JFXButton clientsButton;
-
-    @FXML
     private JFXButton earningsButton;
-
-    @FXML
-    private JFXButton settingsButton;
-
-    @FXML
-    private JFXButton registerStaffButton;
 
     @FXML
     private JFXButton logoutButton;
@@ -55,40 +43,43 @@ public class StaffLoggedIn implements Initializable {
     @FXML
     void clients(ActionEvent event) throws IOException {
         this.welcomeLabel.getScene().getWindow().hide();
-        Operations.loadWindow(this.getClass(), "/view/staff/clients.fxml", "ClientPurchases", 600, 800);
+        Operations.loadWindow("/view/staff/clients.fxml", 600, 800);
     }
 
     @FXML
     void earnings(ActionEvent event) throws IOException {
-        Operations.changeWindows(this.earningsButton, "store/earnings", "/view/staff/earnings.fxml", this.getClass(), 600, 500);
+        this.earningsButton.getScene().getWindow().hide();
+        Operations.loadWindow("/view/staff/earnings.fxml", 600, 500);
     }
 
     @FXML
     void logout(ActionEvent event) throws IOException {
         Main.tcpServer.write("logout");
-        Operations.changeWindows(this.logoutButton, "staffLoggedIn", "/view/login.fxml", this.getClass(), 600, 350);
+        this.earningsButton.getScene().getWindow().hide();
+        Operations.loadWindow("/view/login.fxml", 600, 350);
     }
 
     @FXML
     void products(ActionEvent event) throws IOException {
-        Operations.changeWindows(this.logoutButton, "Products", "/view/staff/staffProducts.fxml", this.getClass(), 600, 730);
+        this.logoutButton.getScene().getWindow().hide();
+        Operations.loadWindow("/view/staff/staffProducts.fxml", 600, 730);
     }
 
     @FXML
     void registerStaff(ActionEvent event) throws IOException {
-        Operations.loadWindow(this.getClass(), "/view/staff/registerStaff.fxml", "Register Staff", 600, 630);
+        Operations.loadWindow("/view/staff/registerStaff.fxml", 600, 630);
         this.welcomeLabel.getScene().getWindow().hide();
     }
 
     @FXML
     void settings(ActionEvent event) throws IOException {
         this.welcomeLabel.getScene().getWindow().hide();
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffSettings.fxml", "Settings", 600, 400);
+        FXMLLoader loader = Operations.loadWindow("/view/staff/staffSettings.fxml", 600, 400);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        // set on/off black friday toggle
         try {
             Main.tcpServer.write("is blackFriday");
             if (Main.tcpServer.read()) {

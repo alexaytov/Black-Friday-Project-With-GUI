@@ -2,8 +2,10 @@ package commands;
 
 import commandEnterpreter.interfaces.Executable;
 import commandEnterpreter.interfaces.Inject;
+import commonMessages.ExceptionMessages;
 import connection.ServerClientConnection;
 import store.Store;
+import validator.Validator;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -25,6 +27,7 @@ public class ChangeProductSize implements Executable {
      */
     @Override
     public void execute() throws IOException, SQLException, ClassNotFoundException {
+        Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         String newSize = this.clientConnection.read().toString();
         this.store.changeProductSize(newSize);
         this.clientConnection.write(true);

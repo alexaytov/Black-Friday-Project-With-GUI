@@ -31,30 +31,31 @@ public class ClientPurchases implements Initializable {
     @FXML
     void goStaffProducts(ActionEvent event) throws IOException {
         this.clientPurchases.getScene().getWindow().hide();
-        Operations.loadWindow(this.getClass(), "/view/staff/staffLoggedIn.fxml", "Welcome", 600, 600);
+        Operations.loadWindow("/view/staff/staffLoggedIn.fxml", 600, 600);
     }
 
     @FXML
     void searchClients(ActionEvent event) {
+        // search client purchases based on client username
         String searchedClient = this.clientsSearchTextField.getText();
+        // remove previously loaded client purchases
         this.clientPurchases.setRoot(null);
         Map<String, List<Purchase>> searchedPurchases = new HashMap<>();
-
+        // fill searchedPurchases with purchases
         for (Map.Entry<String, List<Purchase>> purchasesEntry : this.purchases.entrySet()) {
             if (purchasesEntry.getKey().contains(searchedClient)) {
                 searchedPurchases.put(purchasesEntry.getKey(), purchasesEntry.getValue());
             }
         }
-
+        // set no purchases found message is there are none
         if (searchedPurchases.size() == 0) {
             TreeItem<String> root = new TreeItem<>("No purchases found!");
             this.clientPurchases.setShowRoot(true);
             this.clientPurchases.setRoot(root);
-
         } else {
+            // fill UI with searched purchases
             fillTreeView(searchedPurchases);
         }
-
     }
 
     @Override
@@ -64,15 +65,14 @@ public class ClientPurchases implements Initializable {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
 
     @FXML
     void showAllPurchases() throws IOException, ClassNotFoundException {
+        // load UI with all purchases
         Main.tcpServer.write("get all clients information");
         purchases = Main.tcpServer.read();
-
         fillTreeView(purchases);
     }
 
@@ -80,16 +80,13 @@ public class ClientPurchases implements Initializable {
         TreeItem<String> root = new TreeItem<>();
         this.clientPurchases.setShowRoot(false);
         this.clientPurchases.setRoot(root);
-
         for (Map.Entry<String, List<Purchase>> purchasesEntry : purchases.entrySet()) {
             TreeItem<String> clientUsername = new TreeItem<>(purchasesEntry.getKey());
-
+            // add all purchases for this client
             for (Purchase purchase : purchasesEntry.getValue()) {
                 TreeItem<String> purchaseProductName = new TreeItem<>(purchase.getProductName());
-
                 TreeItem<String> purchaseInformation = new TreeItem<>(purchase.toString());
                 purchaseProductName.getChildren().add(purchaseInformation);
-
                 clientUsername.getChildren().add(purchaseProductName);
             }
             root.getChildren().add(clientUsername);

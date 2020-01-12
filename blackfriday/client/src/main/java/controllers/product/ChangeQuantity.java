@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static util.Operations.confirmationPopUp;
 import static validator.Validator.validateQuantity;
 
 public class ChangeQuantity implements Initializable {
@@ -50,13 +51,13 @@ public class ChangeQuantity implements Initializable {
         Main.tcpServer.write(this.quantity);
 
         if (Main.tcpServer.read()) {
-            ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_QUANTITY_CHANGED_SUCCESSFUL);
+            confirmationPopUp(ConstantMessages.PRODUCT_QUANTITY_CHANGED_SUCCESSFUL);
             this.product.setQuantity(this.quantity);
         } else {
-            ConstantMessages.confirmationPopUp(ConstantMessages.PRODUCT_QUANTITY_CHANGED_UNSUCCESSFUL);
+            confirmationPopUp(ConstantMessages.PRODUCT_QUANTITY_CHANGED_UNSUCCESSFUL);
         }
 
-        FXMLLoader loader = Operations.loadWindow(this.getClass(), "/view/staff/staffChosenProduct.fxml", "Product", 600, 600);
+        FXMLLoader loader = Operations.loadWindow("/view/staff/staffChosenProduct.fxml", 600, 600);
         StaffChosenProduct controller = loader.getController();
         controller.initProduct(product);
         this.checkIfAllDataIsValid.stop();

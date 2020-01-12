@@ -10,6 +10,7 @@ import util.Operations;
 
 import java.io.IOException;
 
+import static util.Operations.showWarningDialog;
 import static validator.Validator.requireNonBlank;
 
 public class UsernameChange {
@@ -28,16 +29,17 @@ public class UsernameChange {
                     usernameField.getText(),
                     ConstantMessages.USERNAME_CHANGE_SUCCESSFUL,
                     ConstantMessages.USERNAME_CHANGE_UNSUCCESSFUL);
+            // if username was changed update user property
             if (isUsernameChanged) {
                 this.user.setUsername(newUsername);
             }
         } catch (IllegalArgumentException ex) {
-            ExceptionMessages.showWarningDialog(ExceptionMessages.STRING_NULL_OR_EMPTY);
+            showWarningDialog(ExceptionMessages.STRING_NULL_OR_EMPTY);
         }
         this.usernameField.getScene().getWindow().hide();
     }
 
-    public void initUser(User user) {
+    void initUser(User user) {
         this.user = user;
     }
 }

@@ -6,20 +6,17 @@ import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import user.User;
 import util.Operations;
 
 import java.io.IOException;
 
+import static util.Operations.showWarningDialog;
 import static validator.Validator.requireNonBlank;
 
 public class FirstNameChange {
 
-    User user;
-
-    @FXML
-    private Label firstNameLabel;
+    private User user;
 
     @FXML
     private JFXTextField firstNameField;
@@ -33,13 +30,14 @@ public class FirstNameChange {
                     firstNameField.getText(),
                     ConstantMessages.FIRST_NAME_CHANGE_SUCCESSFUL,
                     ConstantMessages.FIRST_NAME_CHANGE_UNSUCCESSFUL);
+            // is first name was changed update user property
             if (change_first_name) {
                 user.setFirstName(newFirstName);
             }
         } catch (IllegalArgumentException ex) {
-            ExceptionMessages.showWarningDialog(ExceptionMessages.STRING_NULL_OR_EMPTY);
+            showWarningDialog(ExceptionMessages.STRING_NULL_OR_EMPTY);
         }
-
+        // hide window
         this.firstNameField.getScene().getWindow().hide();
     }
 

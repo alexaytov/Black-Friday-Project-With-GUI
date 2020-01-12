@@ -18,17 +18,21 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import static util.Operations.confirmationPopUp;
 import static validator.Validator.requireNonBlank;
 import static validator.Validator.requireNonNegative;
 
 public class RegisterStaff implements Initializable {
 
     private String firstName;
-    private String lastName;
-    private int age;
-    private String username;
-    private String password;
 
+    private String lastName;
+
+    private int age;
+
+    private String username;
+
+    private String password;
 
     @FXML
     private JFXButton registerStaffButton;
@@ -52,32 +56,34 @@ public class RegisterStaff implements Initializable {
 
     private Color invalidInputFieldColor = Color.RED;
 
-
     @FXML
     void registerStaff(ActionEvent event) throws IOException, ClassNotFoundException {
         if (checkAllFields()) {
-            Main.tcpServer.write("register staff");
+            Main.tcpServer.write("register user");
             User user = new User(this.username, this.password, Permission.ADMIN, this.firstName, this.lastName, this.age);
             Main.tcpServer.write(user);
+            // show user if staff was registered successfully
             if (Main.tcpServer.read()) {
-                ConstantMessages.confirmationPopUp(ConstantMessages.STAFF_REGISTERED);
+                confirmationPopUp(ConstantMessages.STAFF_REGISTERED);
             } else {
-                ConstantMessages.confirmationPopUp(ConstantMessages.STAFF_ALREADY_EXISTS);
+                confirmationPopUp(ConstantMessages.STAFF_ALREADY_EXISTS);
             }
         } else {
-            ConstantMessages.confirmationPopUp("Please enter all field!");
+            confirmationPopUp(ExceptionMessages.FILL_IN_ALL_FIELDS);
         }
     }
 
     @FXML
-    void goToStaffLoggedIn(ActionEvent event) throws IOException {
+    void goBack(ActionEvent event) throws IOException {
         this.registerStaffButton.getScene().getWindow().hide();
-        Operations.loadWindow(this.getClass(), "/view/staff/staffLoggedIn.fxml", "BlackFriday", 600, 600);
+        Operations.loadWindow("/view/staff/staffLoggedIn.fxml", 600, 600);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        // when field unfocused validate imputed data
+        // if data is invalid change unfocused color to red
+        // else set it do default color
         this.firstNameField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 try {
@@ -88,7 +94,9 @@ public class RegisterStaff implements Initializable {
                 }
             }
         });
-
+        // when field unfocused validate imputed data
+        // if data is invalid change unfocused color to red
+        // else set it do default color
         this.lastNameField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 try {
@@ -99,7 +107,9 @@ public class RegisterStaff implements Initializable {
                 }
             }
         });
-
+        // when field unfocused validate imputed data
+        // if data is invalid change unfocused color to red
+        // else set it do default color
         this.usernameField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 try {
@@ -110,7 +120,9 @@ public class RegisterStaff implements Initializable {
                 }
             }
         });
-
+        // when field unfocused validate imputed data
+        // if data is invalid change unfocused color to red
+        // else set it do default color
         this.ageField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 try {
@@ -121,7 +133,9 @@ public class RegisterStaff implements Initializable {
                 }
             }
         });
-
+        // when field unfocused validate imputed data
+        // if data is invalid change unfocused color to red
+        // else set it do default color
         this.passwordField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 try {
@@ -135,6 +149,7 @@ public class RegisterStaff implements Initializable {
     }
 
     private boolean checkAllFields() {
+        // validate all fields
         try {
             String firstName = firstNameField.getText();
             requireNonBlank(firstName, ExceptionMessages.NAME_NULL_OR_EMPTY);
@@ -156,5 +171,4 @@ public class RegisterStaff implements Initializable {
             return false;
         }
     }
-
 }

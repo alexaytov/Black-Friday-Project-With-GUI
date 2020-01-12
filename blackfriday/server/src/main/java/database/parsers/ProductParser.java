@@ -32,6 +32,7 @@ public class ProductParser implements DataParser<Product> {
         byte[] imageContent = input.readAllBytes();
 
         Product product = new Product(name, description, quantity, price, minimumPrice, discountedPercent, imageContent, size);
+        product.setDiscounted(isDiscounted);
 
         return product;
     }

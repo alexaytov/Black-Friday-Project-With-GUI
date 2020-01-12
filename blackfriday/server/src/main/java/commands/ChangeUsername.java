@@ -2,9 +2,11 @@ package commands;
 
 import commandEnterpreter.interfaces.Executable;
 import commandEnterpreter.interfaces.Inject;
+import commonMessages.ExceptionMessages;
 import connection.ServerClientConnection;
 import exceptions.DataAlreadyExistsException;
 import store.Store;
+import validator.Validator;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -28,6 +30,7 @@ public class ChangeUsername implements Executable {
      */
     @Override
     public void execute() throws IOException, SQLException, ClassNotFoundException {
+        Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         boolean isUsernameChangeSuccessful;
         try {
             isUsernameChangeSuccessful = this.store.changeUsername(this.store.getLoggedInUser().getUsername(), this.clientConnection.read());
