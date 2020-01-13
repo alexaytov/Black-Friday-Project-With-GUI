@@ -5,7 +5,7 @@ import com.jfoenix.controls.JFXTextField;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import openjfx.Main;
+import application.Main;
 import util.Operations;
 import validator.Validator;
 

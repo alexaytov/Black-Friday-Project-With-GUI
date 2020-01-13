@@ -6,7 +6,7 @@ import controllers.staff.StaffChosenProduct;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import openjfx.Main;
+import application.Main;
 import product.Product;
 import util.Operations;
 

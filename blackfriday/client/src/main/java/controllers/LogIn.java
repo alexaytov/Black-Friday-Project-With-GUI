@@ -11,7 +11,7 @@ import exceptions.WrongPasswordException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import openjfx.Main;
+import application.Main;
 import passwordHasher.BCryptHasher;
 import user.Permission;
 import user.User;

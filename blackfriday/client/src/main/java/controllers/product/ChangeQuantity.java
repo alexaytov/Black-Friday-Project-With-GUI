@@ -11,7 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.util.Duration;
-import openjfx.Main;
+import application.Main;
 import product.Product;
 import util.Operations;
 

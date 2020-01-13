@@ -26,7 +26,7 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import openjfx.Main;
+import application.Main;
 import product.Product;
 import util.Operations;
 

@@ -6,7 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
-import openjfx.Main;
+import application.Main;
 import store.earnings.Purchase;
 import util.Operations;
 

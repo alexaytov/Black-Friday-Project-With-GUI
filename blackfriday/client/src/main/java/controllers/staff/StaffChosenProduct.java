@@ -9,7 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-import openjfx.Main;
+import application.Main;
 import product.Product;
 import util.Operations;
 

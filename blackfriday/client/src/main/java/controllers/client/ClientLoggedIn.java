@@ -18,7 +18,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import openjfx.Main;
+import application.Main;
 import product.Product;
 import user.User;
 import util.Operations;
@@ -276,7 +276,6 @@ public class ClientLoggedIn implements Initializable {
 
     public void initUser(User user) {
         // sets welcome message
-        String welcomeText = "Welcome " + user.getFirstName() + " " + user.getLastName() + "!";
-        this.welcomeMessage.setText(welcomeText);
+        this.welcomeMessage.setText(String.format(ConstantMessages.WELCOME_MESSAGE, user.getFirstName(), user.getLastName()));
     }
 }

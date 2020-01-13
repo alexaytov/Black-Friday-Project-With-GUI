@@ -6,7 +6,7 @@ import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import openjfx.Main;
+import application.Main;
 import user.Permission;
 import user.User;
 import util.Operations;

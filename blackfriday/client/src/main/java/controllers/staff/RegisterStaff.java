@@ -9,7 +9,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.paint.Color;
-import openjfx.Main;
+import application.Main;
 import user.Permission;
 import user.User;
 import util.Operations;

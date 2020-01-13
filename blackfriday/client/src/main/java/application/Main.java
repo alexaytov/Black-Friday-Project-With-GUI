@@ -1,4 +1,4 @@
-package openjfx;
+package application;
 
 import connection.ServerClientConnection;
 import connection.TCPConnection;

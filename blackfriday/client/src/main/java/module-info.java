@@ -10,6 +10,6 @@ module openjfx {
     opens controllers.client;
     opens controllers.settings;
 
-    opens openjfx to javafx.fxml;
-    exports openjfx;
+    opens application to javafx.fxml;
+    exports application;
 }

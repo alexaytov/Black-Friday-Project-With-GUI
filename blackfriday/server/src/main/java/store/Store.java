@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static validator.Validator.requireNonBlank;
 import static validator.Validator.requireNonNull;
@@ -101,7 +100,7 @@ public class Store {
      *
      * @param username  the username of the user object to be modified
      * @param firstName the new first name to be set to the user
-     * @return
+     * @return if the user first name change was successful
      */
     public boolean changeUserFirstName(String username, String firstName) throws SQLException {
         try {
@@ -247,17 +246,6 @@ public class Store {
      */
     public List<Product> getStaffDiscountedProducts() throws IOException, SQLException {
         return this.productDatabase.read("discounted_percent != 0");
-    }
-
-    /**
-     * @return all the product names from the
-     * database which have quantity higher than 10
-     */
-    public List<String> getProductNamesForClient() throws IOException, SQLException {
-        return this.productDatabase.read("quantity > 0")
-                .stream()
-                .map(Product::getName)
-                .collect(Collectors.toList());
     }
 
     public Product getProductByName(String name) throws NotFoundException, IOException, SQLException {
