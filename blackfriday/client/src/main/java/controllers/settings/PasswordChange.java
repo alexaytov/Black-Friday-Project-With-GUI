@@ -5,7 +5,7 @@ import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import passwordHasher.interfaces.Hasher;
+import passwordHasher.BCryptHasher;
 import user.User;
 import util.Operations;
 
@@ -26,7 +26,7 @@ public class PasswordChange {
         try {
             String newPassword = passwordField.getText();
             requireNonBlank(newPassword, ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
-            newPassword = Hasher.hash(newPassword);
+            newPassword = BCryptHasher.hash(newPassword);
             boolean isPasswordChanged = Operations.changeUserField("change password",
                     newPassword,
                     ConstantMessages.PASSWORD_CHANGE_SUCCESSFUL,

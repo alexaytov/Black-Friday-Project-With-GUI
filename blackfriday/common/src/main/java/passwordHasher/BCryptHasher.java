@@ -1,8 +1,19 @@
 package passwordHasher;
 
+import org.mindrot.jbcrypt.BCrypt;
 
-import passwordHasher.interfaces.Hasher;
+public interface BCryptHasher {
 
-public class BCryptHasher implements Hasher {
+    static String hash(String password){
+        return BCrypt.hashpw(password, BCrypt.gensalt());
+    }
+
+    static String hash(String password, String salt){
+        return BCrypt.hashpw(password, salt);
+    }
+
+    static String getSalt(String hash){
+        return hash.substring(0, 29);
+    }
 
 }

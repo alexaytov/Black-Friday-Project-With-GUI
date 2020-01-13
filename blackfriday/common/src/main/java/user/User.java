@@ -1,7 +1,7 @@
 package user;
 
 import commonMessages.ExceptionMessages;
-import passwordHasher.interfaces.Hasher;
+import passwordHasher.BCryptHasher;
 import validator.Validator;
 
 import java.io.Serializable;
@@ -70,7 +70,7 @@ public class User implements Serializable, Cloneable {
 
     public void setPassword(String password) {
         Validator.requireNonBlank(password, ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
-        password = Hasher.hash(password);
+        password = BCryptHasher.hash(password);
         this.password = password;
     }
 

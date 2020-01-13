@@ -12,7 +12,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import openjfx.Main;
-import passwordHasher.interfaces.Hasher;
+import passwordHasher.BCryptHasher;
 import user.Permission;
 import user.User;
 import util.Operations;
@@ -85,7 +85,7 @@ public class LogIn {
         User user = null;
         if (salt != null) {
             // hash password with same salt when password originally hashed
-            String hashedPassword = Hasher.hash(password, salt);
+            String hashedPassword = BCryptHasher.hash(password, salt);
             // send password
             Main.tcpServer.write(hashedPassword);
             // get user

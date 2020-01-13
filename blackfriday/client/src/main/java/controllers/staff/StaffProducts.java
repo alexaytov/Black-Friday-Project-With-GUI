@@ -183,7 +183,7 @@ public class StaffProducts implements Initializable {
 
     private void fillVBoxWithHBoxWithProducts(List<Product> products, VBox vBoxWithProducts) {
         // fills VBox with two columns of products
-        // which include picture product name and price
+        // which include product picture,name and price
         int index = 0;
         HBox hbox = new HBox();
         hbox.setAlignment(Pos.CENTER);
@@ -423,7 +423,7 @@ public class StaffProducts implements Initializable {
         // sets create product button disable/enable
         // based on validation of all fields
         Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(50), event -> {
-            if (areAllFieldsValid()) {
+            if (areAllCreateProductFieldsValid()) {
                 this.createProductButton.setDisable(false);
             } else {
                 this.createProductButton.setDisable(true);
@@ -457,13 +457,6 @@ public class StaffProducts implements Initializable {
         descriptionTextField.focusedProperty().addListener((arg0, unfocused, focused) -> {
             if (unfocused) {
                 textFieldColorChangeValidation(textFieldDefaultUnfocusedColor, descriptionTextField);
-            }
-        });
-        // when field is unfocused set unfocused color to
-        // red/default unfocused color based if data is invalid/valid
-        sizeTextField.focusedProperty().addListener((arg0, unfocused, focused) -> {
-            if (unfocused) {
-                textFieldColorChangeValidation(textFieldDefaultUnfocusedColor, sizeTextField);
             }
         });
         // when field is unfocused set unfocused color to
@@ -543,7 +536,7 @@ public class StaffProducts implements Initializable {
         }
     }
 
-    private boolean areAllFieldsValid() {
+    private boolean areAllCreateProductFieldsValid() {
         try {
             // check if an image was selected
             if (this.createProductPictureFile == null) {
@@ -559,7 +552,7 @@ public class StaffProducts implements Initializable {
             int quantity = Integer.parseInt(this.quantityTextField.getText());
             // validate all fields
             requireNonBlank(name, ExceptionMessages.NAME_NULL_OR_EMPTY);
-            requireNonBlank(size, ExceptionMessages.SIZE_NULL_OR_EMPTY);
+//            requireNonBlank(size, ExceptionMessages.SIZE_NULL_OR_EMPTY);
             requireNonBlank(description, ExceptionMessages.DESCRIPTION_NULL_OR_EMPTY);
             validateQuantity(quantity);
             validateDiscountPercent(discountPercent, price, minimumPrice);

@@ -10,5 +10,5 @@ module common {
     exports validator;
     exports connection;
     exports store.earnings;
-    exports passwordHasher.interfaces;
+    exports passwordHasher;
 }

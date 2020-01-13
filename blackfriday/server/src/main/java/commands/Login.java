@@ -5,7 +5,7 @@ import commandEnterpreter.interfaces.Inject;
 import connection.ServerClientConnection;
 import exceptions.NotFoundException;
 import exceptions.WrongPasswordException;
-import passwordHasher.interfaces.Hasher;
+import passwordHasher.BCryptHasher;
 import store.Store;
 import user.User;
 
@@ -36,7 +36,7 @@ public class Login implements Executable {
         User userToBeLoggedIn;
         try {
             userToBeLoggedIn = this.store.getUser(username);
-            String salt = Hasher.getSalt(userToBeLoggedIn.getPassword());
+            String salt = BCryptHasher.getSalt(userToBeLoggedIn.getPassword());
             this.clientConnection.write(salt);
             String enteredHashedPassword = this.clientConnection.read();
             if (enteredHashedPassword.equals(userToBeLoggedIn.getPassword())) {

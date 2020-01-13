@@ -8,10 +8,13 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.util.Duration;
 import openjfx.Main;
 import product.Product;
@@ -54,6 +57,16 @@ public class ChosenProduct implements Initializable {
     private Spinner<Integer> wantedQuantity;
 
     @FXML
+    private GridPane productGrid;
+
+
+    @FXML
+    private RowConstraints sizeRow;
+
+    @FXML
+    private Label sizeLabel;
+
+    @FXML
     void buyProduct(ActionEvent event) throws IOException, ClassNotFoundException {
         // get entered wanted quantity
         int wantedQuantity = this.wantedQuantity.getValue();
@@ -81,9 +94,17 @@ public class ChosenProduct implements Initializable {
     public void initProduct(Product product) {
         this.product = product;
         // set text fields values
+        fillTextFieldsWithInformation(product);
+    }
+
+    private void fillTextFieldsWithInformation(Product product) {
         this.nameField.setText(this.product.getName());
         this.descriptionField.setText(this.product.getDescription());
-        this.sizeField.setText(this.product.getSize());
+        if (this.product.getSize().trim().isEmpty()) {
+            this.productGrid.getChildren().removeAll(this.sizeLabel, this.sizeField);
+        }else{
+            this.sizeField.setText(this.product.getSize());
+        }
         this.quantityField.setText(String.valueOf(this.product.getQuantity()));
         this.priceField.setText(String.valueOf(this.product.getPurchasePrice()));
         InputStream is = new ByteArrayInputStream(product.getImageContent());

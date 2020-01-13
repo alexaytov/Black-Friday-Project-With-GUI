@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
 
 import static util.Operations.confirmationPopUp;
 
-public class StaffSettings implements Initializable {
+public class Settings implements Initializable {
 
     private User user;
 
