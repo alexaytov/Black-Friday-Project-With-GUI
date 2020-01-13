@@ -9,11 +9,11 @@ import java.sql.SQLException;
 public class Main {
 
     public static void main(String[] args) {
-        String url = "jdbc:mysql://localhost:3306/enaleks";
-        String user = "root";
-        String password = "9904270045a";
+        String url = System.getenv("DATABASE_URL");
+        String user = System.getenv("DATABASE_USER");
+        String password = System.getenv("DATABASE_PASSWORD");
         final int port = Integer.parseInt(System.getenv("PORT"));
-        try (Connection DBConnection = DriverManager.getConnection(url, user, password)){
+        try (Connection DBConnection = DriverManager.getConnection(url, user, password)) {
             Store store = new Store(DBConnection);
             Server server = new Server(store, port);
             server.launch();
