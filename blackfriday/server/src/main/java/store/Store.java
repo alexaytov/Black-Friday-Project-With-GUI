@@ -147,6 +147,7 @@ public class Store {
         } catch (IllegalArgumentException ex) {
             return false;
         }
+        this.getLoggedInUser().setUsername(newUsername);
         return true;
     }
 

@@ -18,9 +18,8 @@ public class ClientThread implements Runnable {
     private CommandInterpreter commandInterpreter;
 
 
-    public ClientThread(ServerClientConnection clientConnection, Store store, CommandInterpreter commandInterpreter) throws IOException {
+    public ClientThread(ServerClientConnection clientConnection, Store store, CommandInterpreter commandInterpreter) {
         setClientConnection(clientConnection);
-        this.setStore(store);
         this.setCommandInterpreter(commandInterpreter);
 
     }
@@ -33,10 +32,6 @@ public class ClientThread implements Runnable {
     public void setClientConnection(ServerClientConnection clientConnection) {
         Validator.requireNonNull(clientConnection, ExceptionMessages.CONNECTION_NULL);
         this.clientConnection = clientConnection;
-    }
-
-    public void setStore(Store store) {
-        requireNonNull(store);
     }
 
     public void run() {
