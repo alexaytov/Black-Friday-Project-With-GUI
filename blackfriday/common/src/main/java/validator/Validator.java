@@ -24,13 +24,13 @@ public class Validator {
 
     public static void requireNonNull(Object object, String errorMessage) {
         if (object == null) {
-            throw new NullPointerException(errorMessage);
+            throw new IllegalArgumentException(errorMessage);
         }
     }
 
-    public static void validateQuantity(int quantity) {
-        if (quantity < 0) {
-            throw new IllegalArgumentException(ExceptionMessages.QUANTITY_ZERO_OR_NEGATIVE);
+    public static void requireNonZero(int value, String errorMessage) {
+        if (value == 0 ) {
+            throw new IllegalArgumentException(errorMessage);
         }
     }
 
@@ -60,16 +60,6 @@ public class Validator {
         }
     }
 
-
-    public static void validatePromotionalPricePercent(double promotionalPricePercent, double price, double minimumPrice) {
-        double promotionalPrice = price * (1 - promotionalPricePercent / 100);
-        if (promotionalPrice <= 0) {
-            throw new IllegalArgumentException(ExceptionMessages.DISCOUNTED_PRICE_ZERO_NEGATIVE);
-        }
-        if (promotionalPrice < minimumPrice) {
-            throw new IllegalArgumentException(ExceptionMessages.DISCOUNTED_PRICE_BELOW_MINIMUM_PRICE);
-        }
-    }
 
     public static void validateMonth(int month) {
         if (month <= 0 || month > 12) {

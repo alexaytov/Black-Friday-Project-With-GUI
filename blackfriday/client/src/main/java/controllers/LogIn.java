@@ -1,5 +1,6 @@
 package controllers;
 
+import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -11,7 +12,6 @@ import exceptions.WrongPasswordException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import application.Main;
 import passwordHasher.BCryptHasher;
 import user.Permission;
 import user.User;
@@ -78,22 +78,22 @@ public class LogIn {
     }
 
     private User login(String username, String password) throws WrongPasswordException, NotFoundException, IOException, ClassNotFoundException {
-        Main.tcpServer.write("login");
+        App.tcpServer.write("login");
         // get user password salt
-        Main.tcpServer.write(username);
-        String salt = Main.tcpServer.read();
+        App.tcpServer.write(username);
+        String salt = App.tcpServer.read();
         User user = null;
         if (salt != null) {
             // hash password with same salt when password originally hashed
             String hashedPassword = BCryptHasher.hash(password, salt);
             // send password
-            Main.tcpServer.write(hashedPassword);
+            App.tcpServer.write(hashedPassword);
             // get user
-            user = Main.tcpServer.read();
+            user = App.tcpServer.read();
         }
         // if user null, read exception
         if (user == null) {
-            String exceptionType = Main.tcpServer.read().toString();
+            String exceptionType = App.tcpServer.read().toString();
             if (exceptionType.equals("WrongPasswordException")) {
                 throw new WrongPasswordException(ExceptionMessages.WRONG_PASSWORD);
             } else if (exceptionType.equals("NotFoundException")) {

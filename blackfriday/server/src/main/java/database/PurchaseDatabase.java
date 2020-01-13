@@ -29,7 +29,7 @@ public class PurchaseDatabase extends BaseDatabase<Purchase> {
     @Override
     public synchronized void add(Purchase data) throws SQLException {
         String sql = String.format("INSERT INTO `enaleks`.`purchases` (`username`, `product_name`, `quantity`, `product_price`, `purchase_date`) VALUES ('%s', '%s', '%d', '%f', '%s');",
-                data.getUserName(),
+                data.getUsername(),
                 data.getProductName(),
                 data.getQuantity(),
                 data.getPrice(),

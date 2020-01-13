@@ -1,5 +1,6 @@
 package controllers.staff;
 
+import application.App;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
 import controllers.product.*;
@@ -9,7 +10,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-import application.Main;
 import product.Product;
 import util.Operations;
 
@@ -43,17 +43,17 @@ public class StaffChosenProduct {
 
     public void initProduct(String productName) throws IOException, ClassNotFoundException {
         // get currently chosen product by name from server
-        Main.tcpServer.write("get product by name");
-        Main.tcpServer.write(productName);
-        Product product = Main.tcpServer.read();
+        App.tcpServer.write("get product by name");
+        App.tcpServer.write(productName);
+        Product product = App.tcpServer.read();
         fillProductFieldsWithInformation(product);
         this.product = product;
     }
 
     public void initProduct(Product product) throws IOException {
         // get currently chosen product based on server
-        Main.tcpServer.write("set product");
-        Main.tcpServer.write(product);
+        App.tcpServer.write("set product");
+        App.tcpServer.write(product);
         this.product = product;
         fillProductFieldsWithInformation(product);
     }
@@ -74,10 +74,10 @@ public class StaffChosenProduct {
 
     @FXML
     void deleteChosenProduct(ActionEvent event) throws IOException, ClassNotFoundException {
-        Main.tcpServer.write("delete product");
-        Main.tcpServer.write(this.product.getName());
+        App.tcpServer.write("delete product");
+        App.tcpServer.write(this.product.getName());
         // shows user if executed command was successful
-        if (Main.tcpServer.read()) {
+        if (App.tcpServer.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_DELETED_SUCCESSFULLY);
         } else {
             confirmationPopUp(ConstantMessages.PRODUCT_DELETED_UNSUCCESSFULLY);
@@ -129,10 +129,10 @@ public class StaffChosenProduct {
         File file = fileChooser.showOpenDialog(this.nameField.getScene().getWindow());
         if (file != null) {
             // user picked a file
-            Main.tcpServer.write("change product image");
-            Main.tcpServer.write(Files.readAllBytes(file.toPath()));
+            App.tcpServer.write("change product image");
+            App.tcpServer.write(Files.readAllBytes(file.toPath()));
             // shows user if image was changed successfully
-            if (Main.tcpServer.read()) {
+            if (App.tcpServer.read()) {
                 confirmationPopUp(ConstantMessages.PRODUCT_IMAGE_CHANGE_SUCCESSFUL);
                 this.image.setImage(new Image(new FileInputStream(file)));
             } else {

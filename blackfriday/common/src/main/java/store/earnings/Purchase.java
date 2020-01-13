@@ -31,7 +31,7 @@ public class Purchase implements Serializable {
         this.setQuantity(quantity);
         this.setPrice(price);
         this.setUserName(userName);
-        this.date = date;
+        this.setDate(date);
     }
 
     public Purchase(String productName, String userName, int quantity, double price) {
@@ -46,21 +46,13 @@ public class Purchase implements Serializable {
         return this.productName;
     }
 
-    public String getUserName() {
-        return this.userName;
-    }
-
-    public int getQuantity() {
-        return this.quantity;
-    }
-
-    public double getPrice() {
-        return this.price;
-    }
-
     private void setProductName(String productName) {
         requireNonBlank(productName, ExceptionMessages.NAME_NULL_OR_EMPTY);
         this.productName = productName;
+    }
+
+    public String getUsername() {
+        return this.userName;
     }
 
     private void setUserName(String userName) {
@@ -68,9 +60,18 @@ public class Purchase implements Serializable {
         this.userName = userName;
     }
 
+    public int getQuantity() {
+        return this.quantity;
+    }
+
     private void setQuantity(int quantity) {
-        validateQuantity(quantity);
+        requireNonNegative(quantity, ExceptionMessages.QUANTITY_ZERO_OR_NEGATIVE);
+        requireNonZero(quantity, ExceptionMessages.QUANTITY_ZERO_OR_NEGATIVE);
         this.quantity = quantity;
+    }
+
+    public double getPrice() {
+        return this.price;
     }
 
     private void setPrice(double price) {
@@ -80,6 +81,11 @@ public class Purchase implements Serializable {
 
     public LocalDateTime getDate() {
         return date;
+    }
+
+    private void setDate(LocalDateTime date) {
+        requireNonNull(date, ExceptionMessages.DATE_NULL);
+        this.date = date;
     }
 
     /**

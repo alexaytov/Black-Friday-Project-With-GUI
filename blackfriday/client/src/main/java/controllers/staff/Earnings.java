@@ -1,11 +1,11 @@
 package controllers.staff;
 
+import application.App;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import application.Main;
 import util.Operations;
 import validator.Validator;
 
@@ -59,11 +59,11 @@ public class Earnings {
         } else {
             // entered data is valid
             // sending data to server
-            Main.tcpServer.write("earnings period");
-            Main.tcpServer.write(startDate);
-            Main.tcpServer.write(endDate);
+            App.tcpServer.write("earnings period");
+            App.tcpServer.write(startDate);
+            App.tcpServer.write(endDate);
             // get and show earnings to GUI
-            double earnings = Main.tcpServer.read();
+            double earnings = App.tcpServer.read();
             this.customPeriodEarningsField.setText(String.valueOf(earnings));
 
         }
@@ -75,10 +75,10 @@ public class Earnings {
             // get and validate year
             LocalDate date = this.datePicker.getValue();
             // send command and year to server
-            Main.tcpServer.write("earnings date");
-            Main.tcpServer.write(date.toString());
+            App.tcpServer.write("earnings date");
+            App.tcpServer.write(date.toString());
             // get earnings from server
-            double earnings = Main.tcpServer.read();
+            double earnings = App.tcpServer.read();
             dateEarningsField.setText(String.valueOf(earnings));
         } catch (DateTimeException | IOException | ClassNotFoundException ex) {
             ex.printStackTrace();
@@ -92,11 +92,11 @@ public class Earnings {
             int year = Integer.parseInt(this.mYearField.getText());
             int month = Integer.parseInt(this.mMonthField.getText());
             // send data to server
-            Main.tcpServer.write("earnings month");
-            Main.tcpServer.write(month);
-            Main.tcpServer.write(year);
+            App.tcpServer.write("earnings month");
+            App.tcpServer.write(month);
+            App.tcpServer.write(year);
             // show data to GUI
-            double earnings = Main.tcpServer.read();
+            double earnings = App.tcpServer.read();
             this.monthEarningsField.setText(String.valueOf(earnings));
         } catch (NumberFormatException ex) {
             showWarningDialog(ExceptionMessages.ENTER_NUMBER);
@@ -110,10 +110,10 @@ public class Earnings {
             int year = Integer.parseInt(yYearField.getText());
             Validator.requireNonNegative(year, ExceptionMessages.YEAR_MUST_BE_POSITIVE);
             // send command and year to server
-            Main.tcpServer.write("earnings year");
-            Main.tcpServer.write(year);
+            App.tcpServer.write("earnings year");
+            App.tcpServer.write(year);
             // get earnings from server
-            double earnings = Main.tcpServer.read();
+            double earnings = App.tcpServer.read();
             yearEarningsField.setText(String.valueOf(earnings));
         } catch (NumberFormatException ex) {
             showWarningDialog(ExceptionMessages.ENTER_NUMBER);

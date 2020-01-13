@@ -15,9 +15,9 @@ import static util.Operations.showWarningDialog;
 
 
 /**
- * JavaFX Main
+ * JavaFX App
  */
-public class Main extends Application {
+public class App extends Application {
 
     public static ServerClientConnection tcpServer;
 

@@ -1,5 +1,6 @@
 package controllers.staff;
 
+import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
@@ -26,7 +27,6 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import application.Main;
 import product.Product;
 import util.Operations;
 
@@ -146,8 +146,8 @@ public class StaffProducts implements Initializable {
         // products tab is selected
         // load all products in GUI
         this.allProductsButton.selectedProperty().setValue(true);
-        Main.tcpServer.write("get staff products");
-        List<Product> products = Main.tcpServer.read();
+        App.tcpServer.write("get staff products");
+        List<Product> products = App.tcpServer.read();
         fillVBoxWithProducts(products, this.vBoxWithProducts);
     }
 
@@ -156,9 +156,9 @@ public class StaffProducts implements Initializable {
         // clear previously loaded products in GUI
         this.vBoxWithProductsQualityControl.getChildren().clear();
         // execute quantity control command
-        Main.tcpServer.write("search quantity control");
-        Main.tcpServer.write(this.maximumQuantity);
-        List<Product> products = Main.tcpServer.read();
+        App.tcpServer.write("search quantity control");
+        App.tcpServer.write(this.maximumQuantity);
+        List<Product> products = App.tcpServer.read();
         this.products = products;
         if (products.size() == 0) {
             noResultsMessage();
@@ -284,8 +284,8 @@ public class StaffProducts implements Initializable {
     private void loadProductsFromServerToGUI(String serverCommand) throws IOException, ClassNotFoundException {
         // clears previously loaded products in GUI
         this.vBoxWithProducts.getChildren().clear();
-        Main.tcpServer.write(serverCommand);
-        List<Product> products = Main.tcpServer.read();
+        App.tcpServer.write(serverCommand);
+        List<Product> products = App.tcpServer.read();
         fillVBoxWithProducts(products, this.vBoxWithProducts);
         if (products.size() == 0) {
             noResultsMessage();
@@ -314,13 +314,13 @@ public class StaffProducts implements Initializable {
         this.vBoxWithProducts.getChildren().clear();
         // send search command based of selected type of products
         if (allProductsButton.isSelected()) {
-            Main.tcpServer.write("search staff all products");
+            App.tcpServer.write("search staff all products");
         } else {
-            Main.tcpServer.write("search staff discounted products");
+            App.tcpServer.write("search staff discounted products");
         }
-        Main.tcpServer.write(this.productSearch.getText());
+        App.tcpServer.write(this.productSearch.getText());
         // get products from server
-        List<Product> products = Main.tcpServer.read();
+        List<Product> products = App.tcpServer.read();
         // fill UI with products
         fillVBoxWithProducts(products, this.vBoxWithProducts);
         if (vBoxWithProducts.getChildren().size() == 0) {
@@ -372,10 +372,10 @@ public class StaffProducts implements Initializable {
         double discountPercent = getProductInformationFromTextFields.getDiscountPercent();
         Product product = new Product(name, description, quantity, price, minimumPrice, discountPercent, Files.readAllBytes(this.createProductPictureFile.toPath()), size);
         // send new product ot server
-        Main.tcpServer.write("create product");
-        Main.tcpServer.write(product);
+        App.tcpServer.write("create product");
+        App.tcpServer.write(product);
         // shows uer if product was created successfully
-        if (Main.tcpServer.read()) {
+        if (App.tcpServer.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_CREATED);
             resetAllCreateProductField();
         } else {

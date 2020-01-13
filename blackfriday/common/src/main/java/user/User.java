@@ -21,8 +21,8 @@ public class User implements Serializable, Cloneable {
 
 
     public User(String username, String password, Permission permission, String firstName, String lastName, int age, LocalDateTime dateOfCreation) {
-        this(username, password, permission, firstName, lastName, age);
         this.setUsername(username);
+        // doesn't hash password
         this.setPasswordHash(password);
         this.setPermission(permission);
         this.setFirstName(firstName);
@@ -34,6 +34,7 @@ public class User implements Serializable, Cloneable {
 
     public User(String username, String password, Permission permission, String firstName, String lastName, int age) {
         this.setUsername(username);
+        // hashes password
         this.setPassword(password);
         this.setPermission(permission);
         this.setFirstName(firstName);
@@ -49,10 +50,6 @@ public class User implements Serializable, Cloneable {
     public void setPermission(Permission permission) {
         Validator.requireNonNull(permission, ExceptionMessages.PERMISSION_NULL);
         this.permission = permission;
-    }
-
-    public LocalDateTime DateOfCreation() {
-        return this.dateOfCreation;
     }
 
     public String getUsername() {

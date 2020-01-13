@@ -1,5 +1,6 @@
 package controllers.product;
 
+import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
@@ -12,7 +13,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.util.Duration;
-import application.Main;
 import product.Product;
 import util.Operations;
 
@@ -55,10 +55,10 @@ public class ChangeMinimumPrice implements Initializable {
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
         validatePrice(product.getPrice(), this.minimumPrice);
         // send change product minimum price command to server
-        Main.tcpServer.write("change product minimum price");
-        Main.tcpServer.write(this.minimumPrice);
+        App.tcpServer.write("change product minimum price");
+        App.tcpServer.write(this.minimumPrice);
         // shows if executed server command was successful
-        if (Main.tcpServer.read()) {
+        if (App.tcpServer.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_MINIMUM_PRICE_CHANGED_SUCCESSFUL);
             this.product.setMinimumPrice(this.minimumPrice);
         } else {

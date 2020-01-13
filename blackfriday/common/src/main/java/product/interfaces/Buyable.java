@@ -1,11 +1,10 @@
 package product.interfaces;
 
 import exceptions.NotEnoughQuantityException;
-import user.User;
 
 public interface Buyable {
 
-    void buy(User user, int quantity) throws NotEnoughQuantityException;
+    void buy(int quantity) throws NotEnoughQuantityException;
 
     double getPrice();
 

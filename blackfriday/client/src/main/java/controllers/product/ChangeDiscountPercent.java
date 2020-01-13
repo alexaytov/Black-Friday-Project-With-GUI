@@ -11,7 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.util.Duration;
-import application.Main;
+import application.App;
 import product.Product;
 import util.Operations;
 
@@ -54,10 +54,10 @@ public class ChangeDiscountPercent implements Initializable {
         // validate new discount percent before sending to server
         validateDiscountPercent(this.discountPercent, product.getPrice(), product.getMinimumPrice());
         // send change discount percent command to server
-        Main.tcpServer.write("change product discount percent");
-        Main.tcpServer.write(this.discountPercent);
+        App.tcpServer.write("change product discount percent");
+        App.tcpServer.write(this.discountPercent);
         // shows to user if the change was successful
-        if (Main.tcpServer.read()) {
+        if (App.tcpServer.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_DISCOUNT_PERCENT_CHANGED_SUCCESSFUL);
             this.product.setDiscountPercent(this.discountPercent);
         } else {

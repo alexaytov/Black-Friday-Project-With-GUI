@@ -1,5 +1,6 @@
 package controllers.product;
 
+import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
@@ -11,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.util.Duration;
-import application.Main;
 import product.Product;
 import util.Operations;
 
@@ -47,10 +47,10 @@ public class ChangeQuantity implements Initializable {
 
     @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
-        Main.tcpServer.write("change product quantity");
-        Main.tcpServer.write(this.quantity);
+        App.tcpServer.write("change product quantity");
+        App.tcpServer.write(this.quantity);
 
-        if (Main.tcpServer.read()) {
+        if (App.tcpServer.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_QUANTITY_CHANGED_SUCCESSFUL);
             this.product.setQuantity(this.quantity);
         } else {

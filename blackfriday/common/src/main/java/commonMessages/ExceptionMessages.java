@@ -17,6 +17,7 @@ public class ExceptionMessages {
     public static final String DATE_NULL = "Date object can't be null!!!";
     public static final String MINIMUM_PRICE_MUST_BE_POSITIVE = "Minimum price has to be a positive number!!!";
     public static final String QUANTITY_ZERO_OR_NEGATIVE = "Quantity can't be zero or negative!!!";
+    public static final String QUANTITY_NEGATIVE = "Quantity can't be negative!!!";
     public static final String DESCRIPTION_NULL_OR_EMPTY = "Description can't be null or empty string!!!";
     public static final String PRICE_ZERO_NEGATIVE = "Price can't be zero or negative!!!";
     public static final String PRICE_BELOW_MINIMUM_PRICE = "Price can't be below the minimum price!!!";
@@ -31,4 +32,7 @@ public class ExceptionMessages {
     public static final String CONNECTION_NULL = "ServerClientConnection can't be null!!!";
     public static final String PERMISSION_NULL = "Permission can't be nulL!!!";
     public static final String ACCOUNT_NOT_FOUNT = "Account not found";
+    public static final String SOCKET_NULL = "Socket can't be null!!!";
+    public static final String DISCOUNT_PERCENT_NEGATIVE = "Discounte percent can't be below zero!!!";
+    public static final String IMAGE_CONTENT_NULL = "Image content can't be null!!!";
 }

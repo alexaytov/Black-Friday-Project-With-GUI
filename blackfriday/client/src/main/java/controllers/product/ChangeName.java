@@ -1,5 +1,6 @@
 package controllers.product;
 
+import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
@@ -12,7 +13,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.util.Duration;
-import application.Main;
 import util.Operations;
 
 import java.io.IOException;
@@ -43,10 +43,10 @@ public class ChangeName implements Initializable {
     @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
         // send change product name command to server
-        Main.tcpServer.write("change product name");
-        Main.tcpServer.write(this.nameField.getText());
+        App.tcpServer.write("change product name");
+        App.tcpServer.write(this.nameField.getText());
         // shows confirmation of executed command to user
-        if (Main.tcpServer.read()) {
+        if (App.tcpServer.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_NAME_CHANGED_SUCCESSFUL);
         } else {
             confirmationPopUp(ConstantMessages.PRODUCT_NAME_CHANGED_UNSUCCESSFUL);

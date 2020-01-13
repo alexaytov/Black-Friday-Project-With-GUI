@@ -1,12 +1,12 @@
 package controllers;
 
+import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import application.Main;
 import user.Permission;
 import user.User;
 import util.Operations;
@@ -75,13 +75,13 @@ public class SignUp {
 
     private boolean registerUser(User toBeRegisteredUser) {
         try {
-            Main.tcpServer.write("register user");
-            Main.tcpServer.write(toBeRegisteredUser);
+            App.tcpServer.write("register user");
+            App.tcpServer.write(toBeRegisteredUser);
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
-            return Main.tcpServer.read();
+            return App.tcpServer.read();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

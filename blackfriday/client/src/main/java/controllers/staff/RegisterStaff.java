@@ -1,5 +1,6 @@
 package controllers.staff;
 
+import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
@@ -9,7 +10,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.paint.Color;
-import application.Main;
 import user.Permission;
 import user.User;
 import util.Operations;
@@ -59,11 +59,11 @@ public class RegisterStaff implements Initializable {
     @FXML
     void registerStaff(ActionEvent event) throws IOException, ClassNotFoundException {
         if (checkAllFields()) {
-            Main.tcpServer.write("register user");
+            App.tcpServer.write("register user");
             User user = new User(this.username, this.password, Permission.ADMIN, this.firstName, this.lastName, this.age);
-            Main.tcpServer.write(user);
+            App.tcpServer.write(user);
             // show user if staff was registered successfully
-            if (Main.tcpServer.read()) {
+            if (App.tcpServer.read()) {
                 confirmationPopUp(ConstantMessages.STAFF_REGISTERED);
             } else {
                 confirmationPopUp(ConstantMessages.STAFF_ALREADY_EXISTS);

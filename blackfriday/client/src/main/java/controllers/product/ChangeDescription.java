@@ -1,5 +1,6 @@
 package controllers.product;
 
+import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
@@ -12,7 +13,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.util.Duration;
-import application.Main;
 import product.Product;
 import util.Operations;
 
@@ -46,11 +46,11 @@ public class ChangeDescription implements Initializable {
     @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
         // send command to server to change product description
-        Main.tcpServer.write("change product description");
+        App.tcpServer.write("change product description");
         // get confirmation from server
-        Main.tcpServer.write(this.descriptionField.getText());
+        App.tcpServer.write(this.descriptionField.getText());
         // shows confirmation from server to userw
-        if (Main.tcpServer.read()) {
+        if (App.tcpServer.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_DESCRIPTION_CHANGED_SUCCESSFUL);
             product.setDescription(this.descriptionField.getText());
         } else {

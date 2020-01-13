@@ -1,5 +1,6 @@
 package controllers.client;
 
+import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ExceptionMessages;
@@ -16,7 +17,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.util.Duration;
-import application.Main;
 import product.Product;
 import util.Operations;
 
@@ -71,11 +71,11 @@ public class ChosenProduct implements Initializable {
         // get entered wanted quantity
         int wantedQuantity = this.wantedQuantity.getValue();
         // send information to server
-        Main.tcpServer.write("buy product");
-        Main.tcpServer.write(this.product.getName());
-        Main.tcpServer.write(wantedQuantity);
+        App.tcpServer.write("buy product");
+        App.tcpServer.write(this.product.getName());
+        App.tcpServer.write(wantedQuantity);
         // get server confirmation
-        if (Main.tcpServer.read()) {
+        if (App.tcpServer.read()) {
             confirmationPopUp(String.format("You just purchased %d of %s.", wantedQuantity, this.product.getName()));
             this.product.setQuantity(this.product.getQuantity() - wantedQuantity);
             this.quantityField.setText(String.valueOf(this.product.getQuantity()));

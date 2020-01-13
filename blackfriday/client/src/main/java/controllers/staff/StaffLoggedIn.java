@@ -1,5 +1,6 @@
 package controllers.staff;
 
+import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXToggleButton;
 import javafx.event.ActionEvent;
@@ -7,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import application.Main;
 import user.User;
 import util.Operations;
 
@@ -34,9 +34,9 @@ public class StaffLoggedIn implements Initializable {
     @FXML
     void blackFridaySwitch(ActionEvent event) throws IOException {
         if (blackFriday.isSelected()) {
-            Main.tcpServer.write("start blackFriday");
+            App.tcpServer.write("start blackFriday");
         } else {
-            Main.tcpServer.write("stop blackFriday");
+            App.tcpServer.write("stop blackFriday");
         }
     }
 
@@ -54,7 +54,7 @@ public class StaffLoggedIn implements Initializable {
 
     @FXML
     void logout(ActionEvent event) throws IOException {
-        Main.tcpServer.write("logout");
+        App.tcpServer.write("logout");
         this.earningsButton.getScene().getWindow().hide();
         Operations.loadWindow("/view/login.fxml", 600, 350);
     }
@@ -81,8 +81,8 @@ public class StaffLoggedIn implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // set on/off black friday toggle
         try {
-            Main.tcpServer.write("is blackFriday");
-            if (Main.tcpServer.read()) {
+            App.tcpServer.write("is blackFriday");
+            if (App.tcpServer.read()) {
                 blackFriday.selectedProperty().setValue(true);
             } else {
                 blackFriday.selectedProperty().setValue(false);

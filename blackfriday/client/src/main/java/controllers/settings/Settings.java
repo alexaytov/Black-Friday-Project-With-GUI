@@ -1,5 +1,6 @@
 package controllers.settings;
 
+import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import controllers.client.ClientLoggedIn;
@@ -11,7 +12,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.util.Duration;
-import application.Main;
 import user.Permission;
 import user.User;
 import util.Operations;
@@ -95,9 +95,9 @@ public class Settings implements Initializable {
 
     @FXML
     void deleteAccount(ActionEvent event) throws IOException, ClassNotFoundException {
-        Main.tcpServer.write("delete user");
+        App.tcpServer.write("delete user");
         // show user if command was executed successfully
-        if (Main.tcpServer.read()) {
+        if (App.tcpServer.read()) {
             confirmationPopUp("User successfully deleted!");
             this.backButton.getScene().getWindow().hide();
             Operations.loadWindow("/view/login.fxml", 600, 350);
@@ -110,8 +110,8 @@ public class Settings implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // get currently logged user information from server
         try {
-            Main.tcpServer.write("get logged in user");
-            this.user = Main.tcpServer.read();
+            App.tcpServer.write("get logged in user");
+            this.user = App.tcpServer.read();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

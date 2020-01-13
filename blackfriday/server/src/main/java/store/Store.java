@@ -85,11 +85,11 @@ public class Store {
         List<Purchase> purchases = this.purchaseDatabase.read("quantity != 0");
         HashMap<String, List<Purchase>> purchaseMap = new HashMap<>();
         for (Purchase purchase : purchases) {
-            if (purchaseMap.containsKey(purchase.getUserName())) {
-                purchaseMap.get(purchase.getUserName()).add(purchase);
+            if (purchaseMap.containsKey(purchase.getUsername())) {
+                purchaseMap.get(purchase.getUsername()).add(purchase);
             } else {
-                purchaseMap.put(purchase.getUserName(), new ArrayList<>());
-                purchaseMap.get(purchase.getUserName()).add(purchase);
+                purchaseMap.put(purchase.getUsername(), new ArrayList<>());
+                purchaseMap.get(purchase.getUsername()).add(purchase);
             }
         }
         return purchaseMap;
@@ -265,7 +265,7 @@ public class Store {
      */
     public boolean buyProduct(String productName, User user, int quantity) throws NotFoundException, NotEnoughQuantityException, IOException, SQLException {
         Product product = this.productDatabase.getByName(productName);
-        product.buy(user, quantity);
+        product.buy(quantity);
         this.productDatabase.update(productName, "quantity", String.valueOf(product.getQuantity()));
         Purchase purchase = new Purchase(productName, user.getUsername(), quantity, product.getPrice());
         earnings.logPurchase(purchase);

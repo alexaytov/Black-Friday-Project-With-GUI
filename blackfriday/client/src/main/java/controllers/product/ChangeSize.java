@@ -1,12 +1,12 @@
 package controllers.product;
 
+import application.App;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
 import controllers.staff.StaffChosenProduct;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import application.Main;
 import product.Product;
 import util.Operations;
 
@@ -27,10 +27,10 @@ public class ChangeSize {
     @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
         // send change product size command to server
-        Main.tcpServer.write("change product size");
-        Main.tcpServer.write(this.sizeField.getText());
+        App.tcpServer.write("change product size");
+        App.tcpServer.write(this.sizeField.getText());
         // shows if executed command was successful
-        if (Main.tcpServer.read()) {
+        if (App.tcpServer.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_SIZE_CHANGED_SUCCESSFUL);
             this.product.setSize(this.sizeField.getText());
         } else {

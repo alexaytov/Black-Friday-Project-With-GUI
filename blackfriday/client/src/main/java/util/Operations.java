@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import application.Main;
+import application.App;
 
 import java.io.IOException;
 
@@ -28,9 +28,9 @@ public class Operations {
                                               T newVariable,
                                               String messageIfSuccessful,
                                               String messageIfUnsuccessful) throws IOException, ClassNotFoundException {
-        Main.tcpServer.write(commandToServer);
-        Main.tcpServer.write(newVariable);
-        boolean changeSuccessful = Main.tcpServer.read();
+        App.tcpServer.write(commandToServer);
+        App.tcpServer.write(newVariable);
+        boolean changeSuccessful = App.tcpServer.read();
         if (changeSuccessful) {
             confirmationPopUp(messageIfSuccessful);
             return true;

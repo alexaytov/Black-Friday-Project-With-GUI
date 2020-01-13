@@ -4,7 +4,6 @@ import commonMessages.ExceptionMessages;
 import exceptions.NotEnoughQuantityException;
 import product.interfaces.Buyable;
 import product.interfaces.Promotional;
-import user.User;
 import validator.Validator;
 
 import java.io.Serializable;
@@ -25,28 +24,23 @@ public class Product implements Buyable, Promotional, Serializable, Cloneable {
     private byte[] imageContent;
 
     public Product(String name, String description, int quantity, double price, double minimumPrice, double discountPercent, byte[] imageContent, String size) {
-        this(name, description, quantity, price, minimumPrice, discountPercent, imageContent);
         this.setSize(size);
-    }
-
-    public Product(String name, String description, int quantity, double price, double minimumPrice, double discountPercent, byte[] imageContent) {
         this.setName(name);
         this.setDescription(description);
         this.setQuantity(quantity);
         this.setPrice(price);
         this.setMinimumPrice(minimumPrice);
-        this.setSize(null);
         this.setImageContent(imageContent);
         this.setDiscountPercent(discountPercent);
-
-    }
-
-    public void setImageContent(byte[] imageContent) {
-        this.imageContent = imageContent;
     }
 
     public byte[] getImageContent() {
         return imageContent;
+    }
+
+    private void setImageContent(byte[] imageContent) {
+        requireNonNull(imageContent, ExceptionMessages.IMAGE_CONTENT_NULL);
+        this.imageContent = imageContent;
     }
 
     @Override
@@ -60,6 +54,7 @@ public class Product implements Buyable, Promotional, Serializable, Cloneable {
 
     public void setMinimumPrice(double minimumPrice) {
         Validator.requireNonNegative(minimumPrice, ExceptionMessages.MINIMUM_PRICE_MUST_BE_POSITIVE);
+        validatePrice(this.price, minimumPrice);
         this.minimumPrice = minimumPrice;
     }
 
@@ -77,7 +72,7 @@ public class Product implements Buyable, Promotional, Serializable, Cloneable {
     }
 
     public void setQuantity(int quantity) {
-        validateQuantity(quantity);
+        requireNonNegative(quantity, ExceptionMessages.QUANTITY_NEGATIVE);
         this.quantity = quantity;
     }
 
@@ -85,7 +80,7 @@ public class Product implements Buyable, Promotional, Serializable, Cloneable {
         return this.size;
     }
 
-    //size CAN be null that means the certain product has no size
+    //size CAN be null that means the certain products have no size
     public void setSize(String size) {
         this.size = size;
     }
@@ -129,12 +124,11 @@ public class Product implements Buyable, Promotional, Serializable, Cloneable {
     }
 
     /**
-     * @param user     who is going to purchase the product
      * @param quantity the user is going to purchase
      * @throws NotEnoughQuantityException if quantity is bigger than product quantity
      */
     @Override
-    public void buy(User user, int quantity) throws NotEnoughQuantityException {
+    public void buy(int quantity) throws NotEnoughQuantityException {
         if (quantity > this.getQuantity()) {
             throw new NotEnoughQuantityException(String.format(ExceptionMessages.NOT_ENOUGH_QUANTITY, this.getQuantity(), this.getName(), quantity));
         }
@@ -168,14 +162,15 @@ public class Product implements Buyable, Promotional, Serializable, Cloneable {
      */
     @Override
     public void setDiscountPercent(double discountPercent) {
-        validatePromotionalPricePercent(discountPercent, this.price, this.minimumPrice);
+        validateDiscountPercent(discountPercent, this.price, this.minimumPrice);
         this.discountPercent = discountPercent;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Name: " + this.getName())
+        sb.append("Name: ")
+                .append(this.getName())
                 .append(System.lineSeparator())
                 .append("Description: ")
                 .append(this.getDescription())

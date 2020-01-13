@@ -1,12 +1,12 @@
 package controllers.staff;
 
+import application.App;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TreeItem;
-import application.Main;
 import store.earnings.Purchase;
 import util.Operations;
 
@@ -71,8 +71,8 @@ public class ClientPurchases implements Initializable {
     @FXML
     void showAllPurchases() throws IOException, ClassNotFoundException {
         // load UI with all purchases
-        Main.tcpServer.write("get all clients information");
-        purchases = Main.tcpServer.read();
+        App.tcpServer.write("get all clients information");
+        purchases = App.tcpServer.read();
         fillTreeView(purchases);
     }
 

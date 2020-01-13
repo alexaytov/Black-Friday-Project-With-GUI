@@ -1,5 +1,8 @@
 package connection;
 
+import commonMessages.ExceptionMessages;
+import validator.Validator;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,6 +14,7 @@ public class TCPConnection implements ServerClientConnection {
     private ObjectInputStream objectInputStream;
 
     public TCPConnection(Socket socket) throws IOException {
+        Validator.requireNonNull(socket, ExceptionMessages.SOCKET_NULL);
         objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         objectOutputStream.flush();
         objectInputStream = new ObjectInputStream(socket.getInputStream());

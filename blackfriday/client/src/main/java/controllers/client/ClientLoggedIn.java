@@ -1,5 +1,6 @@
 package controllers.client;
 
+import application.App;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
@@ -18,7 +19,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import application.Main;
 import product.Product;
 import user.User;
 import util.Operations;
@@ -64,7 +64,7 @@ public class ClientLoggedIn implements Initializable {
     @FXML
     void goBack(ActionEvent event) throws IOException {
         // go to previous window
-        Main.tcpServer.write("logout");
+        App.tcpServer.write("logout");
         this.vBoxWithProducts.getScene().getWindow().hide();
         Operations.loadWindow("/view/login.fxml", 600, 350);
     }
@@ -88,8 +88,8 @@ public class ClientLoggedIn implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
             // check if black friday is started
-            Main.tcpServer.write("is black friday");
-            boolean storeHasPromotions = Main.tcpServer.read();
+            App.tcpServer.write("is black friday");
+            boolean storeHasPromotions = App.tcpServer.read();
             // make black friday products button visible is black friday is active
             if (storeHasPromotions) {
                 productsFilterChoice.setVisible(true);
@@ -155,9 +155,9 @@ public class ClientLoggedIn implements Initializable {
 
     private void loadAllProductsFromServerToUI(String serverCommand) throws IOException, ClassNotFoundException {
         // send command for products to server
-        Main.tcpServer.write(serverCommand);
+        App.tcpServer.write(serverCommand);
         // get products list from server
-        List<Product> products = Main.tcpServer.read();
+        List<Product> products = App.tcpServer.read();
         // fill UI with products
         fillVBoxWithProducts(products, this.vBoxWithProducts);
         // if there are not products set no results message to UI
@@ -177,14 +177,14 @@ public class ClientLoggedIn implements Initializable {
         // gets searched product name
         String searchedProductName = this.productSearch.getText();
         if (allProductsButton.isSelected()) {
-            Main.tcpServer.write("search client all products");
-            Main.tcpServer.write(searchedProductName);
+            App.tcpServer.write("search client all products");
+            App.tcpServer.write(searchedProductName);
         } else {
-            Main.tcpServer.write("search client discounted products");
-            Main.tcpServer.write(searchedProductName);
+            App.tcpServer.write("search client discounted products");
+            App.tcpServer.write(searchedProductName);
         }
         // get products from server
-        List<Product> products = Main.tcpServer.read();
+        List<Product> products = App.tcpServer.read();
         // fill UI with result from search
         fillVBoxWithProducts(products, this.vBoxWithProducts);
         if (this.vBoxWithProducts.getChildren().size() == 0) {
