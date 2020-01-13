@@ -74,17 +74,8 @@ public class SignUp {
     }
 
     private boolean registerUser(User toBeRegisteredUser) {
-        try {
-            App.tcpServer.write("register user");
-            App.tcpServer.write(toBeRegisteredUser);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            return App.tcpServer.read();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return false;
+        App.serverConnection.write("register user");
+        App.serverConnection.write(toBeRegisteredUser);
+        return App.serverConnection.read();
     }
 }

@@ -1,7 +1,7 @@
 package commands;
 
-import commandEnterpreter.interfaces.Executable;
-import commandEnterpreter.interfaces.Inject;
+import command.enterpreter.interfaces.Executable;
+import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import store.Store;
 import validator.Validator;
@@ -21,7 +21,7 @@ public class StopBlackFriday implements Executable {
      * @throws SQLException if SQL error occurs
      */
     @Override
-    public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
+    public void execute() throws IOException, SQLException {
         Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         this.store.setBlackFriday(false);
     }

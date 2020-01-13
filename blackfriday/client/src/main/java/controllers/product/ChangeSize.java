@@ -27,10 +27,10 @@ public class ChangeSize {
     @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
         // send change product size command to server
-        App.tcpServer.write("change product size");
-        App.tcpServer.write(this.sizeField.getText());
+        App.serverConnection.write("change product size");
+        App.serverConnection.write(this.sizeField.getText());
         // shows if executed command was successful
-        if (App.tcpServer.read()) {
+        if (App.serverConnection.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_SIZE_CHANGED_SUCCESSFUL);
             this.product.setSize(this.sizeField.getText());
         } else {

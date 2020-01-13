@@ -46,11 +46,11 @@ public class ChangeDescription implements Initializable {
     @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
         // send command to server to change product description
-        App.tcpServer.write("change product description");
+        App.serverConnection.write("change product description");
         // get confirmation from server
-        App.tcpServer.write(this.descriptionField.getText());
+        App.serverConnection.write(this.descriptionField.getText());
         // shows confirmation from server to userw
-        if (App.tcpServer.read()) {
+        if (App.serverConnection.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_DESCRIPTION_CHANGED_SUCCESSFUL);
             product.setDescription(this.descriptionField.getText());
         } else {

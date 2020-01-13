@@ -1,9 +1,9 @@
 package commands;
 
-import commandEnterpreter.interfaces.Executable;
-import commandEnterpreter.interfaces.Inject;
+import command.enterpreter.interfaces.Executable;
+import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
-import connection.ServerClientConnection;
+import connection.Connection;
 import store.Store;
 import validator.Validator;
 
@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class SearchStaffDiscountedProducts implements Executable {
 
     @Inject
-    private ServerClientConnection clientConnection;
+    private Connection clientConnection;
 
     @Inject
     private Store store;
@@ -21,12 +21,11 @@ public class SearchStaffDiscountedProducts implements Executable {
     /**
      * Searches products for users with permission admin
      *
-     * @throws IOException            if IO error occurs
-     * @throws SQLException           if SQL error occurs
-     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     * @throws IOException  if IO error occurs
+     * @throws SQLException if SQL error occurs
      */
     @Override
-    public void execute() throws IOException, SQLException, ClassNotFoundException {
+    public void execute() throws IOException, SQLException {
         Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         String searchedDiscountedProductsName = this.clientConnection.read().toString();
         this.clientConnection.write(this.store.searchDiscountedStaffProducts(searchedDiscountedProductsName));

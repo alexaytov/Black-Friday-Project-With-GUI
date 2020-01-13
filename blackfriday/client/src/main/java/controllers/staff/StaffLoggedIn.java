@@ -34,9 +34,9 @@ public class StaffLoggedIn implements Initializable {
     @FXML
     void blackFridaySwitch(ActionEvent event) throws IOException {
         if (blackFriday.isSelected()) {
-            App.tcpServer.write("start blackFriday");
+            App.serverConnection.write("start blackFriday");
         } else {
-            App.tcpServer.write("stop blackFriday");
+            App.serverConnection.write("stop blackFriday");
         }
     }
 
@@ -54,7 +54,7 @@ public class StaffLoggedIn implements Initializable {
 
     @FXML
     void logout(ActionEvent event) throws IOException {
-        App.tcpServer.write("logout");
+        App.serverConnection.write("logout");
         this.earningsButton.getScene().getWindow().hide();
         Operations.loadWindow("/view/login.fxml", 600, 350);
     }
@@ -80,15 +80,11 @@ public class StaffLoggedIn implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // set on/off black friday toggle
-        try {
-            App.tcpServer.write("is blackFriday");
-            if (App.tcpServer.read()) {
-                blackFriday.selectedProperty().setValue(true);
-            } else {
-                blackFriday.selectedProperty().setValue(false);
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+        App.serverConnection.write("is blackFriday");
+        if (App.serverConnection.read()) {
+            blackFriday.selectedProperty().setValue(true);
+        } else {
+            blackFriday.selectedProperty().setValue(false);
         }
     }
 

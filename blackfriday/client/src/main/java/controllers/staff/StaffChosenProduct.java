@@ -43,17 +43,17 @@ public class StaffChosenProduct {
 
     public void initProduct(String productName) throws IOException, ClassNotFoundException {
         // get currently chosen product by name from server
-        App.tcpServer.write("get product by name");
-        App.tcpServer.write(productName);
-        Product product = App.tcpServer.read();
+        App.serverConnection.write("get product by name");
+        App.serverConnection.write(productName);
+        Product product = App.serverConnection.read();
         fillProductFieldsWithInformation(product);
         this.product = product;
     }
 
     public void initProduct(Product product) throws IOException {
         // get currently chosen product based on server
-        App.tcpServer.write("set product");
-        App.tcpServer.write(product);
+        App.serverConnection.write("set product");
+        App.serverConnection.write(product);
         this.product = product;
         fillProductFieldsWithInformation(product);
     }
@@ -74,10 +74,10 @@ public class StaffChosenProduct {
 
     @FXML
     void deleteChosenProduct(ActionEvent event) throws IOException, ClassNotFoundException {
-        App.tcpServer.write("delete product");
-        App.tcpServer.write(this.product.getName());
+        App.serverConnection.write("delete product");
+        App.serverConnection.write(this.product.getName());
         // shows user if executed command was successful
-        if (App.tcpServer.read()) {
+        if (App.serverConnection.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_DELETED_SUCCESSFULLY);
         } else {
             confirmationPopUp(ConstantMessages.PRODUCT_DELETED_UNSUCCESSFULLY);
@@ -129,10 +129,10 @@ public class StaffChosenProduct {
         File file = fileChooser.showOpenDialog(this.nameField.getScene().getWindow());
         if (file != null) {
             // user picked a file
-            App.tcpServer.write("change product image");
-            App.tcpServer.write(Files.readAllBytes(file.toPath()));
+            App.serverConnection.write("change product image");
+            App.serverConnection.write(Files.readAllBytes(file.toPath()));
             // shows user if image was changed successfully
-            if (App.tcpServer.read()) {
+            if (App.serverConnection.read()) {
                 confirmationPopUp(ConstantMessages.PRODUCT_IMAGE_CHANGE_SUCCESSFUL);
                 this.image.setImage(new Image(new FileInputStream(file)));
             } else {

@@ -9,7 +9,6 @@ import javafx.fxml.FXML;
 import util.Operations;
 import validator.Validator;
 
-import java.io.IOException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
@@ -48,7 +47,7 @@ public class Earnings {
     private JFXTextField customPeriodEarningsField;
 
     @FXML
-    void customPeriodEarnings(ActionEvent event) throws IOException, ClassNotFoundException {
+    void customPeriodEarnings(ActionEvent event) {
         // get data from GUI
         LocalDate startDate = this.startDatePicker.getValue();
         LocalDate endDate = this.endDatePicker.getValue();
@@ -59,44 +58,44 @@ public class Earnings {
         } else {
             // entered data is valid
             // sending data to server
-            App.tcpServer.write("earnings period");
-            App.tcpServer.write(startDate);
-            App.tcpServer.write(endDate);
+            App.serverConnection.write("earnings period");
+            App.serverConnection.write(startDate);
+            App.serverConnection.write(endDate);
             // get and show earnings to GUI
-            double earnings = App.tcpServer.read();
+            double earnings = App.serverConnection.read();
             this.customPeriodEarningsField.setText(String.valueOf(earnings));
 
         }
     }
 
     @FXML
-    void dateEarningsButton(ActionEvent event) throws IOException, ClassNotFoundException {
+    void dateEarningsButton(ActionEvent event) {
         try {
             // get and validate year
             LocalDate date = this.datePicker.getValue();
             // send command and year to server
-            App.tcpServer.write("earnings date");
-            App.tcpServer.write(date.toString());
+            App.serverConnection.write("earnings date");
+            App.serverConnection.write(date.toString());
             // get earnings from server
-            double earnings = App.tcpServer.read();
+            double earnings = App.serverConnection.read();
             dateEarningsField.setText(String.valueOf(earnings));
-        } catch (DateTimeException | IOException | ClassNotFoundException ex) {
+        } catch (DateTimeException ex) {
             ex.printStackTrace();
         }
     }
 
     @FXML
-    void monthEarnings(ActionEvent event) throws IOException, ClassNotFoundException {
+    void monthEarnings(ActionEvent event) {
         try {
             // get year and mont from GUI
             int year = Integer.parseInt(this.mYearField.getText());
             int month = Integer.parseInt(this.mMonthField.getText());
             // send data to server
-            App.tcpServer.write("earnings month");
-            App.tcpServer.write(month);
-            App.tcpServer.write(year);
+            App.serverConnection.write("earnings month");
+            App.serverConnection.write(month);
+            App.serverConnection.write(year);
             // show data to GUI
-            double earnings = App.tcpServer.read();
+            double earnings = App.serverConnection.read();
             this.monthEarningsField.setText(String.valueOf(earnings));
         } catch (NumberFormatException ex) {
             showWarningDialog(ExceptionMessages.ENTER_NUMBER);
@@ -104,16 +103,16 @@ public class Earnings {
     }
 
     @FXML
-    void yearEarnings(ActionEvent event) throws IOException, ClassNotFoundException {
+    void yearEarnings(ActionEvent event) {
         try {
             // get and validate year
             int year = Integer.parseInt(yYearField.getText());
             Validator.requireNonNegative(year, ExceptionMessages.YEAR_MUST_BE_POSITIVE);
             // send command and year to server
-            App.tcpServer.write("earnings year");
-            App.tcpServer.write(year);
+            App.serverConnection.write("earnings year");
+            App.serverConnection.write(year);
             // get earnings from server
-            double earnings = App.tcpServer.read();
+            double earnings = App.serverConnection.read();
             yearEarningsField.setText(String.valueOf(earnings));
         } catch (NumberFormatException ex) {
             showWarningDialog(ExceptionMessages.ENTER_NUMBER);
@@ -123,7 +122,7 @@ public class Earnings {
     }
 
     @FXML
-    void goBack(ActionEvent event) throws IOException {
+    void goBack(ActionEvent event) {
         // go to staff logged in window
         this.datePicker.getScene().getWindow().hide();
         Operations.loadWindow("/view/staff/staffLoggedIn.fxml", 600, 600);

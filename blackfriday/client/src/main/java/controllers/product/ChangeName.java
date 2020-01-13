@@ -43,10 +43,10 @@ public class ChangeName implements Initializable {
     @FXML
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
         // send change product name command to server
-        App.tcpServer.write("change product name");
-        App.tcpServer.write(this.nameField.getText());
+        App.serverConnection.write("change product name");
+        App.serverConnection.write(this.nameField.getText());
         // shows confirmation of executed command to user
-        if (App.tcpServer.read()) {
+        if (App.serverConnection.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_NAME_CHANGED_SUCCESSFUL);
         } else {
             confirmationPopUp(ConstantMessages.PRODUCT_NAME_CHANGED_UNSUCCESSFUL);

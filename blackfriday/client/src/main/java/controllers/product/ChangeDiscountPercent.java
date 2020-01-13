@@ -54,10 +54,10 @@ public class ChangeDiscountPercent implements Initializable {
         // validate new discount percent before sending to server
         validateDiscountPercent(this.discountPercent, product.getPrice(), product.getMinimumPrice());
         // send change discount percent command to server
-        App.tcpServer.write("change product discount percent");
-        App.tcpServer.write(this.discountPercent);
+        App.serverConnection.write("change product discount percent");
+        App.serverConnection.write(this.discountPercent);
         // shows to user if the change was successful
-        if (App.tcpServer.read()) {
+        if (App.serverConnection.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_DISCOUNT_PERCENT_CHANGED_SUCCESSFUL);
             this.product.setDiscountPercent(this.discountPercent);
         } else {

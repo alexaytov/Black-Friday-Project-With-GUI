@@ -1,7 +1,9 @@
 package application;
 
-import connection.ServerClientConnection;
+import commonMessages.ExceptionMessages;
+import connection.Connection;
 import connection.TCPConnection;
+import exceptions.ConnectionException;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -19,7 +21,7 @@ import static util.Operations.showWarningDialog;
  */
 public class App extends Application {
 
-    public static ServerClientConnection tcpServer;
+    public static Connection serverConnection;
 
 
     public static void main(String[] args) {
@@ -32,12 +34,18 @@ public class App extends Application {
         // use localhost ip for server
         InetAddress ip = InetAddress.getLocalHost();
         // get port number from environment variables
-        final int port = Integer.parseInt(System.getenv("PORT"));
         try {
+            final int port = Integer.parseInt(System.getenv("PORT"));
             Socket socket = new Socket(ip, port);
-            tcpServer = new TCPConnection(socket);
-        } catch (IOException ex) {
-            showWarningDialog("There was a problem connecting to the server please try again!");
+            serverConnection = new TCPConnection(socket);
+        } catch (ConnectionException ex) {
+            showWarningDialog(ExceptionMessages.PROBLEM_CONNECTION_TO_SERVER);
+            Platform.exit();
+        }catch (IllegalStateException ex){
+            showWarningDialog(ex.getMessage());
+            Platform.exit();
+        }catch (NumberFormatException ex){
+            showWarningDialog(ExceptionMessages.ENVIREMENT_VARIBLE_PORT_NOT_SET);
             Platform.exit();
         }
 

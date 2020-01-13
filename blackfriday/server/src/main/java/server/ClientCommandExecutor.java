@@ -1,9 +1,9 @@
 package server;
 
-import commandEnterpreter.interfaces.CommandInterpreter;
-import commandEnterpreter.interfaces.Executable;
+import command.enterpreter.interfaces.CommandInterpreter;
+import command.enterpreter.interfaces.Executable;
 import commonMessages.ExceptionMessages;
-import connection.ServerClientConnection;
+import connection.Connection;
 import store.Store;
 import validator.Validator;
 
@@ -12,13 +12,13 @@ import java.sql.SQLException;
 
 import static java.util.Objects.requireNonNull;
 
-public class ClientThread implements Runnable {
+public class ClientCommandExecutor implements Runnable {
 
-    private ServerClientConnection clientConnection;
+    private Connection clientConnection;
     private CommandInterpreter commandInterpreter;
 
 
-    public ClientThread(ServerClientConnection clientConnection, Store store, CommandInterpreter commandInterpreter) {
+    public ClientCommandExecutor(Connection clientConnection, Store store, CommandInterpreter commandInterpreter) {
         setClientConnection(clientConnection);
         this.setCommandInterpreter(commandInterpreter);
 
@@ -29,7 +29,7 @@ public class ClientThread implements Runnable {
         this.commandInterpreter = commandInterpreter;
     }
 
-    public void setClientConnection(ServerClientConnection clientConnection) {
+    public void setClientConnection(Connection clientConnection) {
         Validator.requireNonNull(clientConnection, ExceptionMessages.CONNECTION_NULL);
         this.clientConnection = clientConnection;
     }
@@ -46,7 +46,7 @@ public class ClientThread implements Runnable {
             }
         } catch (IOException ex) {
             System.out.println("Client thread: " + Thread.currentThread().getName() + " ended!!!");
-        } catch (ClassNotFoundException | CloneNotSupportedException | SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

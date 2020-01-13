@@ -1,9 +1,9 @@
 package commands;
 
-import commandEnterpreter.interfaces.Executable;
-import commandEnterpreter.interfaces.Inject;
+import command.enterpreter.interfaces.Executable;
+import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
-import connection.ServerClientConnection;
+import connection.Connection;
 import exceptions.NotEnoughQuantityException;
 import exceptions.NotFoundException;
 import store.Store;
@@ -18,18 +18,17 @@ public class BuyProduct implements Executable {
     private Store store;
 
     @Inject
-    private ServerClientConnection clientConnection;
+    private Connection clientConnection;
 
     /**
      * Executes buy logic in Product class and return
      * to client if operation is successful
      *
-     * @throws IOException            if IO error occurs
-     * @throws SQLException           if SQL error occurs
-     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     * @throws IOException  if IO error occurs
+     * @throws SQLException if SQL error occurs
      */
     @Override
-    public void execute() throws IOException, SQLException, ClassNotFoundException {
+    public void execute() throws IOException, SQLException {
         Validator.requireNonNull(store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         String productName = this.clientConnection.read().toString();
         int quantity = this.clientConnection.read();

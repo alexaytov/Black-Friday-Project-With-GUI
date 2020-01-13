@@ -1,9 +1,9 @@
 package commands;
 
-import commandEnterpreter.interfaces.Executable;
-import commandEnterpreter.interfaces.Inject;
+import command.enterpreter.interfaces.Executable;
+import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
-import connection.ServerClientConnection;
+import connection.Connection;
 import exceptions.NotFoundException;
 import product.Product;
 import store.Store;
@@ -18,7 +18,7 @@ public class GetProductByName implements Executable {
     private Store store;
 
     @Inject
-    private ServerClientConnection clientConnection;
+    private Connection clientConnection;
 
     /**
      * Gets product by name and sends them
@@ -30,7 +30,7 @@ public class GetProductByName implements Executable {
      * @throws CloneNotSupportedException if Product class doesn't support cloneable interface
      */
     @Override
-    public void execute() throws IOException, SQLException, ClassNotFoundException, CloneNotSupportedException {
+    public void execute() throws IOException, SQLException{
         Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         String name = this.clientConnection.read().toString();
         Product chosenProduct;
@@ -40,6 +40,8 @@ public class GetProductByName implements Executable {
         } catch (NotFoundException e) {
             this.store.setChosenProduct(null);
             this.clientConnection.write(null);
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -1,4 +1,4 @@
-package commandEnterpreter.interfaces;
+package command.enterpreter.interfaces;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

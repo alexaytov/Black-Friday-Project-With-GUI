@@ -1,7 +1,7 @@
 package commands;
 
-import commandEnterpreter.interfaces.Executable;
-import commandEnterpreter.interfaces.Inject;
+import command.enterpreter.interfaces.Executable;
+import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import store.Store;
 import validator.Validator;

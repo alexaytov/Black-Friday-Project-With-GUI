@@ -59,11 +59,11 @@ public class RegisterStaff implements Initializable {
     @FXML
     void registerStaff(ActionEvent event) throws IOException, ClassNotFoundException {
         if (checkAllFields()) {
-            App.tcpServer.write("register user");
+            App.serverConnection.write("register user");
             User user = new User(this.username, this.password, Permission.ADMIN, this.firstName, this.lastName, this.age);
-            App.tcpServer.write(user);
+            App.serverConnection.write(user);
             // show user if staff was registered successfully
-            if (App.tcpServer.read()) {
+            if (App.serverConnection.read()) {
                 confirmationPopUp(ConstantMessages.STAFF_REGISTERED);
             } else {
                 confirmationPopUp(ConstantMessages.STAFF_ALREADY_EXISTS);

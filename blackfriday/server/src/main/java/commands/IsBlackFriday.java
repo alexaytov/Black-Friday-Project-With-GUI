@@ -1,9 +1,9 @@
 package commands;
 
-import commandEnterpreter.interfaces.Executable;
-import commandEnterpreter.interfaces.Inject;
+import command.enterpreter.interfaces.Executable;
+import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
-import connection.ServerClientConnection;
+import connection.Connection;
 import store.Store;
 import validator.Validator;
 
@@ -16,7 +16,7 @@ public class IsBlackFriday implements Executable {
     private Store store;
 
     @Inject
-    private ServerClientConnection clientConnection;
+    private Connection clientConnection;
 
     /**
      * Sends result from (code isBlackFriday) method in store

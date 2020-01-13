@@ -1,10 +1,10 @@
-package commandEnterpreter;
+package command.enterpreter;
 
-import commandEnterpreter.interfaces.CommandInterpreter;
-import commandEnterpreter.interfaces.Executable;
-import commandEnterpreter.interfaces.Inject;
+import command.enterpreter.interfaces.Inject;
+import command.enterpreter.interfaces.CommandInterpreter;
+import command.enterpreter.interfaces.Executable;
 import commonMessages.ExceptionMessages;
-import connection.ServerClientConnection;
+import connection.Connection;
 import store.Store;
 
 import java.lang.reflect.Constructor;
@@ -17,16 +17,16 @@ public class CommandFactory implements CommandInterpreter {
 
     private static final String COMMAND_DIRECTORY = "commands.";
     private Store store;
-    private ServerClientConnection serverClientConnection;
+    private Connection connection;
 
-    public CommandFactory(Store store, ServerClientConnection serverClientConnection) {
+    public CommandFactory(Store store, Connection connection) {
         this.setStore(store);
-        this.setServerClientConnection(serverClientConnection);
+        this.setConnection(connection);
     }
 
-    private void setServerClientConnection(ServerClientConnection serverClientConnection) {
-        requireNonNull(serverClientConnection, ExceptionMessages.CONNECTION_NULL);
-        this.serverClientConnection = serverClientConnection;
+    private void setConnection(Connection connection) {
+        requireNonNull(connection, ExceptionMessages.CONNECTION_NULL);
+        this.connection = connection;
     }
 
     private void setStore(Store store) {
@@ -48,7 +48,7 @@ public class CommandFactory implements CommandInterpreter {
             Class<?> commandClass = Class.forName(COMMAND_DIRECTORY + command);
             Constructor<?> declaredConstructor = commandClass.getDeclaredConstructor();
             declaredConstructor.setAccessible(true);
-            executable = (commandEnterpreter.interfaces.Executable) declaredConstructor.newInstance();
+            executable = (Executable) declaredConstructor.newInstance();
             populateDependencies(executable);
         } catch (ClassNotFoundException |
                 NoSuchMethodException |

@@ -29,10 +29,12 @@ public class ExceptionMessages {
     public static final String PRODUCT_ALREADY_EXISTS = "Product with the name %s alread exists!!!";
     public static final String MONTH_MUST_BE_BETWEEN_0_1 = "Month %d must be between 1 and 12!!!";
     public static final String YEAR_MUST_BE_POSITIVE = "Year %d must be a positive number!!!";
-    public static final String CONNECTION_NULL = "ServerClientConnection can't be null!!!";
+    public static final String CONNECTION_NULL = "Connection can't be null!!!";
     public static final String PERMISSION_NULL = "Permission can't be nulL!!!";
     public static final String ACCOUNT_NOT_FOUNT = "Account not found";
     public static final String SOCKET_NULL = "Socket can't be null!!!";
-    public static final String DISCOUNT_PERCENT_NEGATIVE = "Discounte percent can't be below zero!!!";
     public static final String IMAGE_CONTENT_NULL = "Image content can't be null!!!";
+    public static final String PROBLEM_LOADING_FXML_FILE = "There was a problem loading fxml file: %s!!!";
+    public static final String PROBLEM_CONNECTION_TO_SERVER = "There was a problem connecting to the server please try again!";
+    public static final String ENVIREMENT_VARIBLE_PORT_NOT_SET = "Environment variable 'PORT' is not set!";
 }

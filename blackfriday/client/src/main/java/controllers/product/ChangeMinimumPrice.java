@@ -55,10 +55,10 @@ public class ChangeMinimumPrice implements Initializable {
     void submit(ActionEvent event) throws IOException, ClassNotFoundException {
         validatePrice(product.getPrice(), this.minimumPrice);
         // send change product minimum price command to server
-        App.tcpServer.write("change product minimum price");
-        App.tcpServer.write(this.minimumPrice);
+        App.serverConnection.write("change product minimum price");
+        App.serverConnection.write(this.minimumPrice);
         // shows if executed server command was successful
-        if (App.tcpServer.read()) {
+        if (App.serverConnection.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_MINIMUM_PRICE_CHANGED_SUCCESSFUL);
             this.product.setMinimumPrice(this.minimumPrice);
         } else {

@@ -79,23 +79,6 @@ public class Store {
     }
 
     /**
-     * @return all of the client purchases
-     */
-    public Map<String, List<Purchase>> getClientPurchases() throws IOException, SQLException {
-        List<Purchase> purchases = this.purchaseDatabase.read("quantity != 0");
-        HashMap<String, List<Purchase>> purchaseMap = new HashMap<>();
-        for (Purchase purchase : purchases) {
-            if (purchaseMap.containsKey(purchase.getUsername())) {
-                purchaseMap.get(purchase.getUsername()).add(purchase);
-            } else {
-                purchaseMap.put(purchase.getUsername(), new ArrayList<>());
-                purchaseMap.get(purchase.getUsername()).add(purchase);
-            }
-        }
-        return purchaseMap;
-    }
-
-    /**
      * Changes user first name
      *
      * @param username  the username of the user object to be modified
@@ -182,6 +165,23 @@ public class Store {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return all of the client purchases
+     */
+    public Map<String, List<Purchase>> getClientPurchases() throws IOException, SQLException {
+        List<Purchase> purchases = this.purchaseDatabase.read("quantity != 0");
+        HashMap<String, List<Purchase>> purchaseMap = new HashMap<>();
+        for (Purchase purchase : purchases) {
+            if (purchaseMap.containsKey(purchase.getUsername())) {
+                purchaseMap.get(purchase.getUsername()).add(purchase);
+            } else {
+                purchaseMap.put(purchase.getUsername(), new ArrayList<>());
+                purchaseMap.get(purchase.getUsername()).add(purchase);
+            }
+        }
+        return purchaseMap;
     }
 
     public boolean isBlackFriday() throws IOException, SQLException {

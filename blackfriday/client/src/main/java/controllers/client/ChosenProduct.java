@@ -71,11 +71,11 @@ public class ChosenProduct implements Initializable {
         // get entered wanted quantity
         int wantedQuantity = this.wantedQuantity.getValue();
         // send information to server
-        App.tcpServer.write("buy product");
-        App.tcpServer.write(this.product.getName());
-        App.tcpServer.write(wantedQuantity);
+        App.serverConnection.write("buy product");
+        App.serverConnection.write(this.product.getName());
+        App.serverConnection.write(wantedQuantity);
         // get server confirmation
-        if (App.tcpServer.read()) {
+        if (App.serverConnection.read()) {
             confirmationPopUp(String.format("You just purchased %d of %s.", wantedQuantity, this.product.getName()));
             this.product.setQuantity(this.product.getQuantity() - wantedQuantity);
             this.quantityField.setText(String.valueOf(this.product.getQuantity()));

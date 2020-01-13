@@ -22,7 +22,7 @@ public abstract class BaseDatabase<T> implements Database<T> {
     private Statement statement;
     private DataParser<T> parser;
 
-    public BaseDatabase(Connection dbConnection, String tableName, String primaryKey, DataParser<T> parser) throws SQLException {
+    BaseDatabase(Connection dbConnection, String tableName, String primaryKey, DataParser<T> parser) throws SQLException {
         this.tableName = tableName;
         this.primaryKey = primaryKey;
         this.statement = dbConnection.createStatement();

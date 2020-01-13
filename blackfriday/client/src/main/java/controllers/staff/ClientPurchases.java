@@ -71,8 +71,8 @@ public class ClientPurchases implements Initializable {
     @FXML
     void showAllPurchases() throws IOException, ClassNotFoundException {
         // load UI with all purchases
-        App.tcpServer.write("get all clients information");
-        purchases = App.tcpServer.read();
+        App.serverConnection.write("get all clients information");
+        purchases = App.serverConnection.read();
         fillTreeView(purchases);
     }
 

@@ -146,8 +146,8 @@ public class StaffProducts implements Initializable {
         // products tab is selected
         // load all products in GUI
         this.allProductsButton.selectedProperty().setValue(true);
-        App.tcpServer.write("get staff products");
-        List<Product> products = App.tcpServer.read();
+        App.serverConnection.write("get staff products");
+        List<Product> products = App.serverConnection.read();
         fillVBoxWithProducts(products, this.vBoxWithProducts);
     }
 
@@ -156,9 +156,9 @@ public class StaffProducts implements Initializable {
         // clear previously loaded products in GUI
         this.vBoxWithProductsQualityControl.getChildren().clear();
         // execute quantity control command
-        App.tcpServer.write("search quantity control");
-        App.tcpServer.write(this.maximumQuantity);
-        List<Product> products = App.tcpServer.read();
+        App.serverConnection.write("search quantity control");
+        App.serverConnection.write(this.maximumQuantity);
+        List<Product> products = App.serverConnection.read();
         this.products = products;
         if (products.size() == 0) {
             noResultsMessage();
@@ -284,8 +284,8 @@ public class StaffProducts implements Initializable {
     private void loadProductsFromServerToGUI(String serverCommand) throws IOException, ClassNotFoundException {
         // clears previously loaded products in GUI
         this.vBoxWithProducts.getChildren().clear();
-        App.tcpServer.write(serverCommand);
-        List<Product> products = App.tcpServer.read();
+        App.serverConnection.write(serverCommand);
+        List<Product> products = App.serverConnection.read();
         fillVBoxWithProducts(products, this.vBoxWithProducts);
         if (products.size() == 0) {
             noResultsMessage();
@@ -314,13 +314,13 @@ public class StaffProducts implements Initializable {
         this.vBoxWithProducts.getChildren().clear();
         // send search command based of selected type of products
         if (allProductsButton.isSelected()) {
-            App.tcpServer.write("search staff all products");
+            App.serverConnection.write("search staff all products");
         } else {
-            App.tcpServer.write("search staff discounted products");
+            App.serverConnection.write("search staff discounted products");
         }
-        App.tcpServer.write(this.productSearch.getText());
+        App.serverConnection.write(this.productSearch.getText());
         // get products from server
-        List<Product> products = App.tcpServer.read();
+        List<Product> products = App.serverConnection.read();
         // fill UI with products
         fillVBoxWithProducts(products, this.vBoxWithProducts);
         if (vBoxWithProducts.getChildren().size() == 0) {
@@ -372,10 +372,10 @@ public class StaffProducts implements Initializable {
         double discountPercent = getProductInformationFromTextFields.getDiscountPercent();
         Product product = new Product(name, description, quantity, price, minimumPrice, discountPercent, Files.readAllBytes(this.createProductPictureFile.toPath()), size);
         // send new product ot server
-        App.tcpServer.write("create product");
-        App.tcpServer.write(product);
+        App.serverConnection.write("create product");
+        App.serverConnection.write(product);
         // shows uer if product was created successfully
-        if (App.tcpServer.read()) {
+        if (App.serverConnection.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_CREATED);
             resetAllCreateProductField();
         } else {
@@ -402,7 +402,7 @@ public class StaffProducts implements Initializable {
         Timeline verifyQuantityControlField = new Timeline(new KeyFrame(Duration.millis(50), event -> {
             try {
                 int quantity = Integer.parseInt(this.quantityControlField.getText());
-                validateQuantity(quantity);
+                requireNonNegative(quantity, ExceptionMessages.QUANTITY_NEGATIVE);
                 this.quantityControlSearchButton.setDisable(false);
                 this.maximumQuantity = quantity;
             } catch (IllegalArgumentException ex) {
@@ -473,7 +473,7 @@ public class StaffProducts implements Initializable {
             if (unfocused) {
                 try {
                     int quantity = Integer.parseInt(quantityTextField.getText());
-                    validateQuantity(quantity);
+                    requireNonNegative(quantity, ExceptionMessages.QUANTITY_NEGATIVE);
                     quantityTextField.setUnFocusColor(textFieldDefaultUnfocusedColor);
                 } catch (IllegalArgumentException ex) {
                     createProductButton.setDisable(true);
@@ -552,9 +552,9 @@ public class StaffProducts implements Initializable {
             int quantity = Integer.parseInt(this.quantityTextField.getText());
             // validate all fields
             requireNonBlank(name, ExceptionMessages.NAME_NULL_OR_EMPTY);
-//            requireNonBlank(size, ExceptionMessages.SIZE_NULL_OR_EMPTY);
+            // requireNonBlank(size, ExceptionMessages.SIZE_NULL_OR_EMPTY);
             requireNonBlank(description, ExceptionMessages.DESCRIPTION_NULL_OR_EMPTY);
-            validateQuantity(quantity);
+            requireNonNegative(quantity, ExceptionMessages.QUANTITY_NEGATIVE);
             validateDiscountPercent(discountPercent, price, minimumPrice);
             return true;
         } catch (IllegalArgumentException ex) {

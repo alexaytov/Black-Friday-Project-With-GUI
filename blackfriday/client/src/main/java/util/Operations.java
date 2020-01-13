@@ -1,20 +1,27 @@
 package util;
 
+import application.App;
 import commonMessages.ConstantMessages;
+import commonMessages.ExceptionMessages;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-import application.App;
 
 import java.io.IOException;
 
 public class Operations {
 
-    public static FXMLLoader loadWindow(String fxmlPath, int width, int height) throws IOException {
+    public static FXMLLoader loadWindow(String fxmlPath, int width, int height) {
         FXMLLoader loader = new FXMLLoader(Operations.class.getResource(fxmlPath));
-        Parent root = loader.load();
+        Parent root;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new IllegalStateException(String.format(ExceptionMessages.PROBLEM_LOADING_FXML_FILE, fxmlPath));
+        }
         Scene scene = new Scene(root, width, height);
         Stage stage = new Stage();
         stage.setScene(scene);
@@ -27,10 +34,10 @@ public class Operations {
     public static <T> boolean changeUserField(String commandToServer,
                                               T newVariable,
                                               String messageIfSuccessful,
-                                              String messageIfUnsuccessful) throws IOException, ClassNotFoundException {
-        App.tcpServer.write(commandToServer);
-        App.tcpServer.write(newVariable);
-        boolean changeSuccessful = App.tcpServer.read();
+                                              String messageIfUnsuccessful) {
+        App.serverConnection.write(commandToServer);
+        App.serverConnection.write(newVariable);
+        boolean changeSuccessful = App.serverConnection.read();
         if (changeSuccessful) {
             confirmationPopUp(messageIfSuccessful);
             return true;

@@ -1,8 +1,8 @@
 package commands;
 
-import commandEnterpreter.interfaces.Executable;
-import commandEnterpreter.interfaces.Inject;
-import connection.ServerClientConnection;
+import command.enterpreter.interfaces.Executable;
+import command.enterpreter.interfaces.Inject;
+import connection.Connection;
 import exceptions.DataAlreadyExistsException;
 import store.Store;
 import user.User;
@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class RegisterUser implements Executable {
 
     @Inject
-    private ServerClientConnection clientConnection;
+    private Connection clientConnection;
 
     @Inject
     private Store store;
@@ -21,12 +21,11 @@ public class RegisterUser implements Executable {
     /**
      * Registers new user in store
      *
-     * @throws IOException            if IO error occurs
-     * @throws SQLException           if SQL error occurs
-     * @throws ClassNotFoundException if read class by (@code clientConnection) is not found
+     * @throws IOException  if IO error occurs
+     * @throws SQLException if SQL error occurs
      */
     @Override
-    public void execute() throws IOException, SQLException, ClassNotFoundException {
+    public void execute() throws IOException, SQLException {
         User user = this.clientConnection.read();
         try {
             this.store.registerUser(user);

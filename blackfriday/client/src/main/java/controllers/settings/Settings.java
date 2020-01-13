@@ -95,9 +95,9 @@ public class Settings implements Initializable {
 
     @FXML
     void deleteAccount(ActionEvent event) throws IOException, ClassNotFoundException {
-        App.tcpServer.write("delete user");
+        App.serverConnection.write("delete user");
         // show user if command was executed successfully
-        if (App.tcpServer.read()) {
+        if (App.serverConnection.read()) {
             confirmationPopUp("User successfully deleted!");
             this.backButton.getScene().getWindow().hide();
             Operations.loadWindow("/view/login.fxml", 600, 350);
@@ -109,12 +109,8 @@ public class Settings implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // get currently logged user information from server
-        try {
-            App.tcpServer.write("get logged in user");
-            this.user = App.tcpServer.read();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        App.serverConnection.write("get logged in user");
+        this.user = App.serverConnection.read();
         // refresh all fields text properties
         Timeline refreshTextFieldsTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> refreshTextFields()));
         refreshTextFieldsTimeline.setCycleCount(Timeline.INDEFINITE);

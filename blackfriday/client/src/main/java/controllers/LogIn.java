@@ -78,22 +78,22 @@ public class LogIn {
     }
 
     private User login(String username, String password) throws WrongPasswordException, NotFoundException, IOException, ClassNotFoundException {
-        App.tcpServer.write("login");
+        App.serverConnection.write("login");
         // get user password salt
-        App.tcpServer.write(username);
-        String salt = App.tcpServer.read();
+        App.serverConnection.write(username);
+        String salt = App.serverConnection.read();
         User user = null;
         if (salt != null) {
             // hash password with same salt when password originally hashed
             String hashedPassword = BCryptHasher.hash(password, salt);
             // send password
-            App.tcpServer.write(hashedPassword);
+            App.serverConnection.write(hashedPassword);
             // get user
-            user = App.tcpServer.read();
+            user = App.serverConnection.read();
         }
         // if user null, read exception
         if (user == null) {
-            String exceptionType = App.tcpServer.read().toString();
+            String exceptionType = App.serverConnection.read().toString();
             if (exceptionType.equals("WrongPasswordException")) {
                 throw new WrongPasswordException(ExceptionMessages.WRONG_PASSWORD);
             } else if (exceptionType.equals("NotFoundException")) {

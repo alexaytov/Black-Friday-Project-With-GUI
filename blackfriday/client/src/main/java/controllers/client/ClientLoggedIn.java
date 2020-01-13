@@ -62,9 +62,9 @@ public class ClientLoggedIn implements Initializable {
     private VBox vBoxWithProducts;
 
     @FXML
-    void goBack(ActionEvent event) throws IOException {
+    void goBack(ActionEvent event) {
         // go to previous window
-        App.tcpServer.write("logout");
+        App.serverConnection.write("logout");
         this.vBoxWithProducts.getScene().getWindow().hide();
         Operations.loadWindow("/view/login.fxml", 600, 350);
     }
@@ -86,24 +86,16 @@ public class ClientLoggedIn implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            // check if black friday is started
-            App.tcpServer.write("is black friday");
-            boolean storeHasPromotions = App.tcpServer.read();
-            // make black friday products button visible is black friday is active
-            if (storeHasPromotions) {
-                productsFilterChoice.setVisible(true);
-            } else {
-                productsFilterChoice.setVisible(false);
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+        // check if black friday is started
+        App.serverConnection.write("is black friday");
+        boolean storeHasPromotions = App.serverConnection.read();
+        // make black friday products button visible is black friday is active
+        if (storeHasPromotions) {
+            productsFilterChoice.setVisible(true);
+        } else {
+            productsFilterChoice.setVisible(false);
         }
-        try {
-            loadAllProductsFromServerToUI("get client products");
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        loadAllProductsFromServerToUI("get client products");
     }
 
     private void fillVBoxWithProducts(List<Product> products, VBox vBoxWithProducts) {
@@ -138,7 +130,7 @@ public class ClientLoggedIn implements Initializable {
     }
 
     @FXML
-    void showAllProducts(ActionEvent event) throws IOException, ClassNotFoundException {
+    void showAllProducts(ActionEvent event) {
         // show all products based on which button is selected - allProducts and blackFridayProducts
         if (allProductsButton.isSelected()) {
             loadAllProductsFromServerToUI("get client products");
@@ -148,16 +140,16 @@ public class ClientLoggedIn implements Initializable {
     }
 
     @FXML
-    void loadAllProducts(ActionEvent event) throws IOException, ClassNotFoundException {
+    void loadAllProducts(ActionEvent event) {
         // loads all products to UI
         loadAllProductsFromServerToUI("get client products");
     }
 
-    private void loadAllProductsFromServerToUI(String serverCommand) throws IOException, ClassNotFoundException {
+    private void loadAllProductsFromServerToUI(String serverCommand) {
         // send command for products to server
-        App.tcpServer.write(serverCommand);
+        App.serverConnection.write(serverCommand);
         // get products list from server
-        List<Product> products = App.tcpServer.read();
+        List<Product> products = App.serverConnection.read();
         // fill UI with products
         fillVBoxWithProducts(products, this.vBoxWithProducts);
         // if there are not products set no results message to UI
@@ -167,24 +159,24 @@ public class ClientLoggedIn implements Initializable {
     }
 
     @FXML
-    void loadDiscountedProducts(ActionEvent event) throws IOException, ClassNotFoundException {
+    void loadDiscountedProducts(ActionEvent event) {
         // loads all discounted products to UI
         loadAllProductsFromServerToUI("get client discounted products");
     }
 
     @FXML
-    void searchProduct(ActionEvent event) throws IOException, ClassNotFoundException {
+    void searchProduct(ActionEvent event) {
         // gets searched product name
         String searchedProductName = this.productSearch.getText();
         if (allProductsButton.isSelected()) {
-            App.tcpServer.write("search client all products");
-            App.tcpServer.write(searchedProductName);
+            App.serverConnection.write("search client all products");
+            App.serverConnection.write(searchedProductName);
         } else {
-            App.tcpServer.write("search client discounted products");
-            App.tcpServer.write(searchedProductName);
+            App.serverConnection.write("search client discounted products");
+            App.serverConnection.write(searchedProductName);
         }
         // get products from server
-        List<Product> products = App.tcpServer.read();
+        List<Product> products = App.serverConnection.read();
         // fill UI with result from search
         fillVBoxWithProducts(products, this.vBoxWithProducts);
         if (this.vBoxWithProducts.getChildren().size() == 0) {

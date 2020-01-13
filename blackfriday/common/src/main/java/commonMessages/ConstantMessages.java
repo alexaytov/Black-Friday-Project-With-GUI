@@ -36,4 +36,5 @@ public class ConstantMessages {
     public static final String NO_RESULTS = "No Results Found";
     public static final String PRODUCT_DELETED_SUCCESSFULLY = "Product was deleted successfully!";
     public static final String PRODUCT_DELETED_UNSUCCESSFULLY = "There was a problem deleting the product please try again!";
+    public static final String THREAD_STARTED = "Thread started!!!";
 }
