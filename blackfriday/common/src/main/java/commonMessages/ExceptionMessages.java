@@ -40,4 +40,5 @@ public class ExceptionMessages {
     public static final String EARNINGS_SERVICE_NULL = "Earning service can't be null!";
     public static final String USER_SERVICE_NULL = "User service can't be null!";
     public static final String PRODUCT_SERVICE_NULL = "Product service can't be null!";
+    public static final String PROBLEM_DELETING_USER = "There was a problem deleting user!";
 }

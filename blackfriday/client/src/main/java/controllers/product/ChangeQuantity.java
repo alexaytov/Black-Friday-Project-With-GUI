@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.util.Duration;
 import product.Product;
 import util.Operations;
+import util.Windows;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -58,7 +59,7 @@ public class ChangeQuantity implements Initializable {
             confirmationPopUp(ConstantMessages.PRODUCT_QUANTITY_CHANGED_UNSUCCESSFUL);
         }
 
-        FXMLLoader loader = Operations.loadWindow("/view/staff/staffChosenProduct.fxml", 600, 600);
+        FXMLLoader loader = Operations.loadWindow(Windows.STAFF_CHOSEN_PRODUCT_PATH, Windows.STAFF_CHOSEN_PRODUCT_WIDTH, Windows.STAFF_CHOSEN_PRODUCT_HEIGHT);
         StaffChosenProduct controller = loader.getController();
         controller.initProduct(product);
         this.checkIfAllDataIsValid.stop();

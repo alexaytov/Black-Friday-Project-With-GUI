@@ -16,9 +16,8 @@ import passwordHasher.BCryptHasher;
 import user.Permission;
 import user.User;
 import util.Operations;
+import util.Windows;
 import validator.Validator;
-
-import java.io.IOException;
 
 import static util.Operations.showWarningDialog;
 
@@ -34,7 +33,7 @@ public class LogIn {
     private JFXButton logInButton;
 
     @FXML
-    void logIn(ActionEvent event) throws IOException, ClassNotFoundException {
+    void logIn(ActionEvent event) {
         // get input data from text fields
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -49,12 +48,12 @@ public class LogIn {
                 this.usernameField.getScene().getWindow().hide();
                 if (user.getPermission().equals(Permission.CLIENT)) {
                     // logged in as client
-                    FXMLLoader loader = Operations.loadWindow("/view/client/clientLoggedIn.fxml", 650, 800);
+                    FXMLLoader loader = Operations.loadWindow(Windows.CLIENT_LOGGED_IN_PATH, Windows.CLIENT_LOGGED_IN_WIDTH, Windows.CLIENT_LOGGED_IN_HEIGHT);
                     ClientLoggedIn controller = loader.getController();
                     controller.initUser(user);
                 } else {
                     // logged in as admin
-                    FXMLLoader loader = Operations.loadWindow("/view/staff/staffLoggedIn.fxml", 600, 600);
+                    FXMLLoader loader = Operations.loadWindow(Windows.STAFF_LOGGED_IN_PATH, Windows.STAFF_LOGGED_IN_WIDTH, Windows.STAFF_LOGGED_IN_HEIGHT);
                     StaffLoggedIn controller = loader.getController();
                     controller.initUser(user);
                 }
@@ -74,10 +73,10 @@ public class LogIn {
     void signUp(ActionEvent event) {
         // go to sign up window
         this.logInButton.getScene().getWindow().hide();
-        Operations.loadWindow("/view/signUp.fxml", 600, 550);
+        Operations.loadWindow(Windows.REGISTER_PATH, Windows.REGISTER_WIDTH, Windows.REGISTER_HEIGHT);
     }
 
-    private User login(String username, String password) throws WrongPasswordException, NotFoundException, IOException, ClassNotFoundException {
+    private User login(String username, String password) throws WrongPasswordException, NotFoundException {
         App.serverConnection.write("login");
         // get user password salt
         App.serverConnection.write(username);

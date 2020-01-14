@@ -3,6 +3,8 @@ package controllers.settings;
 import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.ConstantMessages;
+import commonMessages.ExceptionMessages;
 import controllers.client.ClientLoggedIn;
 import controllers.staff.StaffLoggedIn;
 import javafx.animation.KeyFrame;
@@ -15,6 +17,7 @@ import javafx.util.Duration;
 import user.Permission;
 import user.User;
 import util.Operations;
+import util.Windows;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -43,35 +46,35 @@ public class Settings implements Initializable {
 
     @FXML
     void ChangeAge(ActionEvent event) {
-        FXMLLoader loader = Operations.loadWindow("/view/settings/ageChange.fxml", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(Windows.AGE_CHANGE_PATH, Windows.AGE_CHANGE_WIDTH, Windows.AGE_CHANGE_HEIGHT);
         AgeChange controller = loader.getController();
         controller.initUser(this.user);
     }
 
     @FXML
     void changeFirstName(ActionEvent event) {
-        FXMLLoader loader = Operations.loadWindow("/view/settings/firstNameChange.fxml", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(Windows.FIRST_NAME_CHANGE_PATH, Windows.FIRST_NAME_CHANGE_WIDTH, Windows.FIRST_NAME_CHANGE_HEIGHT);
         FirstNameChange controller = loader.getController();
         controller.initUser(this.user);
     }
 
     @FXML
     void changeLastName(ActionEvent event) {
-        FXMLLoader loader = Operations.loadWindow("/view/settings/lastNameChange.fxml", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(Windows.LAST_NAME_CHANGE_PATH, Windows.LAST_NAME_CHANGE_WIDTH, Windows.LAST_NAME_CHANGE_HEIGHT);
         LastNameChange controller = loader.getController();
         controller.initUser(this.user);
     }
 
     @FXML
     void changePassword(ActionEvent event) {
-        FXMLLoader loader = Operations.loadWindow("/view/settings/passwordChange.fxml", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(Windows.PASSWORD_CHANGE_PATH, Windows.PASSWORD_CHANGE_WIDTH, Windows.PASSWORD_CHANGE_HEIGHT);
         PasswordChange controller = loader.getController();
         controller.initUser(this.user);
     }
 
     @FXML
     void changeUsername(ActionEvent event) {
-        FXMLLoader loader = Operations.loadWindow("/view/settings/usernameChange.fxml", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(Windows.USERNAME_CHANGE_PATH, Windows.USERNAME_CHANGE_WIDTH, Windows.USERNAME_CHANGE_HEIGHT);
         UsernameChange controller = loader.getController();
         controller.initUser(this.user);
     }
@@ -82,11 +85,11 @@ public class Settings implements Initializable {
         FXMLLoader loader;
         // load admin/client window based on user permission
         if ((this.user.getPermission().equals(Permission.CLIENT))) {
-            loader = Operations.loadWindow("/view/client/clientLoggedIn.fxml", 650, 800);
+            loader = Operations.loadWindow(Windows.CLIENT_LOGGED_IN_PATH, Windows.CLIENT_LOGGED_IN_WIDTH, Windows.CLIENT_LOGGED_IN_HEIGHT);
             ClientLoggedIn controller = loader.getController();
             controller.initUser(this.user);
         } else if (this.user.getPermission().equals(Permission.ADMIN)) {
-            loader = Operations.loadWindow("/view/staff/staffLoggedIn.fxml", 600, 600);
+            loader = Operations.loadWindow(Windows.STAFF_CHOSEN_PRODUCT_PATH, Windows.STAFF_CHOSEN_PRODUCT_WIDTH, Windows.STAFF_CHOSEN_PRODUCT_HEIGHT);
             StaffLoggedIn controller = loader.getController();
             controller.initUser(this.user);
         }
@@ -97,11 +100,11 @@ public class Settings implements Initializable {
         App.serverConnection.write("delete user");
         // show user if command was executed successfully
         if (App.serverConnection.read()) {
-            confirmationPopUp("User successfully deleted!");
+            confirmationPopUp(ConstantMessages.USER_DELETED);
             this.backButton.getScene().getWindow().hide();
-            Operations.loadWindow("/view/login.fxml", 600, 350);
+            Operations.loadWindow(Windows.LOGIN_PATH, Windows.LOGIN_WIDTH, Windows.LOGIN_HEIGHT);
         } else {
-            confirmationPopUp("There was a problem deleting user!");
+            confirmationPopUp(ExceptionMessages.PROBLEM_DELETING_USER);
         }
     }
 

@@ -37,4 +37,6 @@ public class ConstantMessages {
     public static final String PRODUCT_DELETED_SUCCESSFULLY = "Product was deleted successfully!";
     public static final String PRODUCT_DELETED_UNSUCCESSFULLY = "There was a problem deleting the product please try again!";
     public static final String THREAD_STARTED = "Thread started!!!";
+    public static final String PRODUCT_BOUGHT_SUCCESSFULLY = "You just purchased %d of %s.";
+    public static final String USER_DELETED = "User successfully deleted!";
 }

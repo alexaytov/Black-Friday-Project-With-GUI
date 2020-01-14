@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import product.Product;
 import user.User;
 import util.Operations;
+import util.Windows;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -66,14 +67,14 @@ public class ClientLoggedIn implements Initializable {
         // go to previous window
         App.serverConnection.write("logout");
         this.vBoxWithProducts.getScene().getWindow().hide();
-        Operations.loadWindow("/view/login.fxml", 600, 350);
+        Operations.loadWindow(Windows.LOGIN_PATH, Windows.LOGIN_WIDTH, Windows.LOGIN_HEIGHT);
     }
 
     @FXML
     void settings(ActionEvent event) throws IOException {
         // go to settings menu
         this.vBoxWithProducts.getScene().getWindow().hide();
-        Operations.loadWindow("/view/staff/staffSettings.fxml", 600, 400);
+        Operations.loadWindow(Windows.STAFF_SETTINGS_PATH, Windows.STAFF_SETTINGS_WIDTH, Windows.STAFF_SETTINGS_HEIGHT);
     }
 
     @FXML
@@ -223,7 +224,7 @@ public class ClientLoggedIn implements Initializable {
         vbox.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             this.welcomeMessage.getScene().getWindow().hide();
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/view/client/clientChosenProduct.fxml"));
+            loader.setLocation(getClass().getResource(Windows.CLIENT_CHOSEN_PRODUCT));
             Stage stage = new Stage();
             Parent root = null;
             try {

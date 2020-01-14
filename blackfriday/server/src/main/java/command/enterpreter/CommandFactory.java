@@ -2,7 +2,6 @@ package command.enterpreter;
 
 import command.enterpreter.interfaces.CommandInterpreter;
 import command.enterpreter.interfaces.Executable;
-import command.enterpreter.interfaces.Inject;
 import commands.*;
 import connection.Connection;
 import database.ProductDatabase;
@@ -14,7 +13,6 @@ import store.services.ProductService;
 import store.services.PurchaseService;
 import store.services.UserService;
 
-import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.HashMap;
 
@@ -99,36 +97,6 @@ public class CommandFactory implements CommandInterpreter {
         commands.put("StartBlackFriday", new StartBlackFriday(store, userService));
         commands.put("StopBlackFriday", new StopBlackFriday(store, userService));
 
-    }
-
-    /**
-     * Checks if all the fields in the command
-     * have (@code Injection) annotation
-     * and if they do it sets their value
-     *
-     * @param executable the executable command
-     */
-    private void populateDependencies(Executable executable) {
-        Field[] executableFields = executable.getClass().getDeclaredFields();
-        Field[] currentClassFields = this.getClass().getDeclaredFields();
-
-        for (Field executableField : executableFields) {
-            try {
-                executableField.getAnnotation(Inject.class);
-            } catch (ClassCastException ex) {
-                continue;
-            }
-            for (Field currentClassField : currentClassFields) {
-                if (currentClassField.getType().equals(executableField.getType())) {
-                    try {
-                        executableField.setAccessible(true);
-                        executableField.set(executable, currentClassField.get(this));
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
     }
 
     /**

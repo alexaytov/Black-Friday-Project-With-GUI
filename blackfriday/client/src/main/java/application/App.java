@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import util.Operations;
+import util.Windows;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -31,7 +32,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Operations.loadWindow("/view/login.fxml", 600, 350);
+        Operations.loadWindow(Windows.LOGIN_PATH, Windows.LOGIN_WIDTH, Windows.LOGIN_HEIGHT);
         // use localhost ip for server
         InetAddress ip = InetAddress.getLocalHost();
         // get port number from environment variables

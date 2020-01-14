@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import user.Permission;
 import user.User;
 import util.Operations;
+import util.Windows;
 
 import static util.Operations.showWarningDialog;
 import static validator.Validator.requireNonBlank;
@@ -38,7 +39,7 @@ public class SignUp {
     @FXML
     void goToLoginScreen(ActionEvent event) {
         signUpButton.getScene().getWindow().hide();
-        Operations.loadWindow("/view/login.fxml", 600, 350);
+        Operations.loadWindow(Windows.LOGIN_PATH, Windows.LOGIN_WIDTH, Windows.LOGIN_HEIGHT);
     }
 
     @FXML
@@ -60,7 +61,7 @@ public class SignUp {
             if (registerUser(user)) {
                 // client registered successfully
                 signUpButton.getScene().getWindow().hide();
-                Operations.loadWindow("/view/login.fxml", 600, 400);
+                Operations.loadWindow(Windows.LOGIN_PATH, Windows.LOGIN_WIDTH, Windows.LOGIN_HEIGHT);
             } else {
                 showWarningDialog(ConstantMessages.CLIENT_ALREADY_EXISTS);
             }

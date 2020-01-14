@@ -3,6 +3,7 @@ package controllers.client;
 import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -19,6 +20,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.util.Duration;
 import product.Product;
 import util.Operations;
+import util.Windows;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -75,7 +77,7 @@ public class ChosenProduct implements Initializable {
         App.serverConnection.write(wantedQuantity);
         // get server confirmation
         if (App.serverConnection.read()) {
-            confirmationPopUp(String.format("You just purchased %d of %s.", wantedQuantity, this.product.getName()));
+            confirmationPopUp(String.format(ConstantMessages.PRODUCT_BOUGHT_SUCCESSFULLY, wantedQuantity, this.product.getName()));
             this.product.setQuantity(this.product.getQuantity() - wantedQuantity);
             this.quantityField.setText(String.valueOf(this.product.getQuantity()));
         } else {
@@ -87,7 +89,7 @@ public class ChosenProduct implements Initializable {
     void goBack(ActionEvent event) {
         // go to previous window
         this.nameField.getScene().getWindow().hide();
-        Operations.loadWindow("/view/client/clientLoggedIn.fxml", 650, 800);
+        Operations.loadWindow(Windows.CLIENT_LOGGED_IN_PATH, Windows.CLIENT_LOGGED_IN_WIDTH, Windows.CLIENT_LOGGED_IN_HEIGHT);
     }
 
     public void initProduct(Product product) {

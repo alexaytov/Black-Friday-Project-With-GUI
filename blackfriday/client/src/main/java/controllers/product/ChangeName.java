@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.util.Duration;
 import util.Operations;
+import util.Windows;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -51,7 +52,7 @@ public class ChangeName implements Initializable {
             confirmationPopUp(ConstantMessages.PRODUCT_NAME_CHANGED_UNSUCCESSFUL);
         }
         // load product window
-        FXMLLoader loader = Operations.loadWindow("/view/staff/staffChosenProduct.fxml", 600, 600);
+        FXMLLoader loader = Operations.loadWindow(Windows.STAFF_CHOSEN_PRODUCT_PATH, Windows.STAFF_CHOSEN_PRODUCT_WIDTH, Windows.STAFF_CHOSEN_PRODUCT_HEIGHT);
         // initialize product in StaffChosenProduct controller
         StaffChosenProduct controller = loader.getController();
         controller.initProduct(this.nameField.getText());
