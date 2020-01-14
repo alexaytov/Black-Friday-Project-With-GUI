@@ -36,5 +36,8 @@ public class ExceptionMessages {
     public static final String IMAGE_CONTENT_NULL = "Image content can't be null!!!";
     public static final String PROBLEM_LOADING_FXML_FILE = "There was a problem loading fxml file: %s!!!";
     public static final String PROBLEM_CONNECTION_TO_SERVER = "There was a problem connecting to the server please try again!";
-    public static final String ENVIREMENT_VARIBLE_PORT_NOT_SET = "Environment variable 'PORT' is not set!";
+    public static final String ENVIRONMENT_VARIABLES_PORT_NOT_SET = "Environment variable 'PORT' is not set!";
+    public static final String EARNINGS_SERVICE_NULL = "Earning service can't be null!";
+    public static final String USER_SERVICE_NULL = "User service can't be null!";
+    public static final String PRODUCT_SERVICE_NULL = "Product service can't be null!";
 }

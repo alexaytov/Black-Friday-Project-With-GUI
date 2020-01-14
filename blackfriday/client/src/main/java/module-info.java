@@ -1,4 +1,4 @@
-module openjfx {
+module application {
     requires javafx.controls;
     requires javafx.fxml;
     requires com.jfoenix;

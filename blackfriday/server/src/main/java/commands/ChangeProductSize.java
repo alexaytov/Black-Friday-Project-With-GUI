@@ -4,7 +4,8 @@ import command.enterpreter.interfaces.Executable;
 import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
-import store.Store;
+import store.services.ProductService;
+import store.services.UserService;
 import validator.Validator;
 
 import java.io.IOException;
@@ -13,10 +14,13 @@ import java.sql.SQLException;
 public class ChangeProductSize implements Executable {
 
     @Inject
-    private Store store;
+    private Connection clientConnection;
 
     @Inject
-    private Connection clientConnection;
+    private UserService userService;
+
+    @Inject
+    private ProductService productService;
 
     /**
      * Changes chosen product size
@@ -26,9 +30,9 @@ public class ChangeProductSize implements Executable {
      */
     @Override
     public void execute() throws IOException, SQLException {
-        Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
+        Validator.requireNonNull(userService.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         String newSize = this.clientConnection.read().toString();
-        this.store.changeProductSize(newSize);
+        productService.changeProductSize(newSize);
         this.clientConnection.write(true);
     }
 }

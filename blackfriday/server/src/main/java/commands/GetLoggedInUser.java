@@ -4,7 +4,7 @@ import command.enterpreter.interfaces.Executable;
 import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
-import store.Store;
+import store.services.UserService;
 import validator.Validator;
 
 import java.io.IOException;
@@ -16,7 +16,7 @@ public class GetLoggedInUser implements Executable {
     private Connection clientConnection;
 
     @Inject
-    private Store store;
+    private UserService userService;
 
     /**
      * Gets currently logged in user in store
@@ -26,7 +26,7 @@ public class GetLoggedInUser implements Executable {
      */
     @Override
     public void execute() throws IOException, SQLException {
-        Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
-        this.clientConnection.write(store.getLoggedInUser());
+        Validator.requireNonNull(userService.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
+        this.clientConnection.write(userService.getLoggedInUser());
     }
 }

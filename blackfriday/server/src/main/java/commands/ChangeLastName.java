@@ -4,7 +4,7 @@ import command.enterpreter.interfaces.Executable;
 import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
-import store.Store;
+import store.services.UserService;
 import validator.Validator;
 
 import java.io.IOException;
@@ -13,10 +13,10 @@ import java.sql.SQLException;
 public class ChangeLastName implements Executable {
 
     @Inject
-    private Store store;
+    private Connection clientConnection;
 
     @Inject
-    private Connection clientConnection;
+    private UserService userService;
 
     /**
      * Changes logged in user last name
@@ -27,8 +27,8 @@ public class ChangeLastName implements Executable {
      */
     @Override
     public void execute() throws IOException, SQLException {
-        Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
-        boolean isLastNameChangeSuccessful = this.store.changeUserLastName(this.store.getLoggedInUser().getUsername(), this.clientConnection.read());
+        Validator.requireNonNull(userService.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
+        boolean isLastNameChangeSuccessful = userService.changeUserLastName(userService.getLoggedInUser().getUsername(), this.clientConnection.read());
         this.clientConnection.write(isLastNameChangeSuccessful);
     }
 }

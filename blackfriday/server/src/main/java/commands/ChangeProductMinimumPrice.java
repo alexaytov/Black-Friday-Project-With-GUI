@@ -5,6 +5,8 @@ import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
 import store.Store;
+import store.services.ProductService;
+import store.services.UserService;
 import validator.Validator;
 
 import java.io.IOException;
@@ -18,6 +20,12 @@ public class ChangeProductMinimumPrice implements Executable {
     @Inject
     private Store store;
 
+    @Inject
+    private UserService userService;
+
+    @Inject
+    private ProductService productService;
+
     /**
      * Changes chosen product minimum price
      * and return to client if operation was successful
@@ -27,10 +35,10 @@ public class ChangeProductMinimumPrice implements Executable {
      */
     @Override
     public void execute() throws IOException, SQLException {
-        Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
+        Validator.requireNonNull(userService.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         double minimumPrice = this.clientConnection.read();
         try {
-            this.store.changeProductMinimumPrice(minimumPrice);
+            productService.changeProductMinimumPrice(minimumPrice);
             this.clientConnection.write(true);
         } catch (IllegalArgumentException ex) {
             this.clientConnection.write(false);

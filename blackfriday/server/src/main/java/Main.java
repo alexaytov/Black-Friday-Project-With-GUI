@@ -1,7 +1,5 @@
 import server.Server;
-import store.Store;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,11 +12,8 @@ public class Main {
         String password = System.getenv("DATABASE_PASSWORD");
         final int port = Integer.parseInt(System.getenv("PORT"));
         try (Connection DBConnection = DriverManager.getConnection(url, user, password)) {
-            Store store = new Store(DBConnection);
-            Server server = new Server(store, port);
+            Server server = new Server(port, DBConnection);
             server.launch();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
         } catch (SQLException e) {
             e.printStackTrace();
         }

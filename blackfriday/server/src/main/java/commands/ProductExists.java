@@ -5,7 +5,8 @@ import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
 import exceptions.NotFoundException;
-import store.Store;
+import store.services.ProductService;
+import store.services.UserService;
 import validator.Validator;
 
 import java.io.IOException;
@@ -14,10 +15,13 @@ import java.sql.SQLException;
 public class ProductExists implements Executable {
 
     @Inject
-    private Store store;
+    private Connection clientConnection;
 
     @Inject
-    private Connection clientConnection;
+    private UserService userService;
+
+    @Inject
+    private ProductService productService;
 
     /**
      * Checks if a product with name read from (@code clientConnection) exists in store
@@ -28,9 +32,9 @@ public class ProductExists implements Executable {
      */
     @Override
     public void execute() throws IOException, SQLException {
-        Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
+        Validator.requireNonNull(userService.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         try {
-            this.store.getProductByName(this.clientConnection.read().toString());
+            productService.getProductByName(this.clientConnection.read().toString());
             this.clientConnection.write(true);
         } catch (NotFoundException e) {
             this.clientConnection.write(false);

@@ -45,7 +45,7 @@ public class App extends Application {
             showWarningDialog(ex.getMessage());
             Platform.exit();
         }catch (NumberFormatException ex){
-            showWarningDialog(ExceptionMessages.ENVIREMENT_VARIBLE_PORT_NOT_SET);
+            showWarningDialog(ExceptionMessages.ENVIRONMENT_VARIABLES_PORT_NOT_SET);
             Platform.exit();
         }
 

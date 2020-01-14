@@ -4,7 +4,6 @@ import command.enterpreter.interfaces.CommandInterpreter;
 import command.enterpreter.interfaces.Executable;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
-import store.Store;
 import validator.Validator;
 
 import java.io.IOException;
@@ -18,7 +17,7 @@ public class ClientCommandExecutor implements Runnable {
     private CommandInterpreter commandInterpreter;
 
 
-    public ClientCommandExecutor(Connection clientConnection, Store store, CommandInterpreter commandInterpreter) {
+    public ClientCommandExecutor(Connection clientConnection, CommandInterpreter commandInterpreter) {
         setClientConnection(clientConnection);
         this.setCommandInterpreter(commandInterpreter);
 

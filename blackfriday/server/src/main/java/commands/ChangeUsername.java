@@ -5,7 +5,7 @@ import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
 import exceptions.DataAlreadyExistsException;
-import store.Store;
+import store.services.UserService;
 import validator.Validator;
 
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class ChangeUsername implements Executable {
     private Connection clientConnection;
 
     @Inject
-    private Store store;
+    private UserService userService;
 
     /**
      * Changes logged in user's username
@@ -29,10 +29,10 @@ public class ChangeUsername implements Executable {
      */
     @Override
     public void execute() throws IOException, SQLException {
-        Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
+        Validator.requireNonNull(userService.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         boolean isUsernameChangeSuccessful;
         try {
-            isUsernameChangeSuccessful = this.store.changeUsername(this.store.getLoggedInUser().getUsername(), this.clientConnection.read());
+            isUsernameChangeSuccessful = userService.changeUsername(userService.getLoggedInUser().getUsername(), this.clientConnection.read());
         } catch (DataAlreadyExistsException e) {
             isUsernameChangeSuccessful = false;
         }

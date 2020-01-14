@@ -4,6 +4,7 @@ import command.enterpreter.interfaces.Executable;
 import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import store.Store;
+import store.services.UserService;
 import validator.Validator;
 
 import java.io.IOException;
@@ -14,6 +15,9 @@ public class StopBlackFriday implements Executable {
     @Inject
     private Store store;
 
+    @Inject
+    private UserService userService;
+
     /**
      * Calls (@code setBlackFriday) in store with argument (@code false)
      *
@@ -22,7 +26,7 @@ public class StopBlackFriday implements Executable {
      */
     @Override
     public void execute() throws IOException, SQLException {
-        Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
+        Validator.requireNonNull(userService.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         this.store.setBlackFriday(false);
     }
 }

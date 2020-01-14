@@ -4,23 +4,23 @@ import command.enterpreter.CommandFactory;
 import commonMessages.ConstantMessages;
 import connection.Connection;
 import connection.TCPConnection;
-import store.Store;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class Server {
 
-    private final Store STORE;
     private final int PORT;
+    private final java.sql.Connection DB_CONNECTION;
     private static final int THREAD_POOL_SIZE = 10;
 
-    public Server(Store store, int PORT) {
-        this.STORE = store;
+    public Server(int PORT, java.sql.Connection DB_CONNECTION) {
         this.PORT = PORT;
+        this.DB_CONNECTION = DB_CONNECTION;
     }
 
     /**
@@ -37,17 +37,16 @@ public class Server {
                 // accept new connection
                 socket = serverSocket.accept();
                 Connection clientConnection = new TCPConnection(socket);
-
                 // create command factory for this connection
-                CommandFactory commandFactory = new CommandFactory(STORE, clientConnection);
+                CommandFactory commandFactory = new CommandFactory(clientConnection, DB_CONNECTION);
 
                 // create thread to handle this connection
-                ClientCommandExecutor clientCommandExecutor = new ClientCommandExecutor(clientConnection, STORE, commandFactory);
+                ClientCommandExecutor clientCommandExecutor = new ClientCommandExecutor(clientConnection, commandFactory);
                 // execute thread
                 threadPool.execute(clientCommandExecutor);
                 System.out.println(ConstantMessages.THREAD_STARTED);
             }
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
 

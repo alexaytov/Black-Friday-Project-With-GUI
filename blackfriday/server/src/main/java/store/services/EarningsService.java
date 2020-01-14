@@ -1,17 +1,18 @@
-package store.earnings;
+package store.services;
 
 import database.PurchaseDatabase;
+import store.earnings.Purchase;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
-public class Earnings {
+public class EarningsService {
 
     private PurchaseDatabase purchaseDatabase;
 
-    public Earnings(PurchaseDatabase purchaseDatabase) {
+    public EarningsService(PurchaseDatabase purchaseDatabase) {
         this.purchaseDatabase = purchaseDatabase;
     }
 

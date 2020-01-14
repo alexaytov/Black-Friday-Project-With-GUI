@@ -92,7 +92,7 @@ public class Purchase implements Serializable {
      * @return the total amount of money from the purchase
      * cost = bought quantity * the price at which the product was sold
      */
-    double getCost() {
+    public double getCost() {
         return this.price * this.quantity;
     }
 

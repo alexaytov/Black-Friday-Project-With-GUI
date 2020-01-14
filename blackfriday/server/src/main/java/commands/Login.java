@@ -6,7 +6,7 @@ import connection.Connection;
 import exceptions.NotFoundException;
 import exceptions.WrongPasswordException;
 import passwordHasher.BCryptHasher;
-import store.Store;
+import store.services.UserService;
 import user.User;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ public class Login implements Executable {
     private Connection clientConnection;
 
     @Inject
-    private Store store;
+    private UserService userService;
 
     /**
      * Sends used salt for hashed password for this specific user trough (@code clientConnection)
@@ -33,12 +33,12 @@ public class Login implements Executable {
         String username = this.clientConnection.read();
         User userToBeLoggedIn;
         try {
-            userToBeLoggedIn = this.store.getUser(username);
+            userToBeLoggedIn = userService.getUser(username);
             String salt = BCryptHasher.getSalt(userToBeLoggedIn.getPassword());
             this.clientConnection.write(salt);
             String enteredHashedPassword = this.clientConnection.read();
             if (enteredHashedPassword.equals(userToBeLoggedIn.getPassword())) {
-                this.store.setLoggedInUser(userToBeLoggedIn);
+                userService.setLoggedInUser(userToBeLoggedIn);
                 this.clientConnection.write(userToBeLoggedIn.clone());
             } else {
                 throw new WrongPasswordException();

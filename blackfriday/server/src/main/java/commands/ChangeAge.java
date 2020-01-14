@@ -4,7 +4,7 @@ import command.enterpreter.interfaces.Executable;
 import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
-import store.Store;
+import store.services.UserService;
 import validator.Validator;
 
 import java.io.IOException;
@@ -13,10 +13,10 @@ import java.sql.SQLException;
 public class ChangeAge implements Executable {
 
     @Inject
-    private Store store;
+    private Connection clientConnection;
 
     @Inject
-    private Connection clientConnection;
+    private UserService userService;
 
     /**
      * Changes user age and return to
@@ -27,8 +27,8 @@ public class ChangeAge implements Executable {
      */
     @Override
     public void execute() throws IOException, SQLException {
-        Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
-        boolean isAgeChangeSuccessful = this.store.changeAge(this.store.getLoggedInUser().getUsername(), Integer.parseInt(this.clientConnection.read().toString()));
+        Validator.requireNonNull(userService.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
+        boolean isAgeChangeSuccessful = userService.changeAge(userService.getLoggedInUser().getUsername(), Integer.parseInt(this.clientConnection.read().toString()));
         this.clientConnection.write(isAgeChangeSuccessful);
     }
 }

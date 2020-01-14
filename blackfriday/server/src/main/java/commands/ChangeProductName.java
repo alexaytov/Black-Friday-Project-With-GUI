@@ -5,7 +5,8 @@ import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
 import exceptions.ProductAlreadyExistsException;
-import store.Store;
+import store.services.ProductService;
+import store.services.UserService;
 import validator.Validator;
 
 import java.io.IOException;
@@ -14,10 +15,13 @@ import java.sql.SQLException;
 public class ChangeProductName implements Executable {
 
     @Inject
-    private Store store;
+    private Connection clientConnection;
 
     @Inject
-    private Connection clientConnection;
+    private UserService userService;
+
+    @Inject
+    private ProductService productService;
 
     /**
      * Changes chosen product name
@@ -28,10 +32,10 @@ public class ChangeProductName implements Executable {
      */
     @Override
     public void execute() throws IOException, SQLException {
-        Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
+        Validator.requireNonNull(userService.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         String newName = this.clientConnection.read().toString();
         try {
-            this.store.changeProductName(newName);
+            productService.changeProductName(newName);
             this.clientConnection.write(true);
         } catch (IllegalArgumentException | ProductAlreadyExistsException ex) {
             this.clientConnection.write(false);

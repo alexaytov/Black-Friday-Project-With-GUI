@@ -4,7 +4,8 @@ import command.enterpreter.interfaces.Executable;
 import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
-import store.Store;
+import store.services.ProductService;
+import store.services.UserService;
 import validator.Validator;
 
 import java.io.IOException;
@@ -16,7 +17,10 @@ public class SearchQuantityControl implements Executable {
     private Connection clientConnection;
 
     @Inject
-    private Store store;
+    private UserService userService;
+
+    @Inject
+    private ProductService productService;
 
     /**
      * Searches store products based on quantity
@@ -26,8 +30,8 @@ public class SearchQuantityControl implements Executable {
      */
     @Override
     public void execute() throws IOException, SQLException {
-        Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
+        Validator.requireNonNull(userService.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         int maximumQuantity = this.clientConnection.read();
-        this.clientConnection.write(this.store.searchQuantityControl(maximumQuantity));
+        this.clientConnection.write(productService.searchQuantityControl(maximumQuantity));
     }
 }

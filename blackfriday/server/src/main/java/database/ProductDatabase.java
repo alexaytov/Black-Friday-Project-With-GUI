@@ -5,7 +5,6 @@ import exceptions.DataAlreadyExistsException;
 import product.Product;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +18,7 @@ public class ProductDatabase extends BaseDatabase<Product> {
     private Statement statement;
     private Connection DBConnection;
 
-    public ProductDatabase(Connection DBConnection) throws IOException, SQLException {
+    public ProductDatabase(Connection DBConnection) throws SQLException {
         super(DBConnection, tableName, primaryKey, new ProductParser());
         this.DBConnection = DBConnection;
         this.statement = DBConnection.createStatement();

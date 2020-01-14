@@ -1,37 +1,43 @@
 package command.enterpreter;
 
-import command.enterpreter.interfaces.Inject;
 import command.enterpreter.interfaces.CommandInterpreter;
 import command.enterpreter.interfaces.Executable;
-import commonMessages.ExceptionMessages;
+import command.enterpreter.interfaces.Inject;
 import connection.Connection;
+import database.ProductDatabase;
+import database.PurchaseDatabase;
+import database.UserDatabase;
 import store.Store;
+import store.services.EarningsService;
+import store.services.ProductService;
+import store.services.PurchaseService;
+import store.services.UserService;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-
-import static validator.Validator.requireNonNull;
+import java.sql.SQLException;
 
 public class CommandFactory implements CommandInterpreter {
 
     private static final String COMMAND_DIRECTORY = "commands.";
     private Store store;
     private Connection connection;
+    private EarningsService earningsService;
+    private UserService userService;
+    private ProductService productService;
+    private PurchaseService purchaseService;
 
-    public CommandFactory(Store store, Connection connection) {
-        this.setStore(store);
-        this.setConnection(connection);
-    }
-
-    private void setConnection(Connection connection) {
-        requireNonNull(connection, ExceptionMessages.CONNECTION_NULL);
+    public CommandFactory(Connection connection, java.sql.Connection dbConnection) throws SQLException {
+        ProductDatabase productDatabase = new ProductDatabase(dbConnection);
+        PurchaseDatabase purchaseDatabase = new PurchaseDatabase(dbConnection);
+        UserDatabase userDatabase = new UserDatabase(dbConnection);
+        this.store = new Store(productDatabase);
+        this.earningsService = new EarningsService(purchaseDatabase);
+        this.userService = new UserService(userDatabase);
+        this.productService = new ProductService(productDatabase);
+        this.purchaseService = new PurchaseService(purchaseDatabase);
         this.connection = connection;
-    }
-
-    private void setStore(Store store) {
-        requireNonNull(store, ExceptionMessages.STORE_NULL);
-        this.store = store;
     }
 
     /**

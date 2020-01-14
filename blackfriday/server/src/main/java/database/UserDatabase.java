@@ -4,7 +4,6 @@ import database.parsers.UserParser;
 import exceptions.DataAlreadyExistsException;
 import user.User;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,7 +14,7 @@ public class UserDatabase extends BaseDatabase<User> {
     private static String primaryKey = "username";
     private Statement statement;
 
-    public UserDatabase(Connection DBConnection) throws IOException, SQLException {
+    public UserDatabase(Connection DBConnection) throws SQLException {
         super(DBConnection, tableName, primaryKey, new UserParser());
         statement = DBConnection.createStatement();
     }

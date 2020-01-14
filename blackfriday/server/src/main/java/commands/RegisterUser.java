@@ -4,7 +4,7 @@ import command.enterpreter.interfaces.Executable;
 import command.enterpreter.interfaces.Inject;
 import connection.Connection;
 import exceptions.DataAlreadyExistsException;
-import store.Store;
+import store.services.UserService;
 import user.User;
 
 import java.io.IOException;
@@ -16,7 +16,7 @@ public class RegisterUser implements Executable {
     private Connection clientConnection;
 
     @Inject
-    private Store store;
+    private UserService userService;
 
     /**
      * Registers new user in store
@@ -28,7 +28,7 @@ public class RegisterUser implements Executable {
     public void execute() throws IOException, SQLException {
         User user = this.clientConnection.read();
         try {
-            this.store.registerUser(user);
+            userService.registerUser(user);
             this.clientConnection.write(true);
         } catch (DataAlreadyExistsException ex) {
             this.clientConnection.write(false);

@@ -4,7 +4,8 @@ import command.enterpreter.interfaces.Executable;
 import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
-import store.Store;
+import store.services.ProductService;
+import store.services.UserService;
 import validator.Validator;
 
 import java.io.IOException;
@@ -16,7 +17,10 @@ public class ChangeProductPrice implements Executable {
     private Connection clientConnection;
 
     @Inject
-    private Store store;
+    private UserService userService;
+
+    @Inject
+    private ProductService productService;
 
     /**
      * Changes chosen product price
@@ -27,10 +31,10 @@ public class ChangeProductPrice implements Executable {
      */
     @Override
     public void execute() throws IOException, SQLException {
-        Validator.requireNonNull(this.store.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
+        Validator.requireNonNull(userService.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         double newPrice = this.clientConnection.read();
         try {
-            this.store.changeProductPrice(newPrice);
+            productService.changeProductPrice(newPrice);
             this.clientConnection.write(true);
         } catch (IllegalArgumentException ex) {
             this.clientConnection.write(false);
