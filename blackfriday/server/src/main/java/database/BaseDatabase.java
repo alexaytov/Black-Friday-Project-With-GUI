@@ -93,6 +93,7 @@ public abstract class BaseDatabase<T> implements Database<T> {
 
     /**
      * Checks if a record with the given name exists in the database
+     *
      * @param name the data to be checked
      * @return whether the record exists in the database
      * @throws SQLException if SQL error occurs
@@ -107,9 +108,10 @@ public abstract class BaseDatabase<T> implements Database<T> {
 
     /**
      * Updates the database
+     *
      * @param primaryKeyValue the primary key based on the database
-     * @param variableName the variable name to be changed
-     * @param newValue the new value for the variable
+     * @param variableName    the variable name to be changed
+     * @param newValue        the new value for the variable
      * @throws SQLException if SQl error occurs
      */
     @Override

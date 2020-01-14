@@ -8,8 +8,6 @@ import javafx.fxml.FXML;
 import user.User;
 import util.Operations;
 
-import java.io.IOException;
-
 import static util.Operations.showWarningDialog;
 import static validator.Validator.requireNonBlank;
 
@@ -21,7 +19,7 @@ public class UsernameChange {
     private JFXTextField usernameField;
 
     @FXML
-    void usernameSubmit(ActionEvent event) throws IOException, ClassNotFoundException {
+    void usernameSubmit(ActionEvent event) {
         String newUsername = usernameField.getText();
         try {
             requireNonBlank(newUsername, ExceptionMessages.NAME_NULL_OR_EMPTY);

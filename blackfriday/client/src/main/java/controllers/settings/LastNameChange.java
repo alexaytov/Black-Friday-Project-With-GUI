@@ -9,8 +9,6 @@ import javafx.scene.control.Label;
 import user.User;
 import util.Operations;
 
-import java.io.IOException;
-
 import static util.Operations.showWarningDialog;
 import static validator.Validator.requireNonBlank;
 
@@ -27,7 +25,7 @@ public class LastNameChange {
 
 
     @FXML
-    void lastNameSubmit(ActionEvent event) throws IOException, ClassNotFoundException {
+    void lastNameSubmit(ActionEvent event) {
         try {
             String newLastName = lastNameField.getText();
             requireNonBlank(newLastName, ExceptionMessages.NAME_NULL_OR_EMPTY);

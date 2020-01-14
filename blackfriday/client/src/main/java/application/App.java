@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import util.Operations;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -38,13 +39,13 @@ public class App extends Application {
             final int port = Integer.parseInt(System.getenv("PORT"));
             Socket socket = new Socket(ip, port);
             serverConnection = new TCPConnection(socket);
-        } catch (ConnectionException ex) {
+        } catch (ConnectionException | ConnectException ex) {
             showWarningDialog(ExceptionMessages.PROBLEM_CONNECTION_TO_SERVER);
             Platform.exit();
-        }catch (IllegalStateException ex){
+        } catch (IllegalStateException ex) {
             showWarningDialog(ex.getMessage());
             Platform.exit();
-        }catch (NumberFormatException ex){
+        } catch (NumberFormatException ex) {
             showWarningDialog(ExceptionMessages.ENVIRONMENT_VARIABLES_PORT_NOT_SET);
             Platform.exit();
         }

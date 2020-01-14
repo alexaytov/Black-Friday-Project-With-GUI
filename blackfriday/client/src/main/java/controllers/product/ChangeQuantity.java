@@ -16,7 +16,6 @@ import javafx.util.Duration;
 import product.Product;
 import util.Operations;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -48,7 +47,7 @@ public class ChangeQuantity implements Initializable {
     }
 
     @FXML
-    void submit(ActionEvent event) throws IOException, ClassNotFoundException {
+    void submit(ActionEvent event) {
         App.serverConnection.write("change product quantity");
         App.serverConnection.write(this.quantity);
 

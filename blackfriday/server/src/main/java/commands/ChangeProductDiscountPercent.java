@@ -1,7 +1,6 @@
 package commands;
 
 import command.enterpreter.interfaces.Executable;
-import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
 import store.services.ProductService;
@@ -13,14 +12,15 @@ import java.sql.SQLException;
 
 public class ChangeProductDiscountPercent implements Executable {
 
-    @Inject
     private UserService userService;
-
-    @Inject
     private Connection clientConnection;
-
-    @Inject
     private ProductService productService;
+
+    public ChangeProductDiscountPercent(UserService userService, Connection clientConnection, ProductService productService) {
+        this.userService = userService;
+        this.clientConnection = clientConnection;
+        this.productService = productService;
+    }
 
     /**
      * Changes chosen product colcount percent

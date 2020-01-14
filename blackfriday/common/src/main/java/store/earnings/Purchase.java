@@ -105,10 +105,10 @@ public class Purchase implements Serializable {
                 .append(this.getQuantity())
                 .append(System.lineSeparator())
                 .append("Price: ")
-                .append(this.getPrice())
+                .append(String.format("%.2f", this.getPrice()))
                 .append(System.lineSeparator())
                 .append("Total cost: ")
-                .append(this.getCost())
+                .append(String.format("%.2f", this.getCost()))
                 .append(System.lineSeparator())
                 .append("Date: ")
                 .append(this.getDate().toLocalDate().toString());

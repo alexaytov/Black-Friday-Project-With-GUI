@@ -21,7 +21,6 @@ import product.Product;
 import util.Operations;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -67,7 +66,7 @@ public class ChosenProduct implements Initializable {
     private Label sizeLabel;
 
     @FXML
-    void buyProduct(ActionEvent event) throws IOException, ClassNotFoundException {
+    void buyProduct(ActionEvent event) {
         // get entered wanted quantity
         int wantedQuantity = this.wantedQuantity.getValue();
         // send information to server
@@ -85,7 +84,7 @@ public class ChosenProduct implements Initializable {
     }
 
     @FXML
-    void goBack(ActionEvent event) throws IOException {
+    void goBack(ActionEvent event) {
         // go to previous window
         this.nameField.getScene().getWindow().hide();
         Operations.loadWindow("/view/client/clientLoggedIn.fxml", 650, 800);
@@ -102,7 +101,7 @@ public class ChosenProduct implements Initializable {
         this.descriptionField.setText(this.product.getDescription());
         if (this.product.getSize().trim().isEmpty()) {
             this.productGrid.getChildren().removeAll(this.sizeLabel, this.sizeField);
-        }else{
+        } else {
             this.sizeField.setText(this.product.getSize());
         }
         this.quantityField.setText(String.valueOf(this.product.getQuantity()));

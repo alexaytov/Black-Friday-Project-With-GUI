@@ -1,7 +1,6 @@
 package commands;
 
 import command.enterpreter.interfaces.Executable;
-import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import store.services.UserService;
 import validator.Validator;
@@ -11,8 +10,11 @@ import java.sql.SQLException;
 
 public class Logout implements Executable {
 
-    @Inject
     private UserService userService;
+
+    public Logout(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * Sets loggedInUser in store to null

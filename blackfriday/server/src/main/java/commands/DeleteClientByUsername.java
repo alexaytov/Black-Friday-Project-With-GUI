@@ -1,7 +1,6 @@
 package commands;
 
 import command.enterpreter.interfaces.Executable;
-import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
 import exceptions.NotFoundException;
@@ -13,11 +12,13 @@ import java.sql.SQLException;
 
 public class DeleteClientByUsername implements Executable {
 
-    @Inject
     private Connection clientConnection;
-
-    @Inject
     private UserService userService;
+
+    public DeleteClientByUsername(Connection clientConnection, UserService userService) {
+        this.clientConnection = clientConnection;
+        this.userService = userService;
+    }
 
     /**
      * Delete client by username

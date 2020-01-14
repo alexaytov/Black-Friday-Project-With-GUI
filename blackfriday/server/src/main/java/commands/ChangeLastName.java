@@ -1,7 +1,6 @@
 package commands;
 
 import command.enterpreter.interfaces.Executable;
-import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
 import store.services.UserService;
@@ -12,11 +11,13 @@ import java.sql.SQLException;
 
 public class ChangeLastName implements Executable {
 
-    @Inject
     private Connection clientConnection;
-
-    @Inject
     private UserService userService;
+
+    public ChangeLastName(Connection clientConnection, UserService userService) {
+        this.clientConnection = clientConnection;
+        this.userService = userService;
+    }
 
     /**
      * Changes logged in user last name

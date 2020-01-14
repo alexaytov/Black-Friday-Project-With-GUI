@@ -1,5 +1,6 @@
 package controllers.product;
 
+import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import commonMessages.ConstantMessages;
@@ -11,11 +12,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.util.Duration;
-import application.App;
 import product.Product;
 import util.Operations;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -50,7 +49,7 @@ public class ChangeDiscountPercent implements Initializable {
     }
 
     @FXML
-    void submit(ActionEvent event) throws IOException, ClassNotFoundException {
+    void submit(ActionEvent event) {
         // validate new discount percent before sending to server
         validateDiscountPercent(this.discountPercent, product.getPrice(), product.getMinimumPrice());
         // send change discount percent command to server

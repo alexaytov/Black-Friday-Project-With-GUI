@@ -107,7 +107,7 @@ public class User implements Serializable, Cloneable {
         this.dateOfCreation = dateOfCreation;
     }
 
-    public void setPasswordHash(String password){
+    public void setPasswordHash(String password) {
         Validator.requireNonBlank(password, ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
         this.password = password;
     }

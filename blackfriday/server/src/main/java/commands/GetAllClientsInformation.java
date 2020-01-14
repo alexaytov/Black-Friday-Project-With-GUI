@@ -1,7 +1,6 @@
 package commands;
 
 import command.enterpreter.interfaces.Executable;
-import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
 import store.earnings.Purchase;
@@ -16,14 +15,15 @@ import java.util.Map;
 
 public class GetAllClientsInformation implements Executable {
 
-    @Inject
     private Connection clientConnection;
-
-    @Inject
     private UserService userService;
-
-    @Inject
     private PurchaseService purchaseService;
+
+    public GetAllClientsInformation(Connection clientConnection, UserService userService, PurchaseService purchaseService) {
+        this.clientConnection = clientConnection;
+        this.userService = userService;
+        this.purchaseService = purchaseService;
+    }
 
     /**
      * Gets client information and sends

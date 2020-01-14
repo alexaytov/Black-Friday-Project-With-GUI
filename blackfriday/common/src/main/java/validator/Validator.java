@@ -29,7 +29,7 @@ public class Validator {
     }
 
     public static void requireNonZero(int value, String errorMessage) {
-        if (value == 0 ) {
+        if (value == 0) {
             throw new IllegalArgumentException(errorMessage);
         }
     }

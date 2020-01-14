@@ -41,7 +41,7 @@ public class StaffChosenProduct {
     @FXML
     private JFXTextField discountedPercentField;
 
-    public void initProduct(String productName) throws IOException, ClassNotFoundException {
+    public void initProduct(String productName) {
         // get currently chosen product by name from server
         App.serverConnection.write("get product by name");
         App.serverConnection.write(productName);
@@ -50,7 +50,7 @@ public class StaffChosenProduct {
         this.product = product;
     }
 
-    public void initProduct(Product product) throws IOException {
+    public void initProduct(Product product) {
         // get currently chosen product based on server
         App.serverConnection.write("set product");
         App.serverConnection.write(product);
@@ -64,7 +64,7 @@ public class StaffChosenProduct {
         this.quantityField.setText(String.valueOf(product.getQuantity()));
         this.sizeField.setText(product.getSize());
         this.priceField.setText(String.valueOf(product.getPrice()));
-        this.minimumPriceField.setText(String.valueOf(product.getMinimumPrice()));
+        this.minimumPriceField.setText(String.format("%.2f", product.getMinimumPrice()));
         this.discountedPercentField.setText(String.format("%.2f", product.getDiscountPercent()));
         this.discountedPrice.setText(String.format("%.2f", product.getDiscountedPrice()));
         // set image to GUI
@@ -73,7 +73,7 @@ public class StaffChosenProduct {
     }
 
     @FXML
-    void deleteChosenProduct(ActionEvent event) throws IOException, ClassNotFoundException {
+    void deleteChosenProduct(ActionEvent event) throws IOException {
         App.serverConnection.write("delete product");
         App.serverConnection.write(this.product.getName());
         // shows user if executed command was successful
@@ -87,7 +87,7 @@ public class StaffChosenProduct {
     }
 
     @FXML
-    void changeDiscountPercent(ActionEvent event) throws IOException {
+    void changeDiscountPercent(ActionEvent event) {
         FXMLLoader loader = Operations.loadWindow("/view/product/changeDiscountPercent.fxml", 600, 200);
         // initialize product in ChangeDiscountPercent controller
         ChangeDiscountPercent controller = loader.getController();
@@ -96,7 +96,7 @@ public class StaffChosenProduct {
     }
 
     @FXML
-    void changeDescription(ActionEvent event) throws IOException {
+    void changeDescription(ActionEvent event) {
         FXMLLoader loader = Operations.loadWindow("/view/product/changeDescription.fxml", 600, 200);
         // initialize product in ChangeDescription controller
         ChangeDescription controller = loader.getController();
@@ -105,7 +105,7 @@ public class StaffChosenProduct {
     }
 
     @FXML
-    void changeMinimumPrice(ActionEvent event) throws IOException {
+    void changeMinimumPrice(ActionEvent event) {
         FXMLLoader loader = Operations.loadWindow("/view/product/changeMinimumPrice.fxml", 600, 200);
         // initialize product in ChangeMinimumPrice controller
         ChangeMinimumPrice controller = loader.getController();
@@ -114,13 +114,13 @@ public class StaffChosenProduct {
     }
 
     @FXML
-    void changeName(ActionEvent event) throws IOException {
+    void changeName(ActionEvent event) {
         this.nameField.getScene().getWindow().hide();
         Operations.loadWindow("/view/product/changeName.fxml", 600, 200);
     }
 
     @FXML
-    void changePicture(ActionEvent event) throws IOException, ClassNotFoundException {
+    void changePicture(ActionEvent event) throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Pick image");
         FileChooser.ExtensionFilter pngExtensionFilter = new FileChooser.ExtensionFilter("PNG Images", "*.png");
@@ -142,7 +142,7 @@ public class StaffChosenProduct {
     }
 
     @FXML
-    void changePrice(ActionEvent event) throws IOException {
+    void changePrice(ActionEvent event) {
         FXMLLoader loader = Operations.loadWindow("/view/product/changePrice.fxml", 600, 200);
         // initialize product in ChangePrice controller
         ChangePrice controller = loader.getController();
@@ -151,7 +151,7 @@ public class StaffChosenProduct {
     }
 
     @FXML
-    void changeQuantity(ActionEvent event) throws IOException {
+    void changeQuantity(ActionEvent event) {
         FXMLLoader loader = Operations.loadWindow("/view/product/changeQuantity.fxml", 600, 200);
         // initialize product in ChangeQuantity controller
         ChangeQuantity controller = loader.getController();
@@ -160,7 +160,7 @@ public class StaffChosenProduct {
     }
 
     @FXML
-    void changeSize(ActionEvent event) throws IOException {
+    void changeSize(ActionEvent event) {
         FXMLLoader loader = Operations.loadWindow("/view/product/changeSize.fxml", 600, 200);
         // initialize product in ChangeSize controller
         ChangeSize controller = loader.getController();
@@ -169,7 +169,7 @@ public class StaffChosenProduct {
     }
 
     @FXML
-    void goStaffProducts(ActionEvent event) throws IOException {
+    void goStaffProducts(ActionEvent event) {
         this.nameField.getScene().getWindow().hide();
         Operations.loadWindow("/view/staff/staffProducts.fxml", 600, 730);
     }

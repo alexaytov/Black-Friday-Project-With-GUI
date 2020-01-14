@@ -17,7 +17,6 @@ import product.Product;
 import util.Operations;
 import validator.Validator;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -52,7 +51,7 @@ public class ChangePrice implements Initializable {
     }
 
     @FXML
-    void submit(ActionEvent event) throws IOException, ClassNotFoundException {
+    void submit(ActionEvent event) {
         // send change product price command to server
         validatePrice(this.price, product.getMinimumPrice());
         App.serverConnection.write("change product price");

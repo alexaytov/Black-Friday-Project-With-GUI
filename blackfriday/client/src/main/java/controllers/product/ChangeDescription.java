@@ -16,7 +16,6 @@ import javafx.util.Duration;
 import product.Product;
 import util.Operations;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -44,7 +43,7 @@ public class ChangeDescription implements Initializable {
     }));
 
     @FXML
-    void submit(ActionEvent event) throws IOException, ClassNotFoundException {
+    void submit(ActionEvent event) {
         // send command to server to change product description
         App.serverConnection.write("change product description");
         // get confirmation from server

@@ -21,7 +21,7 @@ public class EarningsService {
      *
      * @param purchase the purchase added to the purchaseDatabase
      */
-    public void logPurchase(Purchase purchase) throws SQLException{
+    public void logPurchase(Purchase purchase) throws SQLException {
         this.purchaseDatabase.add(purchase);
     }
 

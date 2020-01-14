@@ -1,13 +1,15 @@
 package commands;
 
 import command.enterpreter.interfaces.Executable;
-import command.enterpreter.interfaces.Inject;
 import store.services.ProductService;
 
 public class ExistProductOptions implements Executable {
 
-    @Inject
     private ProductService productService;
+
+    public ExistProductOptions(ProductService productService) {
+        this.productService = productService;
+    }
 
     /**
      * Sets product service chosen product to null

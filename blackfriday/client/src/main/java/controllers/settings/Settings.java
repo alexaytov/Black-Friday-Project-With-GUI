@@ -16,7 +16,6 @@ import user.Permission;
 import user.User;
 import util.Operations;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -43,42 +42,42 @@ public class Settings implements Initializable {
 
 
     @FXML
-    void ChangeAge(ActionEvent event) throws IOException {
+    void ChangeAge(ActionEvent event) {
         FXMLLoader loader = Operations.loadWindow("/view/settings/ageChange.fxml", 600, 200);
         AgeChange controller = loader.getController();
         controller.initUser(this.user);
     }
 
     @FXML
-    void changeFirstName(ActionEvent event) throws IOException {
+    void changeFirstName(ActionEvent event) {
         FXMLLoader loader = Operations.loadWindow("/view/settings/firstNameChange.fxml", 600, 200);
         FirstNameChange controller = loader.getController();
         controller.initUser(this.user);
     }
 
     @FXML
-    void changeLastName(ActionEvent event) throws IOException {
+    void changeLastName(ActionEvent event) {
         FXMLLoader loader = Operations.loadWindow("/view/settings/lastNameChange.fxml", 600, 200);
         LastNameChange controller = loader.getController();
         controller.initUser(this.user);
     }
 
     @FXML
-    void changePassword(ActionEvent event) throws IOException {
+    void changePassword(ActionEvent event) {
         FXMLLoader loader = Operations.loadWindow("/view/settings/passwordChange.fxml", 600, 200);
         PasswordChange controller = loader.getController();
         controller.initUser(this.user);
     }
 
     @FXML
-    void changeUsername(ActionEvent event) throws IOException {
+    void changeUsername(ActionEvent event) {
         FXMLLoader loader = Operations.loadWindow("/view/settings/usernameChange.fxml", 600, 200);
         UsernameChange controller = loader.getController();
         controller.initUser(this.user);
     }
 
     @FXML
-    void goBack(ActionEvent event) throws IOException {
+    void goBack(ActionEvent event) {
         this.usernameField.getScene().getWindow().hide();
         FXMLLoader loader;
         // load admin/client window based on user permission
@@ -94,7 +93,7 @@ public class Settings implements Initializable {
     }
 
     @FXML
-    void deleteAccount(ActionEvent event) throws IOException, ClassNotFoundException {
+    void deleteAccount(ActionEvent event) {
         App.serverConnection.write("delete user");
         // show user if command was executed successfully
         if (App.serverConnection.read()) {

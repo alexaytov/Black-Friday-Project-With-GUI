@@ -1,7 +1,6 @@
 package commands;
 
 import command.enterpreter.interfaces.Executable;
-import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
 import exceptions.DataAlreadyExistsException;
@@ -15,14 +14,15 @@ import java.sql.SQLException;
 
 public class CreateProduct implements Executable {
 
-    @Inject
     private Connection clientConnection;
-
-    @Inject
     private UserService userService;
-
-    @Inject
     private ProductService productService;
+
+    public CreateProduct(Connection clientConnection, UserService userService, ProductService productService) {
+        this.clientConnection = clientConnection;
+        this.userService = userService;
+        this.productService = productService;
+    }
 
     /**
      * Adds product to product database from (@code clientConnection)

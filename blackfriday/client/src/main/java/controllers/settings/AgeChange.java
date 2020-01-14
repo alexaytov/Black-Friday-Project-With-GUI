@@ -8,8 +8,6 @@ import javafx.fxml.FXML;
 import user.User;
 import util.Operations;
 
-import java.io.IOException;
-
 import static util.Operations.showWarningDialog;
 import static validator.Validator.requireNonNegative;
 
@@ -21,7 +19,7 @@ public class AgeChange {
     private JFXTextField ageField;
 
     @FXML
-    void ageSubmit(ActionEvent event) throws IOException, ClassNotFoundException {
+    void ageSubmit(ActionEvent event) {
         try {
             int newAge = Integer.parseInt(ageField.getText());
             requireNonNegative(newAge, ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);

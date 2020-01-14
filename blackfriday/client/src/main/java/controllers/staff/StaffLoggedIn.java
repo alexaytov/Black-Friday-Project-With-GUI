@@ -32,7 +32,7 @@ public class StaffLoggedIn implements Initializable {
     private Label welcomeLabel;
 
     @FXML
-    void blackFridaySwitch(ActionEvent event) throws IOException {
+    void blackFridaySwitch(ActionEvent event) {
         if (blackFriday.isSelected()) {
             App.serverConnection.write("start blackFriday");
         } else {
@@ -41,26 +41,26 @@ public class StaffLoggedIn implements Initializable {
     }
 
     @FXML
-    void clients(ActionEvent event) throws IOException {
+    void clients(ActionEvent event) {
         this.welcomeLabel.getScene().getWindow().hide();
         Operations.loadWindow("/view/staff/clients.fxml", 600, 800);
     }
 
     @FXML
-    void earnings(ActionEvent event) throws IOException {
+    void earnings(ActionEvent event) {
         this.earningsButton.getScene().getWindow().hide();
         Operations.loadWindow("/view/staff/earnings.fxml", 600, 500);
     }
 
     @FXML
-    void logout(ActionEvent event) throws IOException {
+    void logout(ActionEvent event) {
         App.serverConnection.write("logout");
         this.earningsButton.getScene().getWindow().hide();
         Operations.loadWindow("/view/login.fxml", 600, 350);
     }
 
     @FXML
-    void products(ActionEvent event) throws IOException {
+    void products(ActionEvent event) {
         this.logoutButton.getScene().getWindow().hide();
         Operations.loadWindow("/view/staff/staffProducts.fxml", 600, 730);
     }
@@ -72,7 +72,7 @@ public class StaffLoggedIn implements Initializable {
     }
 
     @FXML
-    void settings(ActionEvent event) throws IOException {
+    void settings(ActionEvent event) {
         this.welcomeLabel.getScene().getWindow().hide();
         FXMLLoader loader = Operations.loadWindow("/view/staff/staffSettings.fxml", 600, 400);
     }

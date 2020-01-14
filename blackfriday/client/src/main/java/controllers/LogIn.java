@@ -71,7 +71,7 @@ public class LogIn {
     }
 
     @FXML
-    void signUp(ActionEvent event) throws IOException {
+    void signUp(ActionEvent event) {
         // go to sign up window
         this.logInButton.getScene().getWindow().hide();
         Operations.loadWindow("/view/signUp.fxml", 600, 550);

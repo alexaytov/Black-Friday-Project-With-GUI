@@ -11,8 +11,6 @@ import user.Permission;
 import user.User;
 import util.Operations;
 
-import java.io.IOException;
-
 import static util.Operations.showWarningDialog;
 import static validator.Validator.requireNonBlank;
 import static validator.Validator.requireNonNegative;
@@ -38,13 +36,13 @@ public class SignUp {
     private JFXTextField passwordField;
 
     @FXML
-    void goToLoginScreen(ActionEvent event) throws IOException {
+    void goToLoginScreen(ActionEvent event) {
         signUpButton.getScene().getWindow().hide();
         Operations.loadWindow("/view/login.fxml", 600, 350);
     }
 
     @FXML
-    void signUp(ActionEvent event) throws IOException {
+    void signUp(ActionEvent event) {
         try {
             // get all input data from GUI
             int age = Integer.parseInt(ageField.getText());

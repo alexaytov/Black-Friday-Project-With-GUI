@@ -142,7 +142,7 @@ public class StaffProducts implements Initializable {
     }
 
     @FXML
-    void productsSelected() throws IOException, ClassNotFoundException {
+    void productsSelected() {
         // products tab is selected
         // load all products in GUI
         this.allProductsButton.selectedProperty().setValue(true);
@@ -152,7 +152,7 @@ public class StaffProducts implements Initializable {
     }
 
     @FXML
-    void searchQuantityControl() throws IOException, ClassNotFoundException {
+    void searchQuantityControl() {
         // clear previously loaded products in GUI
         this.vBoxWithProductsQualityControl.getChildren().clear();
         // execute quantity control command
@@ -225,11 +225,7 @@ public class StaffProducts implements Initializable {
             Scene scene = new Scene(root, 600, 600);
             stage.setTitle(STAGE_TITLE);
             StaffChosenProduct controller = loader.getController();
-            try {
-                controller.initProduct(product);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            controller.initProduct(product);
             stage.setScene(scene);
             stage.setResizable(false);
             stage.show();
@@ -281,7 +277,7 @@ public class StaffProducts implements Initializable {
         loadProductsFromServerToGUI("get staff products");
     }
 
-    private void loadProductsFromServerToGUI(String serverCommand) throws IOException, ClassNotFoundException {
+    private void loadProductsFromServerToGUI(String serverCommand) {
         // clears previously loaded products in GUI
         this.vBoxWithProducts.getChildren().clear();
         App.serverConnection.write(serverCommand);
@@ -293,7 +289,7 @@ public class StaffProducts implements Initializable {
     }
 
     @FXML
-    void showAllProducts(ActionEvent event) throws IOException, ClassNotFoundException {
+    void showAllProducts(ActionEvent event) {
         // loads all products to GUI based on selected
         // radio button - all products, black friday products
         if (allProductsButton.isSelected()) {
@@ -304,12 +300,12 @@ public class StaffProducts implements Initializable {
     }
 
     @FXML
-    void loadDiscountedProducts(ActionEvent event) throws IOException, ClassNotFoundException {
+    void loadDiscountedProducts(ActionEvent event) {
         loadProductsFromServerToGUI("get staff discounted products");
     }
 
     @FXML
-    void searchProduct(ActionEvent event) throws IOException, ClassNotFoundException {
+    void searchProduct(ActionEvent event) {
         // clear products from UI
         this.vBoxWithProducts.getChildren().clear();
         // send search command based of selected type of products
@@ -342,7 +338,7 @@ public class StaffProducts implements Initializable {
 
 
     @FXML
-    void goToMainMenu(ActionEvent event) throws IOException {
+    void goToMainMenu(ActionEvent event) {
         this.nameTextField.getScene().getWindow().hide();
         Operations.loadWindow("/view/staff/staffLoggedIn.fxml", 600, 600);
     }
@@ -360,7 +356,7 @@ public class StaffProducts implements Initializable {
     }
 
     @FXML
-    void createProduct(ActionEvent event) throws IOException, ClassNotFoundException {
+    void createProduct(ActionEvent event) throws IOException {
         // gets all fields information
         GetProductInformationFromTextFields getProductInformationFromTextFields = new GetProductInformationFromTextFields().invoke();
         String name = getProductInformationFromTextFields.getName();

@@ -1,7 +1,6 @@
 package commands;
 
 import command.enterpreter.interfaces.Executable;
-import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
 import store.Store;
@@ -14,17 +13,15 @@ import java.sql.SQLException;
 
 public class ChangeProductMinimumPrice implements Executable {
 
-    @Inject
     private Connection clientConnection;
-
-    @Inject
-    private Store store;
-
-    @Inject
     private UserService userService;
-
-    @Inject
     private ProductService productService;
+
+    public ChangeProductMinimumPrice(Connection clientConnection, Store store, UserService userService, ProductService productService) {
+        this.clientConnection = clientConnection;
+        this.userService = userService;
+        this.productService = productService;
+    }
 
     /**
      * Changes chosen product minimum price

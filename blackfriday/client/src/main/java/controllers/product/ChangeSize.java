@@ -10,8 +10,6 @@ import javafx.fxml.FXMLLoader;
 import product.Product;
 import util.Operations;
 
-import java.io.IOException;
-
 import static util.Operations.confirmationPopUp;
 
 public class ChangeSize {
@@ -25,7 +23,7 @@ public class ChangeSize {
     }
 
     @FXML
-    void submit(ActionEvent event) throws IOException, ClassNotFoundException {
+    void submit(ActionEvent event) {
         // send change product size command to server
         App.serverConnection.write("change product size");
         App.serverConnection.write(this.sizeField.getText());

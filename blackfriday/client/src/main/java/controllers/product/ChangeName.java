@@ -15,7 +15,6 @@ import javafx.fxml.Initializable;
 import javafx.util.Duration;
 import util.Operations;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -30,7 +29,7 @@ public class ChangeName implements Initializable {
     @FXML
     private JFXButton submitButton;
 
-    Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(10), event -> {
+    private Timeline checkIfAllDataIsValid = new Timeline(new KeyFrame(Duration.millis(10), event -> {
         // enables/disable submit button based on information entered in nameField
         try {
             requireNonBlank(this.nameField.getText(), ExceptionMessages.NAME_NULL_OR_EMPTY);
@@ -41,7 +40,7 @@ public class ChangeName implements Initializable {
     }));
 
     @FXML
-    void submit(ActionEvent event) throws IOException, ClassNotFoundException {
+    void submit(ActionEvent event) {
         // send change product name command to server
         App.serverConnection.write("change product name");
         App.serverConnection.write(this.nameField.getText());

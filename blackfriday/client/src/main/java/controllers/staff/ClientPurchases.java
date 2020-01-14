@@ -10,7 +10,6 @@ import javafx.scene.control.TreeItem;
 import store.earnings.Purchase;
 import util.Operations;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +28,7 @@ public class ClientPurchases implements Initializable {
 
 
     @FXML
-    void goStaffProducts(ActionEvent event) throws IOException {
+    void goStaffProducts(ActionEvent event) {
         this.clientPurchases.getScene().getWindow().hide();
         Operations.loadWindow("/view/staff/staffLoggedIn.fxml", 600, 600);
     }
@@ -60,16 +59,12 @@ public class ClientPurchases implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            this.showAllPurchases();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        this.showAllPurchases();
     }
 
 
     @FXML
-    void showAllPurchases() throws IOException, ClassNotFoundException {
+    void showAllPurchases() {
         // load UI with all purchases
         App.serverConnection.write("get all clients information");
         purchases = App.serverConnection.read();

@@ -35,7 +35,7 @@ public class TCPConnection implements Connection {
         try {
             return (T) this.objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException ex) {
-           throw new ConnectionException(ex.getMessage());
+            throw new ConnectionException(ex.getMessage());
         }
     }
 }

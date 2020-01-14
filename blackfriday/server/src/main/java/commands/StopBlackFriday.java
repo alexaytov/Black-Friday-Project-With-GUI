@@ -1,7 +1,6 @@
 package commands;
 
 import command.enterpreter.interfaces.Executable;
-import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import store.Store;
 import store.services.UserService;
@@ -12,11 +11,13 @@ import java.sql.SQLException;
 
 public class StopBlackFriday implements Executable {
 
-    @Inject
     private Store store;
-
-    @Inject
     private UserService userService;
+
+    public StopBlackFriday(Store store, UserService userService) {
+        this.store = store;
+        this.userService = userService;
+    }
 
     /**
      * Calls (@code setBlackFriday) in store with argument (@code false)

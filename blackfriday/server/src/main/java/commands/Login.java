@@ -1,7 +1,6 @@
 package commands;
 
 import command.enterpreter.interfaces.Executable;
-import command.enterpreter.interfaces.Inject;
 import connection.Connection;
 import exceptions.NotFoundException;
 import exceptions.WrongPasswordException;
@@ -14,11 +13,13 @@ import java.sql.SQLException;
 
 public class Login implements Executable {
 
-    @Inject
     private Connection clientConnection;
-
-    @Inject
     private UserService userService;
+
+    public Login(Connection clientConnection, UserService userService) {
+        this.clientConnection = clientConnection;
+        this.userService = userService;
+    }
 
     /**
      * Sends used salt for hashed password for this specific user trough (@code clientConnection)
@@ -46,7 +47,7 @@ public class Login implements Executable {
         } catch (NotFoundException | WrongPasswordException e) {
             this.clientConnection.write(null);
             this.clientConnection.write(e.getClass().getSimpleName());
-        }catch (CloneNotSupportedException ex){
+        } catch (CloneNotSupportedException ex) {
             ex.printStackTrace();
         }
     }

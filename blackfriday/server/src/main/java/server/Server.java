@@ -14,9 +14,9 @@ import java.util.concurrent.Executors;
 
 public class Server {
 
+    private static final int THREAD_POOL_SIZE = 10;
     private final int PORT;
     private final java.sql.Connection DB_CONNECTION;
-    private static final int THREAD_POOL_SIZE = 10;
 
     public Server(int PORT, java.sql.Connection DB_CONNECTION) {
         this.PORT = PORT;

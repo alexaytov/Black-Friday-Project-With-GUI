@@ -1,7 +1,6 @@
 package commands;
 
 import command.enterpreter.interfaces.Executable;
-import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
 import store.services.EarningsService;
@@ -16,14 +15,15 @@ import static validator.Validator.validateMonth;
 
 public class EarningsMonth implements Executable {
 
-    @Inject
     private Connection clientConnection;
-
-    @Inject
     private UserService userService;
-
-    @Inject
     private EarningsService earningsService;
+
+    public EarningsMonth(Connection clientConnection, UserService userService, EarningsService earningsService) {
+        this.clientConnection = clientConnection;
+        this.userService = userService;
+        this.earningsService = earningsService;
+    }
 
     /**
      * Gets earnings for specific month and

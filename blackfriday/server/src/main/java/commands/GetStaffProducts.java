@@ -1,7 +1,6 @@
 package commands;
 
 import command.enterpreter.interfaces.Executable;
-import command.enterpreter.interfaces.Inject;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
 import store.services.ProductService;
@@ -13,14 +12,15 @@ import java.sql.SQLException;
 
 public class GetStaffProducts implements Executable {
 
-    @Inject
     private Connection clientConnection;
-
-    @Inject
     private UserService userService;
-
-    @Inject
     private ProductService productService;
+
+    public GetStaffProducts(Connection clientConnection, UserService userService, ProductService productService) {
+        this.clientConnection = clientConnection;
+        this.userService = userService;
+        this.productService = productService;
+    }
 
     /**
      * Gets all products for users with permission admin

@@ -9,8 +9,6 @@ import passwordHasher.BCryptHasher;
 import user.User;
 import util.Operations;
 
-import java.io.IOException;
-
 import static util.Operations.showWarningDialog;
 import static validator.Validator.requireNonBlank;
 
@@ -22,7 +20,7 @@ public class PasswordChange {
     private JFXTextField passwordField;
 
     @FXML
-    void passwordSubmit(ActionEvent event) throws IOException, ClassNotFoundException {
+    void passwordSubmit(ActionEvent event) {
         try {
             String newPassword = passwordField.getText();
             requireNonBlank(newPassword, ExceptionMessages.PASSWORD_NULL_OR_EMPTY);

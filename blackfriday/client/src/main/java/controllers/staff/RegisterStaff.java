@@ -14,7 +14,6 @@ import user.Permission;
 import user.User;
 import util.Operations;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -57,7 +56,7 @@ public class RegisterStaff implements Initializable {
     private Color invalidInputFieldColor = Color.RED;
 
     @FXML
-    void registerStaff(ActionEvent event) throws IOException, ClassNotFoundException {
+    void registerStaff(ActionEvent event) {
         if (checkAllFields()) {
             App.serverConnection.write("register user");
             User user = new User(this.username, this.password, Permission.ADMIN, this.firstName, this.lastName, this.age);
@@ -74,7 +73,7 @@ public class RegisterStaff implements Initializable {
     }
 
     @FXML
-    void goBack(ActionEvent event) throws IOException {
+    void goBack(ActionEvent event) {
         this.registerStaffButton.getScene().getWindow().hide();
         Operations.loadWindow("/view/staff/staffLoggedIn.fxml", 600, 600);
     }
