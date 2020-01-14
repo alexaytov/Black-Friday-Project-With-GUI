@@ -3,6 +3,7 @@ package controllers.client;
 import application.App;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -65,13 +66,13 @@ public class ClientLoggedIn implements Initializable {
     @FXML
     void goBack(ActionEvent event) {
         // go to previous window
-        App.serverConnection.write("logout");
+        App.serverConnection.write(CommandNames.LOGOUT);
         this.vBoxWithProducts.getScene().getWindow().hide();
         Operations.loadWindow(Windows.LOGIN_PATH, Windows.LOGIN_WIDTH, Windows.LOGIN_HEIGHT);
     }
 
     @FXML
-    void settings(ActionEvent event) throws IOException {
+    void settings(ActionEvent event) {
         // go to settings menu
         this.vBoxWithProducts.getScene().getWindow().hide();
         Operations.loadWindow(Windows.STAFF_SETTINGS_PATH, Windows.STAFF_SETTINGS_WIDTH, Windows.STAFF_SETTINGS_HEIGHT);
@@ -88,7 +89,7 @@ public class ClientLoggedIn implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // check if black friday is started
-        App.serverConnection.write("is black friday");
+        App.serverConnection.write(CommandNames.IS_BLACK_FRIDAY);
         boolean storeHasPromotions = App.serverConnection.read();
         // make black friday products button visible is black friday is active
         if (storeHasPromotions) {
@@ -96,7 +97,7 @@ public class ClientLoggedIn implements Initializable {
         } else {
             productsFilterChoice.setVisible(false);
         }
-        loadAllProductsFromServerToUI("get client products");
+        loadAllProductsFromServerToUI(CommandNames.GET_CLIENT_PRODUCTS);
     }
 
     private void fillVBoxWithProducts(List<Product> products, VBox vBoxWithProducts) {
@@ -134,16 +135,16 @@ public class ClientLoggedIn implements Initializable {
     void showAllProducts(ActionEvent event) {
         // show all products based on which button is selected - allProducts and blackFridayProducts
         if (allProductsButton.isSelected()) {
-            loadAllProductsFromServerToUI("get client products");
+            loadAllProductsFromServerToUI(CommandNames.GET_CLIENT_PRODUCTS);
         } else {
-            loadAllProductsFromServerToUI("get client discounted products");
+            loadAllProductsFromServerToUI(CommandNames.GET_CLIENT_DISCOUNTED_PRODUCTS);
         }
     }
 
     @FXML
     void loadAllProducts(ActionEvent event) {
         // loads all products to UI
-        loadAllProductsFromServerToUI("get client products");
+        loadAllProductsFromServerToUI(CommandNames.GET_CLIENT_PRODUCTS);
     }
 
     private void loadAllProductsFromServerToUI(String serverCommand) {
@@ -162,7 +163,7 @@ public class ClientLoggedIn implements Initializable {
     @FXML
     void loadDiscountedProducts(ActionEvent event) {
         // loads all discounted products to UI
-        loadAllProductsFromServerToUI("get client discounted products");
+        loadAllProductsFromServerToUI(CommandNames.GET_CLIENT_DISCOUNTED_PRODUCTS);
     }
 
     @FXML
@@ -170,10 +171,10 @@ public class ClientLoggedIn implements Initializable {
         // gets searched product name
         String searchedProductName = this.productSearch.getText();
         if (allProductsButton.isSelected()) {
-            App.serverConnection.write("search client all products");
+            App.serverConnection.write(CommandNames.SEARCH_CLIENT_ALL_PRODUCTS);
             App.serverConnection.write(searchedProductName);
         } else {
-            App.serverConnection.write("search client discounted products");
+            App.serverConnection.write(CommandNames.SEARCH_CLIENT_DISCOUNTED_PRODUCTS);
             App.serverConnection.write(searchedProductName);
         }
         // get products from server

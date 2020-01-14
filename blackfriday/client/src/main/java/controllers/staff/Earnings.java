@@ -3,16 +3,20 @@ package controllers.staff;
 import application.App;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import util.Operations;
+import util.Windows;
 import validator.Validator;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
 
 import static util.Operations.showWarningDialog;
+import static validator.Validator.requireNonNegative;
+import static validator.Validator.validateMonth;
 
 public class Earnings {
 
@@ -58,7 +62,7 @@ public class Earnings {
         } else {
             // entered data is valid
             // sending data to server
-            App.serverConnection.write("earnings period");
+            App.serverConnection.write(CommandNames.EARNINGS_FOR_PERIOD);
             App.serverConnection.write(startDate);
             App.serverConnection.write(endDate);
             // get and show earnings to GUI
@@ -74,7 +78,7 @@ public class Earnings {
             // get and validate year
             LocalDate date = this.datePicker.getValue();
             // send command and year to server
-            App.serverConnection.write("earnings date");
+            App.serverConnection.write(CommandNames.EARNINGS_FOR_DATE);
             App.serverConnection.write(date.toString());
             // get earnings from server
             double earnings = App.serverConnection.read();
@@ -90,8 +94,11 @@ public class Earnings {
             // get year and mont from GUI
             int year = Integer.parseInt(this.mYearField.getText());
             int month = Integer.parseInt(this.mMonthField.getText());
+            // validate data
+            validateMonth(month);
+            requireNonNegative(year, ExceptionMessages.YEAR_MUST_BE_POSITIVE);
             // send data to server
-            App.serverConnection.write("earnings month");
+            App.serverConnection.write(CommandNames.EARNINGS_FOR_MONTH);
             App.serverConnection.write(month);
             App.serverConnection.write(year);
             // show data to GUI
@@ -99,6 +106,8 @@ public class Earnings {
             this.monthEarningsField.setText(String.valueOf(earnings));
         } catch (NumberFormatException ex) {
             showWarningDialog(ExceptionMessages.ENTER_NUMBER);
+        } catch (IllegalArgumentException ex) {
+            showWarningDialog(ex.getMessage());
         }
     }
 
@@ -109,7 +118,7 @@ public class Earnings {
             int year = Integer.parseInt(yYearField.getText());
             Validator.requireNonNegative(year, ExceptionMessages.YEAR_MUST_BE_POSITIVE);
             // send command and year to server
-            App.serverConnection.write("earnings year");
+            App.serverConnection.write(CommandNames.EARNINGS_FOR_YEAR);
             App.serverConnection.write(year);
             // get earnings from server
             double earnings = App.serverConnection.read();
@@ -125,6 +134,6 @@ public class Earnings {
     void goBack(ActionEvent event) {
         // go to staff logged in window
         this.datePicker.getScene().getWindow().hide();
-        Operations.loadWindow("/view/staff/staffLoggedIn.fxml", 600, 600);
+        Operations.loadWindow(Windows.STAFF_LOGGED_IN_PATH, Windows.STAFF_LOGGED_IN_WIDTH, Windows.STAFF_LOGGED_IN_HEIGHT);
     }
 }

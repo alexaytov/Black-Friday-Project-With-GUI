@@ -1,6 +1,7 @@
 package controllers.settings;
 
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
@@ -25,7 +26,7 @@ public class PasswordChange {
             String newPassword = passwordField.getText();
             requireNonBlank(newPassword, ExceptionMessages.PASSWORD_NULL_OR_EMPTY);
             newPassword = BCryptHasher.hash(newPassword);
-            boolean isPasswordChanged = Operations.changeUserField("change password",
+            boolean isPasswordChanged = Operations.changeUserField(CommandNames.CHANGE_USER_PASSWORD,
                     newPassword,
                     ConstantMessages.PASSWORD_CHANGE_SUCCESSFUL,
                     ConstantMessages.PASSWORD_CHANGE_UNSUCCESSFUL);

@@ -3,6 +3,7 @@ package controllers;
 import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
@@ -73,7 +74,7 @@ public class SignUp {
     }
 
     private boolean registerUser(User toBeRegisteredUser) {
-        App.serverConnection.write("register user");
+        App.serverConnection.write(CommandNames.REGISTER_USER);
         App.serverConnection.write(toBeRegisteredUser);
         return App.serverConnection.read();
     }

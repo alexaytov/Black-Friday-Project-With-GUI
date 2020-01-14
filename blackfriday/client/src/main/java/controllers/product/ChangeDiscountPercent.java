@@ -3,6 +3,7 @@ package controllers.product;
 import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import controllers.staff.StaffChosenProduct;
 import javafx.animation.KeyFrame;
@@ -54,7 +55,7 @@ public class ChangeDiscountPercent implements Initializable {
         // validate new discount percent before sending to server
         validateDiscountPercent(this.discountPercent, product.getPrice(), product.getMinimumPrice());
         // send change discount percent command to server
-        App.serverConnection.write("change product discount percent");
+        App.serverConnection.write(CommandNames.CHANGE_PRODUCT_DISCOUNT_PERCENT);
         App.serverConnection.write(this.discountPercent);
         // shows to user if the change was successful
         if (App.serverConnection.read()) {

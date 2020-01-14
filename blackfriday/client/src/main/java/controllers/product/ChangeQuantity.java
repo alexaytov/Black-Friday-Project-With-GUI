@@ -3,6 +3,7 @@ package controllers.product;
 import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import controllers.staff.StaffChosenProduct;
@@ -49,7 +50,7 @@ public class ChangeQuantity implements Initializable {
 
     @FXML
     void submit(ActionEvent event) {
-        App.serverConnection.write("change product quantity");
+        App.serverConnection.write(CommandNames.CHANGE_PRODUCT_QUANTITY);
         App.serverConnection.write(this.quantity);
 
         if (App.serverConnection.read()) {

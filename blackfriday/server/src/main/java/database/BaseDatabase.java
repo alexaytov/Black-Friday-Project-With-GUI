@@ -6,10 +6,7 @@ import database.parsers.DataParser;
 import exceptions.NotFoundException;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,12 +18,18 @@ public abstract class BaseDatabase<T> implements Database<T> {
     private String primaryKey;
     private Statement statement;
     private DataParser<T> parser;
+    private final Connection DBConnection;
 
-    BaseDatabase(Connection dbConnection, String tableName, String primaryKey, DataParser<T> parser) throws SQLException {
+    BaseDatabase(Connection DBConnection, String tableName, String primaryKey, DataParser<T> parser) throws SQLException {
         this.tableName = tableName;
         this.primaryKey = primaryKey;
-        this.statement = dbConnection.createStatement();
+        this.statement = DBConnection.createStatement();
         this.parser = parser;
+        this.DBConnection = DBConnection;
+    }
+
+    protected Connection getDBConnection() {
+        return DBConnection;
     }
 
     /**
@@ -40,8 +43,9 @@ public abstract class BaseDatabase<T> implements Database<T> {
      */
     @Override
     public synchronized T getByName(String name) throws SQLException, NotFoundException, IOException {
-        String sql = String.format("SELECT * FROM %s WHERE %s = '%s'", this.tableName, this.primaryKey, name);
-        ResultSet resultSet = this.statement.executeQuery(sql);
+        PreparedStatement preparedStatement = DBConnection.prepareStatement(String.format("SELECT * FROM %s WHERE %s = ?", this.tableName, this.primaryKey));
+        preparedStatement.setString(1, name);
+        ResultSet resultSet = preparedStatement.executeQuery();
         if (resultSet.next()) {
             return parser.parseData(resultSet);
         } else {
@@ -62,17 +66,42 @@ public abstract class BaseDatabase<T> implements Database<T> {
         requireNonNull(constraints);
         List<T> data = new ArrayList<>();
         String sql;
+        PreparedStatement preparedStatement = null;
         if (constraints.length != 0) {
-            sql = String.format("SELECT * FROM %s WHERE ", this.tableName) + String.join(" && ", constraints);
+            sql = String.format("SELECT * FROM %s WHERE", this.tableName);
+            if (constraints[0].contains("BETWEEN")) {
+                //parse for sql with between with dates statement
+                String[] tokens = constraints[0].split("\\s+");
+                sql += String.format(" %s %s ? %s ?", tokens[0], tokens[1], tokens[3]);
+                preparedStatement = DBConnection.prepareStatement(sql);
+                preparedStatement.setString(1, tokens[2]);
+                preparedStatement.setString(2, tokens[4]);
+            } else {
+                // setup sql command for prepared statement
+                for (int i = 0; i < constraints.length; i++) {
+                    String[] tokens = constraints[i].split("\\s+");
+                    sql += String.format(" %s %s ?", tokens[0], tokens[1]);
+                    if (i != constraints.length - 1) {
+                        sql += " AND ";
+                    }
+                    preparedStatement = DBConnection.prepareStatement(sql);
+                }
+                // set prepared statement parameters
+                for (int i = 1; i <= constraints.length; i++) {
+                    String[] tokens = constraints[i - 1].split("\\s+");
+                    String wantedValue = tokens[2].replaceAll("\'", "");
+                    preparedStatement.setString(i, wantedValue);
+                }
+            }
         } else {
             sql = String.format("SELECT * FROM %s", this.tableName);
+            preparedStatement = DBConnection.prepareStatement(sql);
         }
-        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()) {
             data.add(parser.parseData(resultSet));
         }
         return data;
-
     }
 
     /**
@@ -87,8 +116,9 @@ public abstract class BaseDatabase<T> implements Database<T> {
         if (!this.contains(name)) {
             throw new NotFoundException(String.format(ExceptionMessages.USER_NOT_FOUND, name));
         }
-        String sql = String.format("DELETE FROM %s WHERE %s = '%s';", this.tableName, this.primaryKey, name);
-        this.statement.execute(sql);
+        PreparedStatement preparedStatement = DBConnection.prepareStatement(String.format("DELETE FROM %s WHERE %s = ?;", this.tableName, this.primaryKey));
+        preparedStatement.setString(1, name);
+        preparedStatement.execute();
     }
 
     /**
@@ -100,8 +130,10 @@ public abstract class BaseDatabase<T> implements Database<T> {
      */
     @Override
     public boolean contains(String name) throws SQLException {
-        String sql = String.format("SELECT COUNT(*) FROM %s WHERE %s = '%s'", this.tableName, this.primaryKey, name);
-        ResultSet resultSet = this.statement.executeQuery(sql);
+        String sql = String.format("SELECT COUNT(*) FROM %s WHERE %s = ?", this.tableName, this.primaryKey);
+        PreparedStatement preparedStatement = DBConnection.prepareStatement(sql);
+        preparedStatement.setString(1, name);
+        ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
         return resultSet.getInt(1) >= 1;
     }
@@ -116,13 +148,14 @@ public abstract class BaseDatabase<T> implements Database<T> {
      */
     @Override
     public synchronized void update(String primaryKeyValue, String variableName, String newValue) throws SQLException {
-        String sql = String.format("UPDATE %s SET %s = '%s' WHERE %s = '%s'",
+        String sql = String.format("UPDATE %s SET %s = ? WHERE %s = ?",
                 this.tableName,
                 variableName,
-                newValue,
-                this.primaryKey,
-                primaryKeyValue);
-        this.statement.execute(sql);
+                this.primaryKey);
+        PreparedStatement preparedStatement = DBConnection.prepareStatement(sql);
+        preparedStatement.setString(1, newValue);
+        preparedStatement.setString(2, primaryKeyValue);
+        preparedStatement.execute();
     }
 
 

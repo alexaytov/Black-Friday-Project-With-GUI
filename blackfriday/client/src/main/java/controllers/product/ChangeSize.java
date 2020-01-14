@@ -2,6 +2,7 @@ package controllers.product;
 
 import application.App;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import controllers.staff.StaffChosenProduct;
 import javafx.event.ActionEvent;
@@ -26,7 +27,7 @@ public class ChangeSize {
     @FXML
     void submit(ActionEvent event) {
         // send change product size command to server
-        App.serverConnection.write("change product size");
+        App.serverConnection.write(CommandNames.CHANGE_PRODUCT_SIZE);
         App.serverConnection.write(this.sizeField.getText());
         // shows if executed command was successful
         if (App.serverConnection.read()) {

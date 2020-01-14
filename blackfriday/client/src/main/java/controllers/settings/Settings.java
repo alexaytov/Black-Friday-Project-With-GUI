@@ -3,6 +3,7 @@ package controllers.settings;
 import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import controllers.client.ClientLoggedIn;
@@ -89,7 +90,7 @@ public class Settings implements Initializable {
             ClientLoggedIn controller = loader.getController();
             controller.initUser(this.user);
         } else if (this.user.getPermission().equals(Permission.ADMIN)) {
-            loader = Operations.loadWindow(Windows.STAFF_CHOSEN_PRODUCT_PATH, Windows.STAFF_CHOSEN_PRODUCT_WIDTH, Windows.STAFF_CHOSEN_PRODUCT_HEIGHT);
+            loader = Operations.loadWindow(Windows.STAFF_LOGGED_IN_PATH, Windows.STAFF_LOGGED_IN_WIDTH, Windows.STAFF_LOGGED_IN_HEIGHT);
             StaffLoggedIn controller = loader.getController();
             controller.initUser(this.user);
         }
@@ -111,7 +112,7 @@ public class Settings implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // get currently logged user information from server
-        App.serverConnection.write("get logged in user");
+        App.serverConnection.write(CommandNames.GET_LOGGED_IN_USER);
         this.user = App.serverConnection.read();
         // refresh all fields text properties
         Timeline refreshTextFieldsTimeline = new Timeline(new KeyFrame(Duration.millis(100), event -> refreshTextFields()));

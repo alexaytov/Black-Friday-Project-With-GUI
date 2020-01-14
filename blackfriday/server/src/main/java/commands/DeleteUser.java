@@ -33,7 +33,7 @@ public class DeleteUser implements Executable {
         try {
             userService.deleteUser(userService.getLoggedInUser().getUsername());
             this.clientConnection.write(true);
-        } catch (NotFoundException ex) {
+        } catch (NotFoundException | IllegalArgumentException ex) {
             this.clientConnection.write(false);
         }
     }

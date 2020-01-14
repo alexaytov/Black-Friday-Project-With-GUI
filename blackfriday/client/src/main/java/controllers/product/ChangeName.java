@@ -3,6 +3,7 @@ package controllers.product;
 import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import controllers.staff.StaffChosenProduct;
@@ -43,7 +44,7 @@ public class ChangeName implements Initializable {
     @FXML
     void submit(ActionEvent event) {
         // send change product name command to server
-        App.serverConnection.write("change product name");
+        App.serverConnection.write(CommandNames.CHANGE_PRODUCT_NAME);
         App.serverConnection.write(this.nameField.getText());
         // shows confirmation of executed command to user
         if (App.serverConnection.read()) {

@@ -3,6 +3,7 @@ package controllers.client;
 import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.animation.KeyFrame;
@@ -72,7 +73,7 @@ public class ChosenProduct implements Initializable {
         // get entered wanted quantity
         int wantedQuantity = this.wantedQuantity.getValue();
         // send information to server
-        App.serverConnection.write("buy product");
+        App.serverConnection.write(CommandNames.BUY_PRODUCT);
         App.serverConnection.write(this.product.getName());
         App.serverConnection.write(wantedQuantity);
         // get server confirmation

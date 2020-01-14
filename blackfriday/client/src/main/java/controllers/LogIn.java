@@ -4,6 +4,7 @@ import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ExceptionMessages;
 import controllers.client.ClientLoggedIn;
 import controllers.staff.StaffLoggedIn;
@@ -77,7 +78,7 @@ public class LogIn {
     }
 
     private User login(String username, String password) throws WrongPasswordException, NotFoundException {
-        App.serverConnection.write("login");
+        App.serverConnection.write(CommandNames.LOGIN);
         // get user password salt
         App.serverConnection.write(username);
         String salt = App.serverConnection.read();

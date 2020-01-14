@@ -3,6 +3,7 @@ package controllers.staff;
 import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXToggleButton;
+import commonMessages.CommandNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,8 +11,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import user.User;
 import util.Operations;
+import util.Windows;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -34,29 +35,29 @@ public class StaffLoggedIn implements Initializable {
     @FXML
     void blackFridaySwitch(ActionEvent event) {
         if (blackFriday.isSelected()) {
-            App.serverConnection.write("start blackFriday");
+            App.serverConnection.write(CommandNames.START_BLACK_FRIDAY);
         } else {
-            App.serverConnection.write("stop blackFriday");
+            App.serverConnection.write(CommandNames.STOP_BLACK_FRIDAY);
         }
     }
 
     @FXML
     void clients(ActionEvent event) {
         this.welcomeLabel.getScene().getWindow().hide();
-        Operations.loadWindow("/view/staff/clients.fxml", 600, 800);
+        Operations.loadWindow(Windows.STAFF_CLIENTS_PATH, Windows.STAFF_CLIENTS_WIDTH, Windows.STAFF_CLIENTS_HEIGHT);
     }
 
     @FXML
     void earnings(ActionEvent event) {
         this.earningsButton.getScene().getWindow().hide();
-        Operations.loadWindow("/view/staff/earnings.fxml", 600, 500);
+        Operations.loadWindow(Windows.EARNINGS_PATH, Windows.EARNINGS_WIDTH, Windows.EARNINGS_HEIGHT);
     }
 
     @FXML
     void logout(ActionEvent event) {
-        App.serverConnection.write("logout");
+        App.serverConnection.write(CommandNames.LOGOUT);
         this.earningsButton.getScene().getWindow().hide();
-        Operations.loadWindow("/view/login.fxml", 600, 350);
+        Operations.loadWindow(Windows.LOGIN_PATH, Windows.LOGIN_WIDTH, Windows.LOGIN_HEIGHT);
     }
 
     @FXML
@@ -66,21 +67,21 @@ public class StaffLoggedIn implements Initializable {
     }
 
     @FXML
-    void registerStaff(ActionEvent event) throws IOException {
-        Operations.loadWindow("/view/staff/registerStaff.fxml", 600, 630);
+    void registerStaff(ActionEvent event) {
+        Operations.loadWindow(Windows.REGISTER_STAFF_PATH, Windows.REGISTER_STAFF_WIDTH, Windows.REGISTER_STAFF_HEIGHT);
         this.welcomeLabel.getScene().getWindow().hide();
     }
 
     @FXML
     void settings(ActionEvent event) {
         this.welcomeLabel.getScene().getWindow().hide();
-        FXMLLoader loader = Operations.loadWindow("/view/staff/staffSettings.fxml", 600, 400);
+        FXMLLoader loader = Operations.loadWindow(Windows.STAFF_SETTINGS_PATH, Windows.STAFF_SETTINGS_WIDTH, Windows.STAFF_SETTINGS_HEIGHT);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // set on/off black friday toggle
-        App.serverConnection.write("is blackFriday");
+        App.serverConnection.write(CommandNames.IS_BLACK_FRIDAY);
         if (App.serverConnection.read()) {
             blackFriday.selectedProperty().setValue(true);
         } else {

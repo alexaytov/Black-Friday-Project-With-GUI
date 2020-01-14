@@ -4,6 +4,7 @@ import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.animation.KeyFrame;
@@ -368,7 +369,7 @@ public class StaffProducts implements Initializable {
         double discountPercent = getProductInformationFromTextFields.getDiscountPercent();
         Product product = new Product(name, description, quantity, price, minimumPrice, discountPercent, Files.readAllBytes(this.createProductPictureFile.toPath()), size);
         // send new product ot server
-        App.serverConnection.write("create product");
+        App.serverConnection.write(CommandNames.CREATE_PRODUCT);
         App.serverConnection.write(product);
         // shows uer if product was created successfully
         if (App.serverConnection.read()) {

@@ -16,29 +16,23 @@ public class ProductDatabase extends BaseDatabase<Product> {
     private static String tableName = "products";
     private static String primaryKey = "name";
     private Statement statement;
-    private Connection DBConnection;
 
     public ProductDatabase(Connection DBConnection) throws SQLException {
         super(DBConnection, tableName, primaryKey, new ProductParser());
-        this.DBConnection = DBConnection;
         this.statement = DBConnection.createStatement();
     }
 
 
     public synchronized void updateProductImage(String productName, byte[] imageContent) {
         String updateSQL = "UPDATE products SET image_content = ? WHERE name = ?";
-        try (PreparedStatement pstmt = this.DBConnection.prepareStatement(updateSQL)) {
-
+        try (PreparedStatement preparedStatement = super.getDBConnection().prepareStatement(updateSQL)) {
             // create input stream from byte array
             InputStream input = new ByteArrayInputStream(imageContent);
-
             // set parameters
-            pstmt.setBinaryStream(1, input);
-            pstmt.setString(2, productName);
-
+            preparedStatement.setBinaryStream(1, input);
+            preparedStatement.setString(2, productName);
             // store image content in the database
-            pstmt.executeUpdate();
-
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -56,19 +50,19 @@ public class ProductDatabase extends BaseDatabase<Product> {
         if (super.contains(data.getName())) {
             throw new DataAlreadyExistsException();
         }
-        String sql = String.format(
-                "INSERT INTO products(`name`, `description`, `quantity`, `price`, `minimum_price`, `discounted_percent`, `is_discounted`, `size`) " +
-                        "VALUES('%s', '%s', '%d', %f, %f, %f, %s, '%s');",
-                data.getName(),
-                data.getDescription(),
-                data.getQuantity(),
-                data.getPrice(),
-                data.getMinimumPrice(),
-                data.getDiscountPercent(),
-                String.valueOf(data.isDiscounted()),
-                data.getSize()
-        );
-        this.statement.execute(sql);
+        String sql =
+                "INSERT INTO products(`name`, `description`, `quantity`, `price`, `minimum_price`, `discounted_percent`, `is_discounted`, `size`) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement preparedStatement = super.getDBConnection().prepareStatement(sql);
+        preparedStatement.setString(1, data.getName());
+        preparedStatement.setString(2, data.getDescription());
+        preparedStatement.setInt(3, data.getQuantity());
+        preparedStatement.setDouble(4, data.getPrice());
+        preparedStatement.setDouble(5, data.getMinimumPrice());
+        preparedStatement.setDouble(6, data.getDiscountedPrice());
+        preparedStatement.setInt(7, (data.isDiscounted()) ? 1 : 0);
+        preparedStatement.setString(8, (data.getSize()));
+
+        preparedStatement.execute();
         updateProductImage(data.getName(), data.getImageContent());
     }
 

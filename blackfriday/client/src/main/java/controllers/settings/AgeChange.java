@@ -1,6 +1,7 @@
 package controllers.settings;
 
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
@@ -24,7 +25,7 @@ public class AgeChange {
             int newAge = Integer.parseInt(ageField.getText());
             requireNonNegative(newAge, ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);
             // change user field operation
-            boolean isAgeChanged = Operations.changeUserField("change age",
+            boolean isAgeChanged = Operations.changeUserField(CommandNames.CHANGE_USER_AGE,
                     ageField.getText(),
                     ConstantMessages.AGE_CHANGE_SUCCESSFUL,
                     ConstantMessages.AGE_CHANGE_UNSUCCESSFUL);

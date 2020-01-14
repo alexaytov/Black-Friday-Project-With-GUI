@@ -3,6 +3,7 @@ package controllers.product;
 import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import controllers.staff.StaffChosenProduct;
@@ -46,10 +47,10 @@ public class ChangeDescription implements Initializable {
     @FXML
     void submit(ActionEvent event) {
         // send command to server to change product description
-        App.serverConnection.write("change product description");
+        App.serverConnection.write(CommandNames.CHANGE_PRODUCT_DESCIRPTION);
         // get confirmation from server
         App.serverConnection.write(this.descriptionField.getText());
-        // shows confirmation from server to userw
+        // shows confirmation from server to user
         if (App.serverConnection.read()) {
             confirmationPopUp(ConstantMessages.PRODUCT_DESCRIPTION_CHANGED_SUCCESSFUL);
             product.setDescription(this.descriptionField.getText());

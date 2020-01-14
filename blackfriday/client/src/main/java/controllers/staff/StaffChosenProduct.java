@@ -2,6 +2,7 @@ package controllers.staff;
 
 import application.App;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import controllers.product.*;
 import javafx.event.ActionEvent;
@@ -12,6 +13,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import product.Product;
 import util.Operations;
+import util.Windows;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -43,7 +45,7 @@ public class StaffChosenProduct {
 
     public void initProduct(String productName) {
         // get currently chosen product by name from server
-        App.serverConnection.write("get product by name");
+        App.serverConnection.write(CommandNames.GET_PRODUCT_BY_NAME);
         App.serverConnection.write(productName);
         Product product = App.serverConnection.read();
         fillProductFieldsWithInformation(product);
@@ -52,7 +54,7 @@ public class StaffChosenProduct {
 
     public void initProduct(Product product) {
         // get currently chosen product based on server
-        App.serverConnection.write("set product");
+        App.serverConnection.write(CommandNames.SET_PRODUCT);
         App.serverConnection.write(product);
         this.product = product;
         fillProductFieldsWithInformation(product);
@@ -73,8 +75,8 @@ public class StaffChosenProduct {
     }
 
     @FXML
-    void deleteChosenProduct(ActionEvent event) throws IOException {
-        App.serverConnection.write("delete product");
+    void deleteChosenProduct(ActionEvent event) {
+        App.serverConnection.write(CommandNames.DELETE_PRODUCT);
         App.serverConnection.write(this.product.getName());
         // shows user if executed command was successful
         if (App.serverConnection.read()) {
@@ -88,7 +90,7 @@ public class StaffChosenProduct {
 
     @FXML
     void changeDiscountPercent(ActionEvent event) {
-        FXMLLoader loader = Operations.loadWindow("/view/product/changeDiscountPercent.fxml", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(Windows.PRODUCT_CHANGE_DISCOUNT_PERCENT_PATH, Windows.PRODUCT_CHANGE_DISCOUNT_PERCENT_WIDTH, Windows.PRODUCT_CHANGE_DISCOUNT_PERCENT_HEIGHT);
         // initialize product in ChangeDiscountPercent controller
         ChangeDiscountPercent controller = loader.getController();
         controller.initProduct(product);
@@ -97,7 +99,7 @@ public class StaffChosenProduct {
 
     @FXML
     void changeDescription(ActionEvent event) {
-        FXMLLoader loader = Operations.loadWindow("/view/product/changeDescription.fxml", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(Windows.PRODUCT_CHANGE_DESCRIPTION_PATH, Windows.PRODUCT_CHANGE_DESCRIPTION_WIDTH, Windows.PRODUCT_CHANGE_DESCRIPTION_HEIGHT);
         // initialize product in ChangeDescription controller
         ChangeDescription controller = loader.getController();
         controller.initProduct(product);
@@ -106,7 +108,7 @@ public class StaffChosenProduct {
 
     @FXML
     void changeMinimumPrice(ActionEvent event) {
-        FXMLLoader loader = Operations.loadWindow("/view/product/changeMinimumPrice.fxml", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(Windows.PRODUCT_CHANGE_MINIMUM_PRICE_PATH, Windows.PRODUCT_CHANGE_MINIMUM_PRICE_WIDTH, Windows.PRODUCT_CHANGE_MINIMUM_PRICE_HEIGHT);
         // initialize product in ChangeMinimumPrice controller
         ChangeMinimumPrice controller = loader.getController();
         controller.initProduct(product);
@@ -116,7 +118,7 @@ public class StaffChosenProduct {
     @FXML
     void changeName(ActionEvent event) {
         this.nameField.getScene().getWindow().hide();
-        Operations.loadWindow("/view/product/changeName.fxml", 600, 200);
+        Operations.loadWindow(Windows.PRODUCT_CHANGE_NAME_PATH, Windows.PRODUCT_CHANGE_NAME_WIDTH, Windows.PRODUCT_CHANGE_NAME_HEIGHT);
     }
 
     @FXML
@@ -129,7 +131,7 @@ public class StaffChosenProduct {
         File file = fileChooser.showOpenDialog(this.nameField.getScene().getWindow());
         if (file != null) {
             // user picked a file
-            App.serverConnection.write("change product image");
+            App.serverConnection.write(CommandNames.CHANGE_PRODUCT_IMAGE);
             App.serverConnection.write(Files.readAllBytes(file.toPath()));
             // shows user if image was changed successfully
             if (App.serverConnection.read()) {
@@ -143,7 +145,7 @@ public class StaffChosenProduct {
 
     @FXML
     void changePrice(ActionEvent event) {
-        FXMLLoader loader = Operations.loadWindow("/view/product/changePrice.fxml", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(Windows.PRODUCT_CHANGE_PRICE_PATH, Windows.PRODUCT_CHANGE_PRICE_WIDTH, Windows.PRODUCT_CHANGE_PRICE_HEIGHT);
         // initialize product in ChangePrice controller
         ChangePrice controller = loader.getController();
         controller.initProduct(product);
@@ -152,7 +154,7 @@ public class StaffChosenProduct {
 
     @FXML
     void changeQuantity(ActionEvent event) {
-        FXMLLoader loader = Operations.loadWindow("/view/product/changeQuantity.fxml", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(Windows.PRODUCT_CHANGE_QUANTITY_PATH, Windows.PRODUCT_CHANGE_QUANTITY_WIDTH, Windows.PRODUCT_CHANGE_QUANTITY_HEIGHT);
         // initialize product in ChangeQuantity controller
         ChangeQuantity controller = loader.getController();
         controller.initProduct(product);
@@ -161,7 +163,7 @@ public class StaffChosenProduct {
 
     @FXML
     void changeSize(ActionEvent event) {
-        FXMLLoader loader = Operations.loadWindow("/view/product/changeSize.fxml", 600, 200);
+        FXMLLoader loader = Operations.loadWindow(Windows.PRODUCT_CHANGE_SIZE_PATH, Windows.PRODUCT_CHANGE_SIZE_WIDTH, Windows.PRODUCT_CHANGE_SIZE_HEIGHT);
         // initialize product in ChangeSize controller
         ChangeSize controller = loader.getController();
         controller.initProduct(product);
@@ -171,6 +173,6 @@ public class StaffChosenProduct {
     @FXML
     void goStaffProducts(ActionEvent event) {
         this.nameField.getScene().getWindow().hide();
-        Operations.loadWindow("/view/staff/staffProducts.fxml", 600, 730);
+        Operations.loadWindow(Windows.STAFF_PRODUCTS_PATH, Windows.STAFF_PRODUCTS_WIDTH, Windows.STAFF_PRODUCTS_HEIGHT);
     }
 }

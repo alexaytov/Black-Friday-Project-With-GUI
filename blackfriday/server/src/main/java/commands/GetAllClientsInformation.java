@@ -36,7 +36,6 @@ public class GetAllClientsInformation implements Executable {
     public void execute() throws IOException, SQLException {
         Validator.requireNonNull(userService.getLoggedInUser(), ExceptionMessages.USER_MUST_BE_LOGGED_IN);
         Map<String, List<Purchase>> clientPurchases = purchaseService.getClientPurchases();
-        System.out.println(clientPurchases);
         this.clientConnection.write(clientPurchases);
     }
 }

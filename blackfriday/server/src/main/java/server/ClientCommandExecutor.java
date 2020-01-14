@@ -4,6 +4,7 @@ import command.enterpreter.interfaces.CommandInterpreter;
 import command.enterpreter.interfaces.Executable;
 import commonMessages.ExceptionMessages;
 import connection.Connection;
+import exceptions.ConnectionException;
 import validator.Validator;
 
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class ClientCommandExecutor implements Runnable {
                 // execute command
                 executable.execute();
             }
-        } catch (IOException ex) {
+        } catch (IOException | ConnectionException ex) {
             System.out.println("Client thread: " + Thread.currentThread().getName() + " ended!!!");
         } catch (SQLException e) {
             e.printStackTrace();

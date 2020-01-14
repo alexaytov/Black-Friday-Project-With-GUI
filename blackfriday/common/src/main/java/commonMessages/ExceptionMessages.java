@@ -8,7 +8,6 @@ public class ExceptionMessages {
     public static final String FILL_IN_ALL_FIELDS = "Please fill in all the fields above!!!";
     public static final String ENTER_NUMBER = "Please enter a number!!!";
     public static final String END_DATE_IS_BEFORE_START_DATE = "End date can't be before start date!!!";
-    public static final String STORE_NULL = "Store can't be nulL!!!";
     public static final String USER_MUST_BE_LOGGED_IN = "User must be logged in! User can't be null!";
     public static final String PURCHASE_PROBLEM = "Sorry there was a problem with this purchase. Please Try again!";
     public static final String AGE_MUST_BE_POSITIVE_NUMBER = "Age must be a positive number!!!";
@@ -27,7 +26,7 @@ public class ExceptionMessages {
     public static final String Product_ALREADY_EXISTS = "Product with the same name already exists!!!";
     public static final String NAME_NULL_OR_EMPTY = "Name can't be null or empty!!!";
     public static final String PRODUCT_ALREADY_EXISTS = "Product with the name %s alread exists!!!";
-    public static final String MONTH_MUST_BE_BETWEEN_0_1 = "Month %d must be between 1 and 12!!!";
+    public static final String MONTH_MUST_BE_BETWEEN_0_1 = "Entered month: %d must be between 1 and 12!!!";
     public static final String YEAR_MUST_BE_POSITIVE = "Year %d must be a positive number!!!";
     public static final String CONNECTION_NULL = "Connection can't be null!!!";
     public static final String PERMISSION_NULL = "Permission can't be nulL!!!";
@@ -37,8 +36,6 @@ public class ExceptionMessages {
     public static final String PROBLEM_LOADING_FXML_FILE = "There was a problem loading fxml file: %s!!!";
     public static final String PROBLEM_CONNECTION_TO_SERVER = "There was a problem connecting to the server please try again!";
     public static final String ENVIRONMENT_VARIABLES_PORT_NOT_SET = "Environment variable 'PORT' is not set!";
-    public static final String EARNINGS_SERVICE_NULL = "Earning service can't be null!";
-    public static final String USER_SERVICE_NULL = "User service can't be null!";
-    public static final String PRODUCT_SERVICE_NULL = "Product service can't be null!";
     public static final String PROBLEM_DELETING_USER = "There was a problem deleting user!";
+    public static final String CANT_DELETE_ONLY_ADMIN_LEFT = "Can't delete the last admin user!";
 }

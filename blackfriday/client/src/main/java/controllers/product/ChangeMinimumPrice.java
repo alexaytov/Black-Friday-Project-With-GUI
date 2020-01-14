@@ -3,6 +3,7 @@ package controllers.product;
 import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import controllers.staff.StaffChosenProduct;
@@ -55,7 +56,7 @@ public class ChangeMinimumPrice implements Initializable {
     void submit(ActionEvent event) {
         validatePrice(product.getPrice(), this.minimumPrice);
         // send change product minimum price command to server
-        App.serverConnection.write("change product minimum price");
+        App.serverConnection.write(CommandNames.CHANGE_PRODUCT_MINIMUM_PRICE);
         App.serverConnection.write(this.minimumPrice);
         // shows if executed server command was successful
         if (App.serverConnection.read()) {

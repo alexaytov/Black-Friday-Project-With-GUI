@@ -1,6 +1,7 @@
 package controllers.settings;
 
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
@@ -23,7 +24,7 @@ public class UsernameChange {
         String newUsername = usernameField.getText();
         try {
             requireNonBlank(newUsername, ExceptionMessages.NAME_NULL_OR_EMPTY);
-            boolean isUsernameChanged = Operations.changeUserField("change username",
+            boolean isUsernameChanged = Operations.changeUserField(CommandNames.CHANGE_USER_USERNAME,
                     usernameField.getText(),
                     ConstantMessages.USERNAME_CHANGE_SUCCESSFUL,
                     ConstantMessages.USERNAME_CHANGE_UNSUCCESSFUL);

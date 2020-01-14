@@ -3,6 +3,7 @@ package controllers.product;
 import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import controllers.staff.StaffChosenProduct;
@@ -55,7 +56,7 @@ public class ChangePrice implements Initializable {
     void submit(ActionEvent event) {
         // send change product price command to server
         validatePrice(this.price, product.getMinimumPrice());
-        App.serverConnection.write("change product price");
+        App.serverConnection.write(CommandNames.CHANGE_PRODUCT_PRICE);
         App.serverConnection.write(this.price);
         // show if executed command was successful to user
         if (App.serverConnection.read()) {

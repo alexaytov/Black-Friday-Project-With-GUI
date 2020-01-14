@@ -3,6 +3,7 @@ package controllers.staff;
 import application.App;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeView;
+import commonMessages.CommandNames;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -66,7 +67,7 @@ public class ClientPurchases implements Initializable {
     @FXML
     void showAllPurchases() {
         // load UI with all purchases
-        App.serverConnection.write("get all clients information");
+        App.serverConnection.write(CommandNames.GET_ALL_CLIENT_INFORMATION);
         purchases = App.serverConnection.read();
         fillTreeView(purchases);
     }

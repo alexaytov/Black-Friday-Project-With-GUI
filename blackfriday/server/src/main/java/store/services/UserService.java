@@ -4,6 +4,7 @@ import commonMessages.ExceptionMessages;
 import database.interfaces.Database;
 import exceptions.DataAlreadyExistsException;
 import exceptions.NotFoundException;
+import user.Permission;
 import user.User;
 
 import java.io.IOException;
@@ -47,7 +48,13 @@ public class UserService {
      * @param username the username of the user to be deleted
      * @throws NotFoundException if the user is not in the database
      */
-    public void deleteUser(String username) throws NotFoundException, SQLException {
+    public void deleteUser(String username) throws NotFoundException, SQLException, IOException {
+        User userToBeDeleted = this.userDatabase.getByName(username);
+        if(userToBeDeleted.getPermission().equals(Permission.ADMIN)){
+            if(this.userDatabase.read("permission = ADMIN").size() == 1){
+                throw new IllegalArgumentException(ExceptionMessages.CANT_DELETE_ONLY_ADMIN_LEFT);
+            }
+        }
         this.userDatabase.delete(username);
     }
 

@@ -11,13 +11,13 @@ public class Validator {
     }
 
     public static void requireNonNegative(int number, String errorMessage) {
-        if (number <= 0) {
+        if (number < 0) {
             throw new IllegalArgumentException(errorMessage);
         }
     }
 
     public static void requireNonNegative(double number, String errorMessage) {
-        if (number <= 0) {
+        if (number < 0) {
             throw new IllegalArgumentException(errorMessage);
         }
     }

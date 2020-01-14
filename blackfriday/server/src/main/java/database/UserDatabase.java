@@ -5,6 +5,7 @@ import exceptions.DataAlreadyExistsException;
 import user.User;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -31,15 +32,17 @@ public class UserDatabase extends BaseDatabase<User> {
         if (this.contains(user.getUsername())) {
             throw new DataAlreadyExistsException();
         }
-        String sql = String.format(
-                "INSERT INTO `enaleks`.`users` (`username`, `password`, `permission`, `first_name`, `last_name`, `age`, `date_of_registration`) VALUES ('%s', '%s', '%s', '%s', '%s', '%d', '%s');",
-                user.getUsername(),
-                user.getPassword(),
-                user.getPermission().toString().toLowerCase(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getAge(),
-                user.getDateOfCreation().toString());
-        this.statement.execute(sql);
+        String sql =
+                "INSERT INTO `enaleks`.`users` (`username`, `password`, `permission`, `first_name`, `last_name`, `age`, `date_of_registration`) VALUES (?, ?, ?, ?, ?, ?, ?);";
+        PreparedStatement preparedStatement = super.getDBConnection().prepareStatement(sql);
+        preparedStatement.setString(1, user.getUsername());
+        preparedStatement.setString(2, user.getPassword());
+        preparedStatement.setString(3, user.getPermission().toString());
+        preparedStatement.setString(4, user.getFirstName());
+        preparedStatement.setString(5, user.getLastName());
+        preparedStatement.setInt(6, user.getAge());
+        preparedStatement.setString(7, user.getDateOfCreation().toString());
+
+        preparedStatement.execute();
     }
 }

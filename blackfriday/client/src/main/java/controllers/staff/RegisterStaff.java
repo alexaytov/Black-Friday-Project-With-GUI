@@ -4,6 +4,7 @@ import application.App;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import commonMessages.CommandNames;
 import commonMessages.ConstantMessages;
 import commonMessages.ExceptionMessages;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.scene.paint.Color;
 import user.Permission;
 import user.User;
 import util.Operations;
+import util.Windows;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -58,7 +60,7 @@ public class RegisterStaff implements Initializable {
     @FXML
     void registerStaff(ActionEvent event) {
         if (checkAllFields()) {
-            App.serverConnection.write("register user");
+            App.serverConnection.write(CommandNames.REGISTER_USER);
             User user = new User(this.username, this.password, Permission.ADMIN, this.firstName, this.lastName, this.age);
             App.serverConnection.write(user);
             // show user if staff was registered successfully
@@ -75,7 +77,7 @@ public class RegisterStaff implements Initializable {
     @FXML
     void goBack(ActionEvent event) {
         this.registerStaffButton.getScene().getWindow().hide();
-        Operations.loadWindow("/view/staff/staffLoggedIn.fxml", 600, 600);
+        Operations.loadWindow(Windows.STAFF_LOGGED_IN_PATH, Windows.STAFF_LOGGED_IN_WIDTH, Windows.STAFF_LOGGED_IN_HEIGHT);
     }
 
     @Override
