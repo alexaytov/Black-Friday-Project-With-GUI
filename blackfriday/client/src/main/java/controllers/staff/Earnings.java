@@ -55,20 +55,23 @@ public class Earnings {
         // get data from GUI
         LocalDate startDate = this.startDatePicker.getValue();
         LocalDate endDate = this.endDatePicker.getValue();
-        // validation of entered data
-        if (endDate.isBefore(startDate) || endDate.equals(startDate)) {
-            //end data is before start data
-            showWarningDialog(ExceptionMessages.END_DATE_IS_BEFORE_START_DATE);
+        if (startDate == null || endDate == null) {
+            showWarningDialog("Start date or End date can't be null!");
         } else {
-            // entered data is valid
-            // sending data to server
-            App.serverConnection.write(CommandNames.EARNINGS_FOR_PERIOD);
-            App.serverConnection.write(startDate);
-            App.serverConnection.write(endDate);
-            // get and show earnings to GUI
-            double earnings = App.serverConnection.read();
-            this.customPeriodEarningsField.setText(String.valueOf(earnings));
-
+            // validation of entered data
+            if (endDate.isBefore(startDate) || endDate.equals(startDate)) {
+                //end data is before start data
+                showWarningDialog(ExceptionMessages.END_DATE_IS_BEFORE_START_DATE);
+            } else {
+                // entered data is valid
+                // sending data to server
+                App.serverConnection.write(CommandNames.EARNINGS_FOR_PERIOD);
+                App.serverConnection.write(startDate);
+                App.serverConnection.write(endDate);
+                // get and show earnings to GUI
+                double earnings = App.serverConnection.read();
+                this.customPeriodEarningsField.setText(String.valueOf(earnings));
+            }
         }
     }
 
@@ -77,12 +80,16 @@ public class Earnings {
         try {
             // get and validate year
             LocalDate date = this.datePicker.getValue();
-            // send command and year to server
-            App.serverConnection.write(CommandNames.EARNINGS_FOR_DATE);
-            App.serverConnection.write(date.toString());
-            // get earnings from server
-            double earnings = App.serverConnection.read();
-            dateEarningsField.setText(String.valueOf(earnings));
+            if (date == null) {
+                showWarningDialog(ExceptionMessages.DATE_NULL);
+            } else {
+                // send command and year to server
+                App.serverConnection.write(CommandNames.EARNINGS_FOR_DATE);
+                App.serverConnection.write(date.toString());
+                // get earnings from server
+                double earnings = App.serverConnection.read();
+                dateEarningsField.setText(String.valueOf(earnings));
+            }
         } catch (DateTimeException ex) {
             ex.printStackTrace();
         }

@@ -95,6 +95,7 @@ public class User implements Serializable, Cloneable {
 
     public void setAge(int age) {
         Validator.requireNonNegative(age, ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);
+        Validator.requireNonZero(age, ExceptionMessages.AGE_MUST_BE_POSITIVE_NUMBER);
         this.age = age;
     }
 

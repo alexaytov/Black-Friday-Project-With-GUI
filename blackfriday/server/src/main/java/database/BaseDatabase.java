@@ -90,7 +90,13 @@ public abstract class BaseDatabase<T> implements Database<T> {
                 for (int i = 1; i <= constraints.length; i++) {
                     String[] tokens = constraints[i - 1].split("\\s+");
                     String wantedValue = tokens[2].replaceAll("\'", "");
-                    preparedStatement.setString(i, wantedValue);
+                    if(wantedValue.equals("true")){
+                        preparedStatement.setBoolean(i, true);
+                    }else if(wantedValue.equals("false")){
+                        preparedStatement.setBoolean(i, false);
+                    }else{
+                        preparedStatement.setString(i, wantedValue);
+                    }
                 }
             }
         } else {
